@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class CreateUsersTable extends Migration
 {
@@ -22,6 +24,12 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        $row = new User();
+        $row->name     = 'elias.fuentes';
+        $row->email    = 'soporte@miasoftware.net';
+        $row->password =  Hash::make('x5w93kra');
+        $row->save();
+
     }
 
     /**

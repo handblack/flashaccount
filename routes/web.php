@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Config\CurrencyController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +19,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Auth::routes();
+Route::get('/logina',function(){
+    echo 'aa';
+});
+Route::get('/login',[HomeController::class,'auth_login'])->name('login');
+Route::post('/login',[HomeController::class,'auth_login_form'])->name('auth_login_form');
+ 
+Route::get('/logout',function (){
+    Session::flush();
+    Auth::logout();
+    return redirect()->route('login');
+})->name('logout');
+ 
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::resource('/config/currency',CurrencyController::class, ['names' => 'currency']);
+});
