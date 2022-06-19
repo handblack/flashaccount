@@ -22,7 +22,7 @@
                 <div class="col-sm-6">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Usuarios 
+                            Perfiles 
                             &nbsp;<i class="fas fa-users-cog ml-3"></i>
 
                         </h1>
@@ -48,12 +48,8 @@
     </ul>
     <div class="rounded-bottom border-left border-right border-bottom bg-white">
         <div class="row p-3">
-            <div class="col-md-3">
-                <label class="mb-0">Nombre</label>
-                <input type="text" class="form-control" id="teamname" name="teamname" placeholder="Identificador del Equipo" value="{{ old('teamname',$row->teamname) }}" required>
-            </div>
-            <div class="col-md-6">
-                <label class="mb-0">Correo</label>
+            <div class="col-md-9">
+                <label class="mb-0">Identificador</label>
                 <input type="text" class="form-control" id="teamname" name="teamname" placeholder="Identificador del Equipo" value="{{ old('teamname',$row->teamname) }}" required>
             </div>
             <div class="col-md-3">
@@ -66,7 +62,7 @@
         </div>
         <div class="card-footer">
             <div class="float-right">
-                <a href="{{ route('user.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>
+                <a href="{{ route('team.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
             </div>
         </div>

@@ -1,12 +1,38 @@
 @extends('layouts.home')
 
+
+@section('style')
+<style>    
+
+
+
+</style>    
+@endsection
+
 @section('container')
-<form action="{{ route('auth_login_form') }}" method="POST">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-    <input type="text" name="email" required>
-    <input type="text" name="password">
-    <button type="submit">Go</button>
-</form>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <a class="navbar-brand" href="" onclick="location.reload();">
+        <img src="{{ asset('images/AdminLTELogo.png') }}" width="30" height="30" class="align-top" alt="FacturaScripts"/>
+        FacturaScripts 2022.06
+    </a>
+    <ul class="nav navbar-nav mr-auto"></ul>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+        </li>
+    </ul>
+</nav>
+<div class="container">
+    <br>
+    <form action="{{ route('auth_login_form') }}" method="POST" class="form-signin">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <input type="email"   id="floatingInputGrid" placeholder="name@example.com" value="{{ old('email') }}" name="email" required>
+        <input type="password"  id="floatingInputGrid" placeholder="name@example.com" value="{{ old('email') }}" name="password" required>
+        <button type="submit" >Go</button>
+    </form>
+</div>
+
+
+
 @endsection
 
 

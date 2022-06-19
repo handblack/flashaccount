@@ -9,4 +9,8 @@ class DashboardController extends Controller
     public function index(){
         return view('dashboard');
     }
+
+    public function building(){
+        return view('dashboard_building');
+    }
 }
