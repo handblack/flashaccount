@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Facade\FlareClient\View;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -14,7 +16,10 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        $result = User::all();
+        return view('system.currency',[
+            'result' => $result,
+        ]);
     }
 
     /**

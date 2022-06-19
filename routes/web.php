@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Config\CurrencyController;
+use App\Http\Controllers\System\CurrencyController;
 use App\Http\Controllers\System\TeamController;
 use App\Http\Controllers\System\TeamGrantController;
 use App\Http\Controllers\System\UserController;

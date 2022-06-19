@@ -42,6 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function team(){
+        return $this->hasOne(WhTeam::class,'id','current_team_id');
+    }
+
     public function grant($module = ''){
 
         //$grant = DB::select('CALL sp_grant(?,?,?)',[$this->id, $this->current_team_id, $module])[0];

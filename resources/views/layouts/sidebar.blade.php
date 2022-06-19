@@ -39,7 +39,7 @@
 				<li class="nav-item  {{ (auth()->user()->menu('m_system_warehouse')) ? 'd-none' : '' }}">
 					<a href="{{ route('warehouse.index') }}" class="nav-link  {{ request()->is('system/warehouse*') ? 'active' : '' }}">
 						<i class="far fa-circle nav-icon"></i>
-						<p>Configuracion Divisas</p>
+						<p>Configuracion Almacenes</p>
 					</a>
 				</li>
 			</ul>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WhTeam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -13,11 +15,22 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $module = 'system.user';
+    public function index(Request $request)
     {
-        $result = User::all();
+        if(!auth()->user()->grant($this->module)){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $q = str_replace(' ','%',$request->q);
+        $result = User::where('name','LIKE',"{$q}%")
+            ->whereOr('email','LIKE',"{$q}%")
+            ->paginate(env('PAGINATE_USER',10));
         return view('system.user',[
             'result' => $result,
+            'q' => $request->q,
         ]);
     }
 
@@ -29,10 +42,13 @@ class UserController extends Controller
     public function create()
     {
         $row = new User();
+        $row->name = old('name');
+        $row->current_team_id = old('current_team_id');
         return view('system.user_form',[
             'mode' => 'new',
             'row' => $row, 
             'url' => route('user.store'),
+            'teams' => WhTeam::all(),
         ]);
     }
 
@@ -44,7 +60,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'isactive' => 'required',
+            'current_team_id' => 'required',
+        ]);
+        $row = new User();
+        $row->fill($request->all());
+        $row->password = Hash::make($request->password);
+        $row->token = md5(date("YmdHis"));
+        $row->save();
+        return redirect()->route('user.index')->with('message','Se agrego usuario');
     }
 
     /**
@@ -66,7 +94,16 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row = User::where('token',$id)->first();
+        if(!$row){
+            abort(403,'Token no valido');
+        }
+        return view('system.user_form',[
+            'mode'  => 'edit',
+            'row'   => $row,
+            'url'   => route('user.update',$row->token),
+            'teams' => WhTeam::all(),
+        ]);
     }
 
     /**

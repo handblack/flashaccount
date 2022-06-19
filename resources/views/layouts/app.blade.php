@@ -118,6 +118,30 @@
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('adminlte/js/adminlte.min.js') }}"></script>
     <script>
+        $(function(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('.delete-record').click(function(e){
+        e.preventDefault()
+        if (confirm('Estas seguro en eliminar?')) {
+            let id = $(this).data('id');
+            let url = $(this).data('url');
+            $.post(url,{_method:'delete'})
+            .done(function(data){
+                if(data.status == 100){
+                    $('#tr-'+id).remove();
+                    toastr.success('Elemento eliminado');
+                }else{
+                    toastr.error(data.message);
+                }
+            });
+        }
+    });
+});
         @if (\Session::has('error'))
             toastr.error('{{ session('error') }}');
         @endif

@@ -49,8 +49,8 @@
 
 
 @section('container')
-    <div class="card">
-        <div class="card-body table-responsive">
+    <div class="card mb-2">
+        <div class="card-body table-responsive p-0" >
             <table class="table table-hover text-nowrap table-sm table-borderless">
                 <thead>
                     <tr class="bg-light">
@@ -61,8 +61,10 @@
                 <tbody>
                     @foreach ($result as $item)
                         <tr id="tr-{{ $item->id }}">
-                            <td class="pl-3" style="{{ $item->isactive == 'Y' ? '' : 'tachado' }}">
-                                {{ $item->teamname }}</td>
+                            <td class="" style="{{ $item->isactive == 'Y' ? '' : 'tachado' }}">
+                                {{ $item->teamname }}
+                            </td>
+                            
                             <td class="text-right">
                                 <a href="{{ route('teamgrant.show', $item->token) }}"> <i class="fas fa-key"></i>
                                     Acceso</a> |
@@ -77,9 +79,6 @@
             </table>
         </div>
     </div>
-
-
-
 
     <div class="row">
         <div class="col-md-12 pt-2">
