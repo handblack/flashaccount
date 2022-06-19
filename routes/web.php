@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\System\CurrencyController;
+use App\Http\Controllers\System\SequenceController;
 use App\Http\Controllers\System\TeamController;
 use App\Http\Controllers\System\TeamGrantController;
 use App\Http\Controllers\System\UserController;
@@ -48,4 +50,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/system/teamgrant',TeamGrantController::class, ['names' => 'teamgrant']);
     Route::resource('/system/currency',CurrencyController::class, ['names' => 'currency']);
     Route::resource('/system/warehouse',WarehouseController::class, ['names' => 'warehouse']);
+    Route::resource('/system/sequence',SequenceController::class, ['names' => 'sequence']);
+    Route::resource('/system/parameter',ParameterController::class, ['names' => 'parameter']);
+
+    Route::resource('/config/product',ProductController::class, ['names' => 'product']);
+    Route::resource('/config/productfamily',ProductFamilyController::class, ['names' => 'productfamily']);
+    Route::resource('/config/productline',ProductLineController::class, ['names' => 'productline']);
 });
