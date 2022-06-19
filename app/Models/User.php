@@ -47,16 +47,22 @@ class User extends Authenticatable
     }
 
     public function grant($module = ''){
-
-        //$grant = DB::select('CALL sp_grant(?,?,?)',[$this->id, $this->current_team_id, $module])[0];
-        //dd($grant);
-        //return view('error',['grant' => $grant,'action'=>'isgrant']);
-        //
         $filter = [
             ['team_id',$this->current_team_id],
             ['module',$module],
         ];
         $row = WhTeamGrant::where($filter)->first();
+        if(!$row){
+            $row = new WhTeamGrant();            
+            $row->module   = $module;
+            $row->team_id  = $this->current_team_id;
+            $row->isgrant  = ($this->isadmin == 'Y') ? 'Y' : 'N';
+            #$row->iscreate = 'D';
+            #$row->isread   = 'D';
+            #$row->isupdate = 'D';
+            #row->isdelete = 'D';
+            $row->save();
+        }
         return  $row;//DB::select('CALL sp_grant(?,?,?)',[$this->id, $this->current_team_id, $module])[0];
     }
 
