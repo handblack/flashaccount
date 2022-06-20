@@ -8,6 +8,7 @@
 				<p>Dashboard</p>
 			</a>
 		</li>
+		{{-- SISTEMAS --}}
 		<li class="nav-item {{ request()->is('system/*') ? 'menu-open' : '' }} {{ (!auth()->user()->menu('m_system')) ? 'd-none' : '' }}">
 			<a href="#" class="nav-link {{ request()->is('system/*') ? 'active' : '' }}">
 				<i class="nav-icon fas fa-rocket"></i>
@@ -55,6 +56,7 @@
 				</li>
 			</ul>
 		</li>
+		{{-- CATALOGO --}}
 		<li class="nav-item {{ request()->is('config/*') ? 'menu-open' : '' }} {{ (!auth()->user()->menu('m_config')) ? 'd-none' : '' }}">
 			<a href="#" class="nav-link {{ request()->is('config/*') ? 'active' : '' }}">								
 				<i class="nav-icon fas fa-clipboard-check"></i>
@@ -84,8 +86,7 @@
 				</li>			
 			</ul>
 		</li>
-
-
+		{{-- SOCIO DE NEGOCIO --}}
 		<li class="nav-item {{ request()->is('bpartner/*') ? 'menu-open' : '' }} {{ (!auth()->user()->menu('m_bpartner')) ? 'd-none' : '' }}">
 			<a href="#" class="nav-link {{ request()->is('bpartner/*') ? 'active' : '' }}">												
 				<i class="nav-icon fas fa-user-tie"></i>
@@ -121,7 +122,7 @@
 				</li>			
 			</ul>
 		</li>
-
+		{{-- VENTAS / CLIENTES --}}
 		<li class="nav-item {{ request()->is('ventas/*') ? 'menu-open' : '' }} {{ (!auth()->user()->menu('m_ventas')) ? 'd-none' : '' }}">
 			<a href="#" class="nav-link {{ request()->is('ventas/*') ? 'active' : '' }}">												
 				<i class="nav-icon fas fa-cash-register"></i>
@@ -132,7 +133,7 @@
 			</a>
 			<ul class="nav nav-treeview">				
 				<li class="nav-item  {{ (!auth()->user()->menu('m_ventas_order')) ? 'd-none' : '' }}">
-					<a href="{{ route('product.index') }}" class="nav-link {{ request()->is('bpartner/manager*') ? 'active' : '' }}">						
+					<a href="{{ route('corder.index') }}" class="nav-link {{ request()->is('ventas/manager*') ? 'active' : '' }}">						
 						<i class="far fa-circle nav-icon"></i>
 						<p>Proforma</p>
 					</a>

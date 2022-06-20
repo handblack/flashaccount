@@ -163,4 +163,14 @@ class ProductController extends Controller
         }
         return response()->json($data);
     }
+
+    public function search(Request $request){
+        $result = WhProduct::where(function($query) use ($request){
+            $query->where('productcode','LIKE',"{$request->productcode}%");
+            $query->whereOr('productname','LIKE',"{$request->productcode}%");
+        })->get(['id','productname as text']);
+        return response()->json([
+            'results' => $result->toArray()
+        ]);
+    }
 }

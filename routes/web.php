@@ -10,6 +10,8 @@ use App\Http\Controllers\System\TeamController;
 use App\Http\Controllers\System\TeamGrantController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\WarehouseController;
+use App\Http\Controllers\Ventas\COrderController;
+use App\Http\Controllers\Ventas\COrderLineController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
@@ -57,8 +59,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/config/product',ProductController::class, ['names' => 'product']);
     Route::resource('/config/productfamily',ProductFamilyController::class, ['names' => 'productfamily']);
     Route::resource('/config/productline',ProductLineController::class, ['names' => 'productline']);
-    
+    Route::get('config/products/ajax',[ProductController::class,'search'])->name('product_ajax');
+
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
 
-
+    // Ventas - Clientes
+    Route::resource('/ventas/manager',COrderController::class, ['names' => 'corder']);
+    Route::resource('/ventas/managers/line',COrderLineController::class, ['names' => 'corderline']);
 });

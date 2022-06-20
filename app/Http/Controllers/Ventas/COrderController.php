@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhCOrder;
 use Illuminate\Http\Request;
 
 class COrderController extends Controller
@@ -14,7 +15,10 @@ class COrderController extends Controller
      */
     public function index()
     {
-        //
+        $result = WhCOrder::paginate(env('PAGINATE_CORDER',10));
+        return view('ventas.order',[
+            'result' => $result
+        ]);
     }
 
     /**
@@ -23,8 +27,11 @@ class COrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+    {   
+        $row = new WhCOrder();
+        return view('ventas.order_form_new',[
+            'row' => $row,
+        ]);
     }
 
     /**
