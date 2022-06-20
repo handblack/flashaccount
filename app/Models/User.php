@@ -57,10 +57,10 @@ class User extends Authenticatable
             $row->module   = $module;
             $row->team_id  = $this->current_team_id;
             $row->isgrant  = ($this->isadmin == 'Y') ? 'Y' : 'N';
-            #$row->iscreate = 'D';
-            #$row->isread   = 'D';
-            #$row->isupdate = 'D';
-            #row->isdelete = 'D';
+            $row->iscreate = ($this->isadmin == 'Y') ? 'Y' : 'N';
+            $row->isread   = ($this->isadmin == 'Y') ? 'Y' : 'N';
+            $row->isupdate = ($this->isadmin == 'Y') ? 'Y' : 'N';
+            $row->isdelete = ($this->isadmin == 'Y') ? 'Y' : 'N';
             $row->save();
         }
         return  $row;//DB::select('CALL sp_grant(?,?,?)',[$this->id, $this->current_team_id, $module])[0];

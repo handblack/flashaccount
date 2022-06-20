@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Config;
+namespace App\Http\Controllers\BPartner;
 
 use App\Http\Controllers\Controller;
-use App\Models\WhProduct;
-use App\Models\WhProductFamily;
-use App\Models\WhProductLine;
-use Illuminate\Http\Request;
+use App\Models\WhBpartner;
 use Hashids\Hashids;
+use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class BPartnerController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    private $module = 'config.product';
+    private $module = 'bpartner.manager';
     public function index()
     {
         if(auth()->user()->grant($this->module)->isgrant == 'N'){
@@ -25,8 +23,8 @@ class ProductController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhProduct::paginate(env('PAGINATE_PRODUCT',10));
-        return view('config.product',[
+        $result = WhBpartner::paginate(env('PAGINATE_BPARTNER',10));
+        return view('bpartner.bpartner',[
             'result' => $result, 
         ]);
     }
@@ -41,20 +39,14 @@ class ProductController extends Controller
         if(auth()->user()->grant($this->module)->iscreate == 'N'){
             return back()->with('error','No tienes privilegio para crear');
         }       
-        $row = new WhProduct();
+        $row = new WhBpartner();
         $row->token = old('token',date("His"));
-        $row->productcode = old('productcode');
-        $row->productname = old('productname');
-        $row->productfamily_id = old('productfamily_id');
-        $row->productline_id   = old('productline_id');
-        $fam = WhProductFamily::all();
-        $lin = WhProductLine::all();
-        return view('config.product_form',[
+        $row->bpartnercode = old('bpartnercode');
+        $row->bpartnername = old('bpartnername');
+        return view('bpartner.bpartner_form',[
             'mode' => 'new',
             'row'  => $row,
-            'fam'  => $fam,
-            'lin'  => $lin,
-            'url'  => route('product.store'),
+            'url'  => route('bpartner.store'),
         ]);
     }
 
@@ -70,16 +62,16 @@ class ProductController extends Controller
             return back()->with('error','No tienes privilegio para crear');
         }
         $request->validate([
-            'productcode' => 'required|unique:wh_products,productcode',
-            'productname' => 'required',
+            'bpartnercode' => 'required|unique:wh_bpartners,bpartnercode',
+            'bpartnername' => 'required',
         ]);
         $hash = new Hashids(env('APP_HASH'));
-        $row = new WhProduct();
+        $row = new WhBpartner();
         $row->fill($request->all());        
         $row->save();
         $row->token = $hash->encode($row->id);
         $row->save();
-        return redirect()->route('product.index')->with('message','Producto creado');
+        return redirect()->route('bpartner.index')->with('message','Producto creado');
     }
 
     /**
@@ -104,15 +96,11 @@ class ProductController extends Controller
         if(auth()->user()->grant($this->module)->isupdate == 'N'){
             return back()->with('error','No tienes privilegio para modificar');
         }
-        $row = WhProduct::where('token',$id)->first();
-        $fam = WhProductFamily::all();
-        $lin = WhProductLine::all();
-        return view('config.product_form',[
+        $row = WhBpartner::where('token',$id)->first();
+        return view('bpartner.bpartner_form',[
             'mode' => 'edit',
             'row'  => $row,
-            'fam'  => $fam,
-            'lin'  => $lin,
-            'url'  => route('product.update',$row->token),
+            'url'  => route('bpartner.update',$row->token),
         ]);
     }
 
@@ -129,13 +117,13 @@ class ProductController extends Controller
             return back()->with('error','No tienes privilegio para modificar');
         }
         $request->validate([
-            'productcode' => "required|unique:wh_products,productcode,{$request->productcode}",
-            'productname' => 'required',
+            'bpartnercode' => "required|unique:wh_bpartners,bpartnercode,{$request->bpartnercode}",
+            'bpartnername' => 'required',
         ]);
-        $row = WhProduct::where('token',$id)->first();
+        $row = WhBpartner::where('token',$id)->first();
         $row->fill($request->all());
         $row->save();
-        return redirect()->route('product.index')->with('message','Registro actualizado');
+        return redirect()->route('bpartner.index')->with('message','Registro actualizado');
     }
 
     /**
@@ -154,7 +142,7 @@ class ProductController extends Controller
             $data['message'] = 'No tienes privilegio para eliminar';
         }
         
-        $row = WhProduct::where('token',$id)->first();
+        $row = WhBpartner::where('token',$id)->first();
         if($row){
             $row->delete();
         }else{

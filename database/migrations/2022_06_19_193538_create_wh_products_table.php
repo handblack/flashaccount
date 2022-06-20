@@ -16,10 +16,11 @@ class CreateWhProductsTable extends Migration
     {
         Schema::create('wh_products', function (Blueprint $table) {
             $table->id();
-            $table->string('productcode',15);
+            $table->string('productcode',15)->unique();
             $table->string('productname',200);
             $table->foreignId('productfamily_id');
             $table->foreignId('productline_id');
+            $table->foreignId('um_id');
             $table->string('token',60);
             $table->timestamps();
         });
@@ -29,6 +30,7 @@ class CreateWhProductsTable extends Migration
             'productname' => 'LAPICERO TRILUX 032 MEDIUM NEGRO',
             'productfamily_id' => 1,
             'productline_id' => 1,
+            'um_id' => 1,
             'token' => md5('1'),
         ]);
         $row->create([
@@ -36,6 +38,7 @@ class CreateWhProductsTable extends Migration
             'productname' => 'LAPICERO TRILUX 032 MEDIUM AZUL',
             'productfamily_id' => 1,
             'productline_id' => 1,
+            'um_id' => 1,
             'token' => md5('2'),
         ]);
         $row->create([
@@ -43,6 +46,7 @@ class CreateWhProductsTable extends Migration
             'productname' => 'LAPICERO TRILUX 032 MEDIUM ROJO',
             'productfamily_id' => 1,
             'productline_id' => 1,
+            'um_id' => 1,
             'token' => md5('3'),
         ]);
 

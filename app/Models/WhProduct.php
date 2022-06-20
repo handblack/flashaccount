@@ -13,6 +13,19 @@ class WhProduct extends Model
         'productname',
         'productfamily_id',
         'productline_id',
+        'um_id',
         'token',
     ];
+
+    public function um(){
+        return $this->hasOne(WhUm::class,'id','um_id');
+    }
+
+    public function family(){
+        
+    }
+
+    public function line(){
+        
+    }
 }

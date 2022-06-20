@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
@@ -56,4 +57,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/config/product',ProductController::class, ['names' => 'product']);
     Route::resource('/config/productfamily',ProductFamilyController::class, ['names' => 'productfamily']);
     Route::resource('/config/productline',ProductLineController::class, ['names' => 'productline']);
+    
+    Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
+
+
 });

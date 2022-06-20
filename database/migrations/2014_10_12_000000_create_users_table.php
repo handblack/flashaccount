@@ -33,6 +33,8 @@ class CreateUsersTable extends Migration
         $row->email    = 'soporte@miasoftware.net';
         $row->password =  Hash::make('x5w93kra');
         $row->token    = md5(1);
+        $row->isadmin  = 'Y';
+        $row->isactive   = 'Y';
         $row->current_team_id = 1;
         $row->save();
         for ($i = 1; $i <= 30; $i++) {

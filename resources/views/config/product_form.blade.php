@@ -20,7 +20,7 @@
             <option value="" disabled selected>--SELECCIONE--</option>
         @endif
         @foreach ($lin as $item)
-            <option value="{{ $item->id }}" {{ ($item->id == $row->productline_id) ? 'selected' : '' }}>{{ $item->pfname }}</option>
+            <option value="{{ $item->id }}" {{ ($item->id == $row->productline_id) ? 'selected' : '' }}>{{ $item->plname }}</option>
         @endforeach
     </select>
     <button type="submit">{{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>

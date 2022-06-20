@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhBpartner extends Model
+class WhWarehouse extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'bpartnercode',
-        'bpartnername',
-        'token',
+        'warehousename',
+        'shortname',
+        'isactive',
     ];
 }

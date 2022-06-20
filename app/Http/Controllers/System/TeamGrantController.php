@@ -54,10 +54,10 @@ class TeamGrantController extends Controller{
     public function update(Request $request, $id){
         $grant = WhTeamGrant::find($id);
         $grant->isgrant     = ($request->has('isgrant')) ? 'Y' : 'N';
-        if(!$grant->iscreate == 'D'){$grant->iscreate    = ($request->has('iscreate')) ? 'Y' : 'N';}
-        if(!$grant->isread == 'D'){$grant->isread      = ($request->has('isread')) ? 'Y' : 'N';}
-        if(!$grant->isupdate == 'D'){$grant->isupdate    = ($request->has('isupdate')) ? 'Y' : 'N';}
-        if(!$grant->isdelete == 'D'){$grant->isdelete    = ($request->has('isdelete')) ? 'Y' : 'N';}
+        if(!($grant->iscreate == 'D')){$grant->iscreate    = ($request->has('iscreate')) ? 'Y' : 'N';}            
+        if(!($grant->isread   == 'D')){$grant->isread      = ($request->has('isread')) ? 'Y' : 'N';}
+        if(!($grant->isupdate == 'D')){$grant->isupdate    = ($request->has('isupdate')) ? 'Y' : 'N';}
+        if(!($grant->isdelete == 'D')){$grant->isdelete    = ($request->has('isdelete')) ? 'Y' : 'N';}
         $grant->save();
         return response()->json(['message'=>"Se actualizo <strong>{$grant->module}</strong>"]);
         /*
