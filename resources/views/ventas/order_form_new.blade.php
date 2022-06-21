@@ -131,7 +131,7 @@
                 </thead>
                 <tbody>
                     @forelse ($lines as $item)
-                        <tr id="{{ $item->token }}">
+                        <tr id="tr-{{ $item->id }}">
                             <td>{{ $item->productcode }}</td>
                             <td>{{ $item->description }}</td>
                             <td>{{ $item->priceunit }}</td>

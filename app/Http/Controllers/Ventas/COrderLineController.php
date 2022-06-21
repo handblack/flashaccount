@@ -49,7 +49,7 @@ class COrderLineController extends Controller
             $row->description = $request->servicename;
         }
         $row->save();
-        $html = "<tr id='{$row->token}'>";        
+        $html = "<tr id='tr-{$row->token}'>";        
         $html .= "<td>{$row->productcode}</td>";
         $html .= "<td>{$row->description}</td>";
         $html .= "<td class='text-right'>{$row->qty}</td>";        
@@ -108,6 +108,15 @@ class COrderLineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+        $row = WhTempLine::where('token',$id)->first();
+        if($row){
+            $row->delete();
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 }
