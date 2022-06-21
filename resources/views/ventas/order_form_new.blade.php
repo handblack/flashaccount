@@ -99,7 +99,7 @@
                     <div class="float-sm-right mt-1">
 
                         <div class="btn-group">
-                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem">
+                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem" data-backdrop="static" data-keyboard="false">
                                 <i class="fas fa-plus-square fa-fw"></i>
                                 Agregar Item
                             </a>    
@@ -118,7 +118,7 @@
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-order-items">
                 <thead>
                     <tr class="border-bottom bg-secondary">
-                        <th width="100">Codigo</th>
+                        <th width="80">Codigo</th>
                         <th class="border-left">Producto/Servicio</th>
                         <th width="80" class="text-right border-left">Cantidad</th>
                         <th width="80" class="text-right border-left">UM</th>
@@ -132,7 +132,9 @@
                 <tbody>
                     <tr class="d-none"></tr>     
                     @forelse ($lines as $item)
-                        @include('ventas.order_form_list_item',['item'=>$item])                        
+                        @include('ventas.order_form_list_item',[
+                            'item'=>$item,
+                        ])                        
                     @empty
                         <!-- No hay ITEMS -->
                     @endforelse
@@ -144,7 +146,14 @@
         </div>
     </div>
     {{-- MODALES --}}
-    @include('ventas.order_form_additem')
+    {{-- init / FormModalAddItems --}}
+    <div class="modal" id="ModalAddItem"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        @include('ventas.order_form_additem',[
+            'item' => $item,
+            'taxes' => $taxes,
+        ])
+    </div>
+    {{-- fin / FormModalAddItems --}}
 @endsection
 
 @section('script')
@@ -162,12 +171,13 @@ $(function(){
                 if(data.status == '100'){
                     
                     $("#ModalAddItem").modal('hide');
-                    console.log(data.tr_item);
-                    //$('#table-order-items tbody tr:last').after(data.tr_item);
-                    //$('#table-order-items tbody tr').last().before(data.tr_item);   
-                    //$('#table-order-items tbody').last().before(data.tr_item);   
-                    $('#table-order-items tbody tr').last().after(data.tr_item);   
+                     
                     $('#order-items-totales').html(data.tr_total);
+                    if(data.modeline == 'edit'){
+                        $('#tr-' + data.item.id).replaceWith(data.tr_item);   
+                    }else{
+                        $('#table-order-items tbody tr').last().after(data.tr_item);   
+                    }
                     //$('#table-order-items tbody').last(data.tr_item);   
                     //$('#table-order-items tbody tr').last(data.tr_item);   
                     //$('#table-order-items tbody tr:last').after('<tr><td>aaa</td></tr>');
@@ -231,12 +241,36 @@ $(function(){
         theme:'bootstrap4'
     });
 
-    @if(!$lines)
-        $("#ModalAddItem").modal('show');
-    @endif
     $('#servicename').hide();
 });
 
+function edit_item(t){
+    let id = $(t).data('id');
+    let url = $(t).data('url');
+    $.get(url,function(data){
+        $('#modeline').val('edit');
+        $('#itemtoken').val(data.item.token);
+        $("#typeproduct").val(data.item.typeproduct).change();        
+        if(data.item.typeproduct == 'P'){
+            if ($('#product_id').find("option[value='" + data.item.product_id + "']").length) {
+                $('#product_id').val(data.item.product_id).trigger('change');
+            } else { 
+                var newOption = new Option(data.item.productcode + ' - ' + data.item.description, data.item.product_id, true, true);
+                $('#product_id').append(newOption).trigger('change');
+            } 
+        }else{
+            $('#servicename2').val(data.item.description)
+        }
+        $('#qty').val(data.item.qty);
+        $('#priceunit').val(data.item.priceunit);
+    });    
+    $('#ModalAddItem').modal('show');
+}
+
+function close_modal_item(){
+    $('#ModalAddItem').modal('hide');
+    $('#modeline').val('new');
+}
 function delete_item(t){     
     if (confirm('Estas seguro en eliminar?')) {
         let id = $(t).data('id');
@@ -257,4 +291,3 @@ function delete_item(t){
 }
 </script>
 @endsection
-

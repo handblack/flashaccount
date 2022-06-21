@@ -15,10 +15,14 @@ class WhTempLine extends Model
         'description',
         'qty',
         'priceunit',
+        'tax_id',
         'token',
     ];
 
     public function product(){
         return $this->hasOne(WhProduct::class,'id','product_id');
+    }
+    public function tax(){
+        return $this->hasOne(WhTax::class,'id','tax_id');
     }
 }

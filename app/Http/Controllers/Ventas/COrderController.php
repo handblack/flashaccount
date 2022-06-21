@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ventas;
 use App\Http\Controllers\Controller;
 use App\Models\WhCOrder;
 use App\Models\WhCurrency;
+use App\Models\WhTax;
 use App\Models\WhTempLine;
 use Illuminate\Http\Request;
 
@@ -31,10 +32,14 @@ class COrderController extends Controller
     public function create()
     {   
         $row = new WhCOrder();
-        $lines = WhTempLine::where('session',session()->getId())->get();
+        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
+        $item = new WhTempLine();
+        $item->typeproduct = 'P';
         return view('ventas.order_form_new',[
             'row' => $row,
             'lines' => $lines,
+            'item'  => $item,
+            'taxes' => WhTax::all(),
             'currency' => WhCurrency::all(),
         ]);
     }

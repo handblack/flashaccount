@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhCOrderLine;
+use App\Models\WhTax;
 use App\Models\WhTempLine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -38,10 +39,17 @@ class COrderLineController extends Controller
      */
     public function store(Request $request)
     {
-        $row = new WhTempLine();
+        if($request->modeline == 'new'){
+            $row = new WhTempLine();
+        }else{
+            $row = WhTempLine::where('token',$request->itemtoken)->first();
+        }        
         $row->fill($request->all());  
         $row->token = md5(date("YmdHis"));
+        $row->it_base  = $request->qty * $request->priceunit;
         $row->save();
+        $row->it_tax   = round(($row->tax->ratio / 100) * $row->it_base,2);
+        $row->it_grand = $row->it_base + $row->it_tax;
         //Completamos demas informacion
         if($request->typeproduct == 'P'){
             $row->productcode = $row->product->productcode;
@@ -54,7 +62,10 @@ class COrderLineController extends Controller
         $data['status']   = '100';
         $data['message']  = 'Se agrego ITEM';
         $data['tr_item']  = view('ventas.order_form_list_item',['item' => $row])->render();
-        $data['tr_total'] = view('ventas.order_form_list_total',['lines' => $row])->render();
+        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
+        $data['tr_total'] = view('ventas.order_form_list_total',['lines' => $lines])->render();
+        $data['item'] = $row->toArray();
+        $data['modeline'] = $request->modeline;
         return response()->json($data);
     }
 
@@ -77,7 +88,17 @@ class COrderLineController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item = WhTempLine::where('token',$id)->first();
+        $taxes = WhTax::all();
+        /*return view('ventas.order_form_additem',[
+            'item' => $item,
+            'taxes' => $taxes,
+        ]);
+        */
+        $data['status'] = 100;
+        $data['messages'] = '';
+        $data['item'] = $item->toArray();
+        return response()->json($data);
     }
 
     /**
