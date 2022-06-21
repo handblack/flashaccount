@@ -54,8 +54,10 @@ class COrderLineController extends Controller
         $html .= "<td>{$row->description}</td>";
         $html .= "<td class='text-right'>{$row->qty}</td>";        
         $html .= "<td class='text-right'>{$row->priceunit}</td>";   
+        $html .= "<td>";
         $html .= "<a class='delete-record' data-url='".route('corderline.destroy', $row->token)."'";
-        $html .= " data-id='{$row->id}'><i class='fas fa-trash-alt'></i></a>";
+        $html .= " data-id='{$row->id}'>".'<i class="fas fa-trash-alt"></i></a>';
+        $html .= '</td>';
         $html .= '</tr>';
         //Responsemod en JSON
         $data['status'] = '100';

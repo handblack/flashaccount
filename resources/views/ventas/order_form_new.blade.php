@@ -172,7 +172,7 @@ $(function(){
                 if(data.status == '100'){
                     
                     $("#ModalAddItem").modal('hide');
-                    $('#table-order-items tbody tr:last').after(data.tr_item);
+                    $('#table-order-items tbody tr:last').after().load(data.tr_item);
                     //$('#table-order-items tbody tr').last().before(data.tr);   
                     toastr.success(data.message);
                     $(this).trigger("reset");
