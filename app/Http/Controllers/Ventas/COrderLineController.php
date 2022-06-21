@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WhCOrderLine;
 use App\Models\WhTempLine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class COrderLineController extends Controller
 {
@@ -49,20 +50,11 @@ class COrderLineController extends Controller
             $row->description = $request->servicename;
         }
         $row->save();
-        $html = "<tr id='tr-{$row->token}'>";        
-        $html .= "<td>{$row->productcode}</td>";
-        $html .= "<td>{$row->description}</td>";
-        $html .= "<td class='text-right'>{$row->qty}</td>";        
-        $html .= "<td class='text-right'>{$row->priceunit}</td>";   
-        $html .= "<td>";
-        $html .= "<a class='delete-record' data-url='".route('corderline.destroy', $row->token)."'";
-        $html .= " data-id='{$row->id}'>".'<i class="fas fa-trash-alt"></i></a>';
-        $html .= '</td>';
-        $html .= '</tr>';
         //Responsemod en JSON
-        $data['status'] = '100';
-        $data['message'] = 'Se agrego ITEM';
-        $data['tr_item'] = $html;
+        $data['status']   = '100';
+        $data['message']  = 'Se agrego ITEM';
+        $data['tr_item']  = view('ventas.order_form_list_item',['item' => $row])->render();
+        $data['tr_total'] = view('ventas.order_form_list_total',['lines' => $row])->render();
         return response()->json($data);
     }
 

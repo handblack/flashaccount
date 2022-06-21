@@ -117,49 +117,39 @@
         <div class="card-body table-responsive p-0 border-top">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-order-items">
                 <thead>
-                    <tr>
-                        <th>Codigo</th>
-                        <th>Producto/Servicio</th>
-                        <th>Cantidad</th>
-                        <th>UM</th>
-                        <th>Precio</th>
-                        <th>SubTotal</th>
-                        <th>IGV</th>
-                        <th>TOTAL</th>
-
+                    <tr class="border-bottom bg-secondary">
+                        <th width="100">Codigo</th>
+                        <th class="border-left">Producto/Servicio</th>
+                        <th width="80" class="text-right border-left">Cantidad</th>
+                        <th width="80" class="text-right border-left">UM</th>
+                        <th class="border-left">Precio</th>
+                        <th class="border-left">SubTotal</th>
+                        <th class="border-left">IGV</th>
+                        <th class="border-left">TOTAL</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr class="d-none"></tr>     
                     @forelse ($lines as $item)
-                        <tr id="tr-{{ $item->id }}">
-                            <td>{{ $item->productcode }}</td>
-                            <td>{{ $item->description }}</td>
-                            <td>{{ $item->priceunit }}</td>
-                            <td class="text-right">
-                                <i class="far fa-edit"></i> |                                
-                                <a class="delete-record" data-url="{{ route('corderline.destroy', $item->token) }}"
-                                    data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @include('ventas.order_form_list_item',['item'=>$item])                        
                     @empty
-                        <tr>
-                            <td coslpan="10">No hay item registrado</td>
-                        </tr>                        
+                        <!-- No hay ITEMS -->
                     @endforelse
-                </tbody>
+                </tbody>                
             </table>
         </div>
-
+        <div class="card-body border-top" id="order-items-totales">
+            @include('ventas.order_form_list_total',['lines'=>$lines])
+        </div>
     </div>
     {{-- MODALES --}}
     @include('ventas.order_form_additem')
-
 @endsection
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
 <script>
-
 $(function(){
     let fai = $('#form-add-item');
     fai.submit(function (e) {
@@ -172,8 +162,15 @@ $(function(){
                 if(data.status == '100'){
                     
                     $("#ModalAddItem").modal('hide');
-                    $('#table-order-items tbody tr:last').after().load(data.tr_item);
-                    //$('#table-order-items tbody tr').last().before(data.tr);   
+                    console.log(data.tr_item);
+                    //$('#table-order-items tbody tr:last').after(data.tr_item);
+                    //$('#table-order-items tbody tr').last().before(data.tr_item);   
+                    //$('#table-order-items tbody').last().before(data.tr_item);   
+                    $('#table-order-items tbody tr').last().after(data.tr_item);   
+                    $('#order-items-totales').html(data.tr_total);
+                    //$('#table-order-items tbody').last(data.tr_item);   
+                    //$('#table-order-items tbody tr').last(data.tr_item);   
+                    //$('#table-order-items tbody tr:last').after('<tr><td>aaa</td></tr>');
                     toastr.success(data.message);
                     $(this).trigger("reset");
                 }else{
@@ -239,6 +236,25 @@ $(function(){
     @endif
     $('#servicename').hide();
 });
+
+function delete_item(t){     
+    if (confirm('Estas seguro en eliminar?')) {
+        let id = $(t).data('id');
+        let url = $(t).data('url');
+        console.log(id);
+        console.log(url);
+        $.post(url,{_method:'delete'})
+        .done(function(data){
+            if(data.status == 100){
+                $('#tr-'+id).remove();
+                toastr.success('Elemento eliminado');
+            }else{
+                toastr.error(data.message);
+            }
+        });
+    }
+    
+}
 </script>
 @endsection
 

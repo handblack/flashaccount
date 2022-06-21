@@ -49,6 +49,22 @@ class CreateWhProductsTable extends Migration
             'um_id' => 1,
             'token' => md5('3'),
         ]);
+        $row->create([
+            'productcode' => '1003',
+            'productname' => 'LAPICERO PILOT BPS-GP-F-B NEGRO',
+            'productfamily_id' => 1,
+            'productline_id' => 1,
+            'um_id' => 1,
+            'token' => md5('3'),
+        ]);
+        $row->create([
+            'productcode' => '1004',
+            'productname' => 'DOÑA PEPA',
+            'productfamily_id' => 1,
+            'productline_id' => 1,
+            'um_id' => 1,
+            'token' => md5('3'),
+        ]);
 
     }
 
