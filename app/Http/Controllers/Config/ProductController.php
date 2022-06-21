@@ -8,6 +8,7 @@ use App\Models\WhProductFamily;
 use App\Models\WhProductLine;
 use Illuminate\Http\Request;
 use Hashids\Hashids;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -168,7 +169,8 @@ class ProductController extends Controller
         $result = WhProduct::where(function($query) use ($request){
             $query->where('productcode','LIKE',"{$request->productcode}%");
             $query->whereOr('productname','LIKE',"{$request->productcode}%");
-        })->get(['id','productname as text']);
+        })
+        ->get(['id',DB::raw('CONCAT(productcode,\' - \',productname) as text')]);
         return response()->json([
             'results' => $result->toArray()
         ]);

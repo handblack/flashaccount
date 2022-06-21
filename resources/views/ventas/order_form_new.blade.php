@@ -2,10 +2,11 @@
 
 @section('header')
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 @endsection
 
 @section('breadcrumb')
-    <section class="content-header">
+    <section class="content-header pb-2">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
@@ -22,13 +23,39 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Orden de Venta
-                            &nbsp;
-                            <i class="fas fa-edit fa-fw"></i>
-                        </h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-sm-right">
+                                <h1 class="h4 mb-0 d-none d-md-inline-block">
+                                    Orden de Venta
+                                    &nbsp;
+                                    <i class="fas fa-edit fa-fw"></i>
+                                </h1>
+                                
+                            </div>
+                        </div>
                     </div>
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="float-sm-right">
+                                <div class="btn-group">
+                                    <select name="" id="" class="form-control">
+                                        <option value="">F001</option>                                
+                                    </select>
+                                </div>
+                                <div class="btn-group">                            
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="btn-group">                            
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+
+
                 </div>
 
             </div>
@@ -41,93 +68,92 @@
         <div class="card-header bg-light">
             <div class="row">
 
-                <div class="col-md-8">
+                <div class="col-md-8 col-sm-12">
                     <label class="mb-0">Socio de Negocio</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                        placeholder="Identificador del Equipo" value="{{ $row->name }}" required>
+                    <select class="form-control select2-bpartner">
+                    </select>
+                
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <label class="mb-0">Codigo</label>
                     <input type="text" class="form-control" id="name" name="name"
                         placeholder="Identificador del Equipo" value="{{ $row->name }}" required>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-sm-6">
                     <label class="mb-0">Moneda</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                        placeholder="Identificador del Equipo" value="{{ $row->name }}" required>
+                    <select name="currency_id" class="form-control">
+                        @foreach ($currency as $item)
+                            <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body pt-1 pb-1 bg-light ">
             <div class="row">
-                <div class="col-md-8">
-                    <label class="mb-0">Producto Servicio</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                        placeholder="Identificador del Equipo" value="{{ $row->name }}" required>
+                <div class="col-md-6">
+                    
                 </div>
-                <a href="#"  data-toggle="modal" data-target="#exampleModal">
-                    aaa
-                </a>
+                <div class="col-md-6">
+                    <div class="float-sm-right mt-1">
+
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem">
+                                <i class="fas fa-plus-square fa-fw"></i>
+                                Agregar Item
+                            </a>    
+                        </div>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-primary btn-sm">
+                                <i class="fas fa-save fa-fw"></i>
+                                Procesar
+                            </a>
+                        </div>    
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body border-top">
-            <table class="table">
-                <tr>
-                    <td>DP</td>
-                    <td>PRO</td>
-                    <td>1</td>
-                    <td>12.30</td>
-                    <td>
-                        <i class="far fa-edit"></i> |
-                        <i class="far fa-trash-alt"></i>
-                    </td>
-                </tr>
+        <div class="card-body table-responsive p-0 border-top">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-order-items">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Producto/Servicio</th>
+                        <th>Cantidad</th>
+                        <th>UM</th>
+                        <th>Precio</th>
+                        <th>SubTotal</th>
+                        <th>IGV</th>
+                        <th>TOTAL</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($lines as $item)
+                        <tr id="{{ $item->token }}">
+                            <td>{{ $item->productcode }}</td>
+                            <td>{{ $item->description }}</td>
+                            <td>{{ $item->priceunit }}</td>
+                            <td class="text-right">
+                                <i class="far fa-edit"></i> |                                
+                                <a class="delete-record" data-url="{{ route('corderline.destroy', $item->token) }}"
+                                    data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td coslpan="10">No hay item registrado</td>
+                        </tr>                        
+                    @endforelse
+                </tbody>
             </table>
         </div>
 
     </div>
     {{-- MODALES --}}
-    {{-- init / FormModalAddItems --}}
-    <div class="modal" id="exampleModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('corderline.store') }}" id="form-add-item" method="POST">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <select name="typeproduct" id="typeproduct">
-                            <option value="P">Producto</option>
-                            <option value="S">Servicio</option>
-                        </select>
-                        <select name="" id="">
-                            <option value="1">Operacion Grabada</option>
-                            <option value="2">Operacion Inafecta</option>
-                            <option value="3">Operacion Exonerada</option>
-                        </select> 
+    @include('ventas.order_form_additem')
 
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <input type="text" name="productcode" id="productcode" class="select2-product">
-                            <select name="productname" id="productname" class="form-control select2-product"></select>
-                        </div>
-                        <div>
-                            <textarea name="" name="servicename" id="servicename" cols="30" rows="3"></textarea>
-                        </div>
-                        <p>Modal body text goes here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    {{-- fin / FormModalAddItems --}}
 @endsection
 
 @section('script')
@@ -143,7 +169,16 @@ $(function(){
             url: fai.attr('action'),
             data: fai.serialize(),
             success: function(data){
-                console.log('add correcto');
+                if(data.status == '100'){
+                    
+                    $("#ModalAddItem").modal('hide');
+                    $('#table-order-items tbody tr:last').after(data.tr_item);
+                    //$('#table-order-items tbody tr').last().before(data.tr);   
+                    toastr.success(data.message);
+                    $(this).trigger("reset");
+                }else{
+                    toastr.error(data.message);
+                }
             },
             error: function(data){
                 console.log('error genero');
@@ -161,16 +196,48 @@ $(function(){
             $('#servicename').show();
         }        
     })
-    $('#servicename').hide();
+    
+    // SocioNegocio
+    $('.select2-bpartner').select2({
+        ajax: {
+            url: '{{ route('api.bpartner') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2,
+        theme:'bootstrap4'
+    });
     // Productos
     $('.select2-product').select2({
         ajax: {
-            url: '{{ route('product_ajax') }}',
+            url: '{{ route('api.product') }}',
+            type: 'post',
             dataType: 'json',
-            type: "POST",
-            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2,
+        theme:'bootstrap4'
     });
+
+    @if(!$lines)
+        $("#ModalAddItem").modal('show');
+    @endif
+    $('#servicename').hide();
 });
 </script>
 @endsection

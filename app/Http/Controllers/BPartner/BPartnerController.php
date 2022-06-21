@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WhBpartner;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BPartnerController extends Controller
 {
@@ -150,5 +151,16 @@ class BPartnerController extends Controller
             $data['message'] = 'El registro no existe o fue eliminado';
         }
         return response()->json($data);
+    }
+
+    public function search(Request $request){
+        $result = WhBpartner::where('bpartnername','LIKE',"%{$request->q}%")
+            ->whereOr('bpartnercode',)
+            ->limit(20)
+            ->orderBy('bpartnername','asc')
+            ->get(['id',DB::raw('CONCAT(bpartnercode,\' - \',bpartnername) as text')]);
+        return response()->json([
+            'results' => $result->toArray(),
+        ]);
     }
 }
