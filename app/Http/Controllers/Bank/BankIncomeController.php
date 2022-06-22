@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempBankIncome;
+use App\Models\TempBankIncomeLine;
+use App\Models\TempBankIncomePayment;
 use App\Models\WhBIncome;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class BankIncomeController extends Controller
@@ -39,7 +43,16 @@ class BankIncomeController extends Controller
      */
     public function store(Request $request)
     {
-        //pside
+        $request->validate([
+            'bpartner_id' => 'required'
+        ]);
+        $row = new TempBankIncome();
+        $row->bpartner_id = $request->bpartner_id;
+        $row->save();
+        $hash = new Hashids(env('APP_HASH'));
+        $row->token = $hash->encode($row->id);
+        $row->save();
+        return redirect()->route('bincome.edit',$row->token);
     }
 
     /**
@@ -61,7 +74,14 @@ class BankIncomeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row     = TempBankIncome::where('token',$id)->first();
+        $lines   = TempBankIncomeLine::where('income_id',$row->id)->get();
+        $payment = TempBankIncomePayment::where('income_id',$row->id)->get();
+        return view('bank.income_form',[
+            'row'     => $row,
+            'lines'   => $lines,
+            'payment' => $payment,
+        ]);
     }
 
     /**

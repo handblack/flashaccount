@@ -57,7 +57,8 @@
     <div class="modal fade" id="ModalCreate"role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="">
+            <form action="{{ route('bincome.store') }}" method="POST">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
                         <h5 class="modal-title" id="exampleModalLongTitle">Registrar INGRESO a Caja / Bancos</h5>
@@ -67,12 +68,12 @@
                     </div>
                     <div class="modal-body">
                         <label class="mb-0">Socio de Negocio</label>
-                        <select class="form-control select2-bpartner"></select>
+                        <select name="bpartner_id" class="form-control select2-bpartner" required></select>
                         <p class="lead mt-3">Para todo ingreso a CAJA/BANCO se debe de identificar al Socio de Negocio, asi tambien podra especificar como ANTICIPO a su cuenta</p>
                     </div>
                     <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Crear INGRESO</button>
+                        <button type="submit" class="btn btn-primary">Crear INGRESO</button>
                     </div>
                 </div>
             </form>
