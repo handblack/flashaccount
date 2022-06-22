@@ -51,12 +51,12 @@
                 <div class="modal-body">
                     <div class="row" id="productcode">
                         <div class="col-md-12">                                
-                            <select name="product_id" id="product_id" class="form-control select2-product"></select>
+                            <select name="product_id" id="product_id" class="form-control select2-product" ></select>
                         </div>
                     </div>
-                    <div class="row" id="servicename">
+                    <div class="row" id="servicename" style="display: none;">
                         <div class="col-md-12">
-                            <textarea name="servicename" id="servicename2" cols="30" rows="2" class="form-control"></textarea>
+                            <textarea name="servicename" id="servicename2" cols="30" rows="2" class="form-control" ></textarea>
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -65,7 +65,11 @@
                             <div class="input-group">
                                 <input type="text" id="qty" name="qty" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">UND</span>
+                                    <select name="um_id" id="um_id" class="form-control" style="border-top-left-radius:0px;border-bottom-left-radius:0px;">
+                                        @foreach (auth()->user()->ums() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->umname }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

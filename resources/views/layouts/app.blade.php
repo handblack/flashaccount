@@ -9,8 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>flashaccount</title>
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css')}}">
@@ -18,6 +17,12 @@
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/css/docs.css') }}">
     @yield('header')
+    <style>
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 47, 255, 0.6);
+        }
+    </style>
     @yield('style')
 </head>
 

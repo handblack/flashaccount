@@ -39,32 +39,42 @@ class COrderLineController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->modeline == 'new'){
-            $row = new WhTempLine();
-        }else{
+        $data['status']   = '100';
+        $data['message']  = 'Se agrego ITEM';                
+        if($request->modeline == 'edit'){
             $row = WhTempLine::where('token',$request->itemtoken)->first();
+        }else{
+            $row = new WhTempLine();
         }        
         $row->fill($request->all());  
-        $row->token = md5(date("YmdHis"));
-        $row->it_base  = $request->qty * $request->priceunit;
+        $row->token    = md5(date("YmdHis"));
+        $row->it_base  = $request->qty * $request->priceunit;        
         $row->save();
         $row->it_tax   = round(($row->tax->ratio / 100) * $row->it_base,2);
         $row->it_grand = $row->it_base + $row->it_tax;
         //Completamos demas informacion
         if($request->typeproduct == 'P'){
+            if(!$request->has('product_id')){
+                $data['status']   = '101';
+                $data['message']  = 'Especificar el producto';
+            }
             $row->productcode = $row->product->productcode;
             $row->description = $row->product->productname;
+            $row->um_id       = $row->product->um->id;
+            $row->umname      = $row->product->um->umname;
+            $row->umshortname = $row->product->um->shortname;
         }else{
             $row->description = $request->servicename;
+            $row->umname      = $row->um->umname;
+            $row->umshortname = $row->um->shortname;
         }
         $row->save();
         //Responsemod en JSON
-        $data['status']   = '100';
-        $data['message']  = 'Se agrego ITEM';
+        
         $data['tr_item']  = view('ventas.order_form_list_item',['item' => $row])->render();
         $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
         $data['tr_total'] = view('ventas.order_form_list_total',['lines' => $lines])->render();
-        $data['item'] = $row->toArray();
+        $data['item']     = $row->toArray();
         $data['modeline'] = $request->modeline;
         return response()->json($data);
     }

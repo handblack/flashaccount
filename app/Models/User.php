@@ -46,6 +46,10 @@ class User extends Authenticatable
         return $this->hasOne(WhTeam::class,'id','current_team_id');
     }
 
+    public function ums(){
+        return WhUm::all();
+    }
+
     public function grant($module = ''){
         $filter = [
             ['team_id',$this->current_team_id],
@@ -94,4 +98,6 @@ class User extends Authenticatable
         }
         return $response;
     }
+
+
 }

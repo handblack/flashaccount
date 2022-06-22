@@ -20,6 +20,9 @@ class CreateWhTempLinesTable extends Migration
             $table->enum('typeproduct',['P','S'])->default('P');
             $table->foreignId('tax_id')->nullable();
             $table->foreignId('product_id')->nullable();
+            $table->foreignId('um_id')->nullable();
+            $table->string('umname',30)->nullable();
+            $table->string('umshortname',15)->nullable();
             $table->string('productcode',15)->nullable();
             $table->text('description')->nullable();
             $table->double('qty',12,5)->nullable();

@@ -2,7 +2,7 @@
     <td>{{ $item->productcode }}</td>
     <td>{{ $item->description }}</td>
     <td class="text-right border-left">{{ $item->qty }}</td>
-    <td></td>
+    <td>{{ $item->umshortname }}</td>
     <td class="text-right border-left">{{ $item->priceunit }}</td>
     <td class="text-right border-left">{{ number_format($item->it_base,2) }}</td>
     <td></td>

@@ -65,55 +65,54 @@
 
 @section('container')
     <div class="card">
-        <div class="card-header bg-light">
-            <div class="row">
+        <form action="{{ route('corder.store') }}" method="POST">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name='session' value="corder-{{ session()->getId() }}">
+            <div class="card-header bg-light">
+                <div class="row">
 
-                <div class="col-md-8 col-sm-12">
-                    <label class="mb-0">Socio de Negocio</label>
-                    <select class="form-control select2-bpartner">
-                    </select>
-                
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <label class="mb-0">Codigo</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                        placeholder="Identificador del Equipo" value="{{ $row->name }}" required>
-                </div>
-                <div class="col-md-1 col-sm-6">
-                    <label class="mb-0">Moneda</label>
-                    <select name="currency_id" class="form-control">
-                        @foreach ($currency as $item)
-                            <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-            </div>
-        </div>
-        <div class="card-body pt-1 pb-1 bg-light ">
-            <div class="row">
-                <div class="col-md-6">
+                    <div class="col-md-10 col-sm-12">
+                        <label class="mb-0">Socio de Negocio</label>
+                        <select class="form-control select2-bpartner">
+                        </select>
                     
-                </div>
-                <div class="col-md-6">
-                    <div class="float-sm-right mt-1">
+                    </div>                    
+                    <div class="col-md-2 col-sm-6">
+                        <label class="mb-0">Moneda</label>
+                        <select name="currency_id" class="form-control">
+                            @foreach ($currency as $item)
+                                <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                        <div class="btn-group">
-                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem" data-backdrop="static" data-keyboard="false">
-                                <i class="fas fa-plus-square fa-fw"></i>
-                                Agregar Item
-                            </a>    
+                </div>
+            </div>
+            <div class="card-body pt-1 pb-1 bg-light ">
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="float-sm-right mt-1">
+
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem" data-backdrop="static" data-keyboard="false">
+                                    <i class="fas fa-plus-square fa-fw"></i>
+                                    Agregar Item
+                                </a>    
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-save fa-fw"></i>
+                                    Procesar
+                                </button>                                
+                            </div>    
                         </div>
-                        <div class="btn-group">
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="fas fa-save fa-fw"></i>
-                                Procesar
-                            </a>
-                        </div>    
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="card-body table-responsive p-0 border-top">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-order-items">
                 <thead>
@@ -168,10 +167,8 @@ $(function(){
             url: fai.attr('action'),
             data: fai.serialize(),
             success: function(data){
-                if(data.status == '100'){
-                    
-                    $("#ModalAddItem").modal('hide');
-                     
+                if(data.status == '100'){                    
+                    $("#ModalAddItem").modal('hide');                     
                     $('#order-items-totales').html(data.tr_total);
                     if(data.modeline == 'edit'){
                         $('#tr-' + data.item.id).replaceWith(data.tr_item);   
@@ -197,10 +194,16 @@ $(function(){
     $('#typeproduct').change(function(){
         if($(this).val() == 'P'){
             $('#productcode').show();
+            //$('#product_id').attr('required', true);
             $('#servicename').hide();
+            $('#servicename2').attr('required', false);
+            $('#um_id').prop( "disabled", true);
         }else{
             $('#productcode').hide();
+            //$('#product_id').attr('required', false);
             $('#servicename').show();
+            $('#servicename2').attr('required', true);
+            $('#um_id').prop( "disabled", false);
         }        
     })
     
