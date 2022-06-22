@@ -18,5 +18,12 @@ class WhCOrder extends Model
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
 
-    
+    public function currency(){
+        return $this->hasOne(WhCurrency::class,'id','currency_id');
+    }
+
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
 }

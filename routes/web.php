@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Bank\BankAllocateController;
+use App\Http\Controllers\Bank\BankExpensesController;
+use App\Http\Controllers\Bank\BankIncomeController;
 use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
@@ -10,6 +13,8 @@ use App\Http\Controllers\System\TeamController;
 use App\Http\Controllers\System\TeamGrantController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\System\WarehouseController;
+use App\Http\Controllers\Ventas\CCreditController;
+use App\Http\Controllers\Ventas\CInvoiceController;
 use App\Http\Controllers\Ventas\COrderController;
 use App\Http\Controllers\Ventas\COrderLineController;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +69,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
 
     // Ventas - Clientes
-    Route::resource('/ventas/manager',COrderController::class, ['names' => 'corder']);
-    Route::resource('/ventas/managers/line',COrderLineController::class, ['names' => 'corderline']);
+    //ORDEN DE VENTA
+    Route::resource('/ventas/order/manager',COrderController::class, ['names' => 'corder']);
+    Route::resource('/ventas/order/managers/line',COrderLineController::class, ['names' => 'corderline']);
+    Route::get('ventas/order/managers/ci/{token}',[COrderController::class,'create_invoice'])->name('corder_createinvoice');
+    //INVOICE
+    Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
+    //NOTA CREDITO
+    Route::resource('/ventas/credit/manager',CCreditController::class, ['names' => 'ccredit']);
+
+    /*
+        Bancos
+    */
+    Route::resource('/bank/income/manager',BankIncomeController::class, ['names' => 'bincome']);
+    Route::resource('/bank/expense/manager',BankExpensesController::class, ['names' => 'bexpense']);
+    Route::resource('/bank/allocate/manager',BankAllocateController::class, ['names' => 'ballocate']);
 });

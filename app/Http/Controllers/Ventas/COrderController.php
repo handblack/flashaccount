@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhCInvoice;
+use App\Models\WhCInvoiceLine;
 use App\Models\WhCOrder;
 use App\Models\WhCOrderLine;
 use App\Models\WhCurrency;
@@ -129,5 +131,23 @@ class COrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function create_invoice($token){
+        $head = WhCOrder::where('token',$token)->first();
+        if($head){
+            $i = new WhCInvoice();
+            $i->fill($head->toArray());
+            $i->dateinvoiced = date("Y-m-d");
+            $i->order_id = $head->id;
+            $i->save();
+            $lin = WhCOrderLine::where('order_id',$head->id);
+            foreach($lin as $it){
+                $il = new WhCInvoiceLine();
+                $il->fill($it->toArray());
+                $il->invoice_id = $i->id;
+                $il->save();
+            }
+        }
     }
 }

@@ -17,10 +17,17 @@ class CreateWhCurrenciesTable extends Migration
         Schema::create('wh_currencies', function (Blueprint $table) {
             $table->id();
             $table->string('currencyname',20);
+            $table->string('shortname',20)->nullable();
+            $table->string('iso',5)->nullable();
             $table->timestamps();
         });
         $row = new WhCurrency();
         $row->currencyname = 'SOLES';
+        $row->iso = 'PEN';
+        $row->save();
+        $row = new WhCurrency();
+        $row->currencyname = 'DOLARES';
+        $row->iso = 'USD';
         $row->save();
 
     }
