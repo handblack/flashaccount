@@ -18,8 +18,11 @@ class CreateWhCOrdersTable extends Migration
             $table->date('dateorder');
             $table->foreignId('bpartner_id');
             $table->foreignId('sequence_id');
+            $table->string('serial',4);
+            $table->string('documentno',15);
             $table->foreignId('currency_id');
-            $table->foreignId('warehouse_id');
+            $table->foreignId('warehouse_id')->nullable();
+            $table->string('token',60);
             $table->timestamps();
         });
     }

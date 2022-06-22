@@ -12,7 +12,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('team.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -35,25 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-
-                        <div class="col-md-12">
-                            <div class="float-sm-right">
-                                <div class="btn-group">
-                                    <select name="" id="" class="form-control">
-                                        <option value="">F001</option>                                
-                                    </select>
-                                </div>
-                                <div class="btn-group">                            
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="btn-group">                            
-                                    <input type="date" class="form-control">
-                                </div>
-                            </div>
-                        </div>
                     
-                    </div>
 
 
                 </div>
@@ -68,18 +50,46 @@
         <form action="{{ route('corder.store') }}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <input type="hidden" name='session' value="corder-{{ session()->getId() }}">
-            <div class="card-header bg-light">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6"> </div>
+                    <div class="col-md-6"> 
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="float-sm-right">
+                                    <div class="btn-group">
+                                        <select name="sequence_id" id="" class="form-control">
+                                            @foreach ($sequence as $item)
+                                                <option value="{{ $item->id }}">{{ $item->serial }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="btn-group">                            
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="btn-group">                            
+                                        <input type="date" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body bg-light">
                 <div class="row">
 
                     <div class="col-md-10 col-sm-12">
                         <label class="mb-0">Socio de Negocio</label>
-                        <select class="form-control select2-bpartner">
+                        <select name="bpartner_id" class="form-control select2-bpartner" required>
                         </select>
                     
                     </div>                    
                     <div class="col-md-2 col-sm-6">
                         <label class="mb-0">Moneda</label>
-                        <select name="currency_id" class="form-control">
+                        <select name="currency_id" class="form-control" required>
                             @foreach ($currency as $item)
                                 <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
                             @endforeach
@@ -88,7 +98,7 @@
 
                 </div>
             </div>
-            <div class="card-body pt-1 pb-1 bg-light ">
+            <div class="card-body pt-1 pb-1 bg-light border-top">
                 <div class="row">
                     <div class="col-md-6">
                         

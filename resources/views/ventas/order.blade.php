@@ -47,11 +47,13 @@
 
 @section('container')
 <div class="card">
-    <div class="card-body">
-        <table>
+    <div class="card-body table-responsive p-0 border-top">
+        <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
             @forelse ($result as $item)
                 <tr>
-                    <td>ad</td>
+                    <td>{{ $item->serial }}-{{ $item->documentno }}</td>
+                    <td>{{ $item->bpartner->bpartnercode }}</td>
+                    <td>{{ $item->bpartner->bpartnername }}</td>
                 </tr>
             @empty
                 <tr>

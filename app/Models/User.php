@@ -50,6 +50,7 @@ class User extends Authenticatable
         return WhUm::all();
     }
 
+    
     public function grant($module = ''){
         $filter = [
             ['team_id',$this->current_team_id],
@@ -99,5 +100,23 @@ class User extends Authenticatable
         return $response;
     }
 
+    public function get_lastnumber($id){
+        return WhSequence::find($id)->lastnumber;
+    }
+    public function set_lastnumber($id){
+        //almacena el siguiente numero
+        $row = WhSequence::find($id);
+        if($row){
+            $row->lastnumber = $row->lastnumber + 1;
+            $row->save();
+            $id = $row->lastnumber;
+        }else{
+            $id++;
+        }
+        return (string) $id;
+    }
+    public function get_serial($id){
+        return WhSequence::find($id)->serial;        
+    }
 
 }

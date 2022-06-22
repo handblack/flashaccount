@@ -15,6 +15,11 @@ class CreateWhCOrderLinesTable extends Migration
     {
         Schema::create('wh_c_order_lines', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('corder_id')->nullable();
+            $table->foreignId('product_id')->nullable();
+            $table->text('description')->nullable();
+            $table->foreignId('um_id');
+            $table->string('token',60)->nullable();
             $table->timestamps();
         });
     }

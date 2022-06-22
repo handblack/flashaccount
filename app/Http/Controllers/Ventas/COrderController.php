@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhCOrder;
+use App\Models\WhCOrderLine;
 use App\Models\WhCurrency;
+use App\Models\WhSequence;
 use App\Models\WhTax;
 use App\Models\WhTempLine;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class COrderController extends Controller
@@ -35,11 +38,13 @@ class COrderController extends Controller
         $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
         $item = new WhTempLine();
         $item->typeproduct = 'P';
+        $sequence = WhSequence::where('tag','corder')->get();
         return view('ventas.order_form_new',[
             'row' => $row,
             'lines' => $lines,
             'item'  => $item,
             'taxes' => WhTax::all(),
+            'sequence' => $sequence,
             'currency' => WhCurrency::all(),
         ]);
     }
@@ -52,7 +57,33 @@ class COrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'bpartner_id' => 'required',
+            'currency_id' => 'required',
+            'sequence_id' => 'required',
+            'session' => 'required',
+        ]);
+        $hash = new Hashids(env('APP_HASH'));
+        $row = new WhCOrder();
+        $row->fill($request->all());
+        $row->dateorder  = date("Y-m-d");
+        $row->serial     = auth()->user()->get_serial($row->sequence_id);
+        $row->documentno = auth()->user()->set_lastnumber($row->sequence_id);
+        $row->token = $hash->encode($row->sequence_id.$row->documentno);        
+        $row->save();
+        //Guardamos las lineas
+        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
+        foreach($lines as $line){
+            $lin = new WhCOrderLine();
+            $lin->fill($line->toArray());
+            $lin->corder_id = $row->id; 
+            $lin->token     = $hash->encode($line->id.date("YmdHis"));
+            $lin->save();
+        }
+        //Limpiamos el cotenedor
+        WhTempLine::where('session','corder-'.session()->getId())
+            ->delete();
+        return redirect()->route('corder.index');
     }
 
     /**
