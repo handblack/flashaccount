@@ -162,7 +162,7 @@
                     <a href="{{ route('corder.index') }}"
                         class="nav-link {{ request()->is('ventas/order/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Proforma</p>
+                        <p>Orden de Venta</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_ventas_invoice')? 'd-none': '' }}">

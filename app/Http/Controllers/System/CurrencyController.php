@@ -4,7 +4,9 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WhCurrency;
 use Facade\FlareClient\View;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -14,11 +16,19 @@ class CurrencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $module = 'system.currency';
+    public function index(Request $request)
     {
-        $result = User::all();
+        if(!auth()->user()->grant($this->module)){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $result = WhCurrency::all();
         return view('system.currency',[
             'result' => $result,
+            'q' => $request->q,
         ]);
     }
 
@@ -29,7 +39,16 @@ class CurrencyController extends Controller
      */
     public function create()
     {
-        //
+        if(auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $row = new WhCurrency();
+        $row->currencyname = old('currencyname');
+        return view('system.currency_form',[
+            'mode' => 'new',
+            'row' => $row,
+            'url' => route('currency.store'),
+        ]);
     }
 
     /**
@@ -40,7 +59,19 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $request->validate([
+            'currencyname' => 'required',
+        ]);
+        $hash = new Hashids(env('APP_HASH'));
+        $row = new WhCurrency();
+        $row->fill($request->all());        
+        $row->save();
+        $row->token = $hash->encode($row->id);
+        $row->save();
+        return redirect()->route('currency.index')->with('message','Registro agregado');
     }
 
     /**
@@ -62,7 +93,15 @@ class CurrencyController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $row = WhCurrency::where('token',$id)->first();
+        return view('system.currency_form',[
+            'mode' => 'edit',
+            'row'  => $row,
+            'url'  => route('currency.update',$row->token),
+        ]);
     }
 
     /**
@@ -74,7 +113,17 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $request->validate([
+            'currencyname' => 'required',
+            'currencyiso' => 'required',
+        ]);
+        $row = WhCurrency::where('token',$id)->first();
+        $row->fill($request->all());
+        $row->save();
+        return redirect()->route('currency.index')->with('message','Registro actualizado');
     }
 
     /**
@@ -85,6 +134,21 @@ class CurrencyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        if(auth()->user()->grant($this->module)->isdelete == 'N'){
+            $data['status'] = 102;
+            $data['message'] = 'No tienes privilegio para eliminar';
+        }
+        
+        $row = WhCurrency::where('token',$id)->first();
+        if($row){
+            $row->delete();
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 }

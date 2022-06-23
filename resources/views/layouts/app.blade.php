@@ -22,6 +22,21 @@
             border-color: #007bff;
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 47, 255, 0.6);
         }
+        .form-group {
+            margin-bottom: 5px;
+            /*height: calc(1.999rem + 2px);*/
+        }
+        .tachado {
+            text-decoration:line-through;
+            color: red;
+        }
+        .table-sm td, .table-sm th {
+            padding: 0.08rem;
+        }
+        .table thead {
+            background-color: rgba(0,0,0,.03);
+            border-bottom: 2px solid #dee2e6;
+        }
     </style>
     @yield('style')
 </head>

@@ -72,14 +72,4 @@
 </form>
 @endsection
 
-
-@section('script')
-<script>
-
-@if ($errors->any())
-    @foreach ($errors->all() as $error)
-        toastr.success('{{ $error }}');
-    @endforeach
-@endif
-</script>
-@endsection
+ 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\System\CurrencyController;
+use App\Http\Controllers\System\ParameterController;
 use App\Http\Controllers\System\SequenceController;
 use App\Http\Controllers\System\TeamController;
 use App\Http\Controllers\System\TeamGrantController;

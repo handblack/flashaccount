@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhParam;
 use Illuminate\Http\Request;
 
 class ParameterController extends Controller
@@ -12,74 +13,75 @@ class ParameterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+    private $title = 'Parametros';
+    private $grupos = [
+        ['id' => '0', 'name' => 'Parametros de sistema'],
+        ['id' => '1', 'name' => 'Ventas - Proforma - Forma de Pago'],
+        ['id' => '2', 'name' => 'Ventas - Proforma - Plazo de Entrega'],
+        ['id' => '3', 'name' => 'Ventas - Proforma - Validez de la proforma'],
+        ['id' => '4', 'name' => 'Ventas - Proforma - Garantia'],
+    ];
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function index(Request $request){
+        if($request->has('group_id')){
+            $id = $request->group_id;
+        }else{
+            $id = session('cv_param_group_select_id',0);
+        }
+        session(['cv_param_group_select_id' => $id]);
+        $result = WhParam::where('group_id', $id)
+            ->orderBy('orden','asc')
+            ->paginate(40);
+        return view('system.param',[
+            'result'    => $result,
+            'grupos'    => $this->grupos,
+            'select_id' => $id,
+            'title'     => $this->title,
+        ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function create(){
+        $grupos = WhParam::where('group_id','0')->get();
+        $row = new WhParam();
+        $row->isrequired = 'N';
+        $row->orden = 0;
+        return view('system.param_form',[
+            'mode'      => 'new',
+            'row'       => $row,
+            'grupos'    => $this->grupos,
+            'title'     => $this->title,
+        ]);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function store(Request $request){
+        $request->validate([
+            'group_id' => 'required',
+        ]);
+        $row = new WhParam();
+        $row->fill($request->all());
+        $row->save();
+        return redirect(route('parameter.index'))->with('message','Parametro agregado');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function show($id){}
+    public function edit($id){
+        //$row = BpoEmployedParam::where('md5(id)',$id)->first();
+        $row = WhParam::whereRaw('md5(id) = ?',[$id])->first();
+        return view('system.param_form',[
+            'mode'      => 'edit',
+            'row'       => $row,
+            'grupos'    => $this->grupos,
+            'title'     => $this->title,
+        ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+        #$row = BpoEmployedParam::whereRaw('md5(id) = ?',[$id])->first();
+        #dd($id);
+        $row = WhParam::find($id);
+        $row->fill($request->all());
+        $row->save();
+        return redirect(route('parameter.index'))->with('message','Parametro actualizado');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
+        $row = WhParam::find($id);
+        $row->delete();
+        return redirect()->route('parameter.index')->with('message','Parametro eliminado');
     }
 }

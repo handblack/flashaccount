@@ -39,7 +39,7 @@ class BPartnerController extends Controller
     {
         if(auth()->user()->grant($this->module)->iscreate == 'N'){
             return back()->with('error','No tienes privilegio para crear');
-        }       
+        }
         $row = new WhBpartner();
         $row->token = old('token',date("His"));
         $row->bpartnercode = old('bpartnercode');

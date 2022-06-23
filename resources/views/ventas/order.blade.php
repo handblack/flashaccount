@@ -57,7 +57,7 @@
                 <td>{{ $item->bpartner->bpartnername }}</td>
                 <td class="text-right">{{ number_format($item->amount,2) }} {{ $item->currency->iso }}</td>
                 <td>{{ $item->warehouse_id }}</td>
-                <td>{{ $item->token }}</td>
+
                 <td class="text-right">
                     <div class="btn-group">
                         <a href="#" class="dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">

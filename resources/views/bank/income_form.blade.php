@@ -41,12 +41,12 @@
         </div>
         <div class="card-body pt-2 pb-2">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="mb-0">Medio de PAGO</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Identificador del Equipo" value="" required="">
                 </div>
                 <div class="col-md-6">
-                    <label class="mb-0">Correo</label>
+                    <label class="mb-0">Detalle</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Identificador del Equipo" value="" required="">
                 </div>
                 <div class="col-md-3">
