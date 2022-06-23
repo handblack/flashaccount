@@ -23,7 +23,8 @@
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
                             Perfiles 
-                            &nbsp;<i class="fas fa-users-cog ml-3"></i>
+                            &nbsp;
+                            <i class="fas fa-users-cog fa-fw"></i>
 
                         </h1>
                     </div>
@@ -67,8 +68,6 @@
             </div>
         </div>
     </div>
-
- 
 </form>
 @endsection
 

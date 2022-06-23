@@ -12,5 +12,6 @@ class WhWarehouse extends Model
         'warehousename',
         'shortname',
         'isactive',
+        'token',
     ];
 }

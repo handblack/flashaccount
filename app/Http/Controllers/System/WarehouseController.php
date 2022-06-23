@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhWarehouse;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
@@ -12,9 +14,19 @@ class WarehouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $module = 'system.warehouse';
+    public function index(Request $request)
     {
-        return view('system.warehouse');
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $result = WhWarehouse::paginate(env('PAGINATE_WAREHOUSE',2));
+        return view('system.warehouse',[
+            'result' => $result, 
+        ]);
     }
 
     /**
@@ -24,7 +36,18 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        //
+        if(auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $row = new WhWarehouse();
+        $row->token = old('token',date("YmdHis"));
+        $row->warehousename = old('warehousename');
+        $row->shortname = old('shortname');
+        return view('system.warehouse_form',[
+            'mode' => 'new',
+            'row'  => $row,
+            'url'  => route('warehouse.store'),
+        ]);
     }
 
     /**
@@ -35,7 +58,19 @@ class WarehouseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $request->validate([
+            'warehousename' => 'required',
+        ]);
+        $hash = new Hashids(env('APP_HASH'));
+        $row = new WhWarehouse();
+        $row->fill($request->all());        
+        $row->save();
+        $row->token = $hash->encode($row->id);
+        $row->save();
+        return redirect()->route('warehouse.index')->with('message','Registro creado');
     }
 
     /**
@@ -57,7 +92,15 @@ class WarehouseController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $row = WhWarehouse::where('token',$id)->first();
+        return view('system.warehouse_form',[
+            'mode' => 'edit',
+            'row'  => $row,
+            'url'  => route('warehouse.update',$row->token),
+        ]);
     }
 
     /**
@@ -69,7 +112,16 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $request->validate([
+            'warehousename' => 'required',
+        ]);
+        $row = WhWarehouse::where('token',$id)->first();
+        $row->fill($request->all());
+        $row->save();
+        return redirect()->route('warehouse.index')->with('message','Registro actualizado');
     }
 
     /**
@@ -80,6 +132,21 @@ class WarehouseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        if(auth()->user()->grant($this->module)->isdelete == 'N'){
+            $data['status'] = 102;
+            $data['message'] = 'No tienes privilegio para eliminar';
+        }
+        
+        $row = WhWarehouse::where('token',$id)->first();
+        if($row){
+            $row->delete();
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 }

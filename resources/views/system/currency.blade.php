@@ -47,8 +47,8 @@
 
 @section('container')
     <div class="card">
-        <div class="card-body">
-            <table class="table table-sm table-hover table-borderless">
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
@@ -71,4 +71,5 @@
             </table>
         </div>
     </div>
+ 
 @endsection
