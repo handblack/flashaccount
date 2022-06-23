@@ -49,11 +49,19 @@
                         <p>Configuracion Almacenes</p>
                     </a>
                 </li>
+                
                 <li class="nav-item  {{ !auth()->user()->menu('m_system_sequence')? 'd-none': '' }}">
                     <a href="{{ route('sequence.index') }}"
                         class="nav-link  {{ request()->is('system/sequence*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Configuracion Series</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_system_bankaccount')? 'd-none': '' }}">
+                    <a href="{{ route('warehouse.index') }}"
+                        class="nav-link  {{ request()->is('system/bankaccount*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Cuentas Bancarias</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_system_parameter')? 'd-none': '' }}">

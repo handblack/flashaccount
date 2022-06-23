@@ -7,6 +7,7 @@ use App\Models\TempBankIncome;
 use App\Models\TempBankIncomeLine;
 use App\Models\TempBankIncomePayment;
 use App\Models\WhBIncome;
+use App\Models\WhCInvoice;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 
@@ -76,10 +77,12 @@ class BankIncomeController extends Controller
     {
         $row     = TempBankIncome::where('token',$id)->first();
         $lines   = TempBankIncomeLine::where('income_id',$row->id)->get();
+        $open    = WhCInvoice::where('bpartner_id',$row->bpartner_id)->get();
         $payment = TempBankIncomePayment::where('income_id',$row->id)->get();
         return view('bank.income_form',[
             'row'     => $row,
             'lines'   => $lines,
+            'open'    => $open,
             'payment' => $payment,
         ]);
     }

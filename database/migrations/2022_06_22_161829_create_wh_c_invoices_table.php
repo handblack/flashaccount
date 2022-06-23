@@ -18,6 +18,9 @@ class CreateWhCInvoicesTable extends Migration
             $table->foreignId('order_id')->nullable();
             $table->foreignId('bpartner_id');
             $table->date('dateinvoiced');
+            $table->foreignId('currency_id');
+            $table->float('amountgrand',12,5)->default(0);
+            $table->float('amountopen',12,5)->default(0);
             $table->timestamps();
         });
     }

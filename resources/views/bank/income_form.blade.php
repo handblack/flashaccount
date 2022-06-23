@@ -39,16 +39,62 @@
         <div class="card-header">
             <div class="card-title">{{ $row->bpartner->bpartnername }}</div>
         </div>
-        <div class="card-body">
-            <table>
+        <div class="card-body pt-2 pb-2">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="mb-0">Medio de PAGO</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Identificador del Equipo" value="" required="">
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-0">Correo</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Identificador del Equipo" value="" required="">
+                </div>
+                <div class="col-md-3">
+                    <label class="mb-0">Estado</label>
+                    <select name="isactive" id="isactive" class="form-control">
+                        <option value="Y">ACTIVO</option>
+                        <option value="N">DESACTIVADO</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-responsive p-0 border-top">
+            <table class="table table-hover text-nowrap table-sm  mb-0">
+                <thead>
+                    <tr style="background-color:#dcdcdc;">
+                        <th>check</th>
+                        <th>Fecha</th>
+                        <th>Documento</th>
+                        <th>Moneda</th>
+                        <th class="text-right">Total</th>
+                        <th class="text-right">Abierto</th>
+                        <th class="text-right">Aplicar</th>
+                        <th class="text-right">Saldo</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    @forelse ($lines as $line)
-                        <tr>
+                    @forelse ($open as $line)
+                        <tr id="" class="bg-light">
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                </div>
+                            </td>
+                            <td>{{ $line->dateinvoiced }}</td>
                             <td>{{ $line->id }}</td>
+                            <td>moneda</td>
+                            <td width="120" class="text-right">total</td>
+                            <td width="120" class="text-right">Abierto</td>
+                            <td width="140">
+                                <input type="text" class="text-right form-control form-control-sm" value="0.00">
+                            </td>
+                            <td class="text-right">
+                                saldo
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10">No hay documentos</td>
+                            <td colspan="10">No hay documentos con importes abiertos</td>
                         </tr>
                     @endforelse
                 </tbody>
