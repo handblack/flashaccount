@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\WhDocType;
 use App\Models\WhSequence;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -24,13 +25,22 @@ class CreateWhSequencesTable extends Migration
             $table->enum('isactive',['Y','N'])->default('Y');
             $table->enum('isdocref',['Y','N'])->default('N');
             $table->enum('isfex',['Y','N'])->default('Y');
+            $table->foreignId('warehouse_id')->nullable();
             $table->timestamps();
         });
+       
+        //Orden de Venta
         $row = new WhSequence();
-        $row->tag    = 'corder';
-        $row->serial = 'P001';
-        $row->token  = md5(1);
-        $row->save();
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
+            'serial'     => 'O001',
+            'token'      => md5('1'),
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
+            'serial'     => 'O002',
+            'token'      => md5('2'),
+        ]);
     }
 
     /**

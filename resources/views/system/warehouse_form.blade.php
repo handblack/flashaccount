@@ -56,12 +56,12 @@
         <div class="row p-3">
             <div class="col-md-12 mb-2">
                 <label class="mb-0">Identificador</label>
-                <input type="text" class="form-control" id="warehousename" name="warehousename" placeholder="Nombre del almacen" value="{{ $row->teamname }}" required>
+                <input type="text" class="form-control" id="warehousename" name="warehousename" placeholder="Nombre del almacen" value="{{ $row->warehousename }}" required>
             </div>
          
             <div class="col-md-9">
                 <label class="mb-0">Nombre Corto</label>
-                <input type="text" class="form-control" id="shortname" name="shortname" placeholder="Nombre Abreviado" value="{{ $row->teamname }}">
+                <input type="text" class="form-control" id="shortname" name="shortname" placeholder="Nombre Abreviado" value="{{ $row->shortname }}">
             </div>
             <div class="col-md-3">
                 <label class="mb-0">Estado</label>
