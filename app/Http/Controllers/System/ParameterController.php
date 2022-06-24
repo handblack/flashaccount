@@ -16,10 +16,8 @@ class ParameterController extends Controller
     private $title = 'Parametros';
     private $grupos = [
         ['id' => '0', 'name' => 'Parametros de sistema'],
-        ['id' => '1', 'name' => 'Ventas - Proforma - Forma de Pago'],
-        ['id' => '2', 'name' => 'Ventas - Proforma - Plazo de Entrega'],
-        ['id' => '3', 'name' => 'Ventas - Proforma - Validez de la proforma'],
-        ['id' => '4', 'name' => 'Ventas - Proforma - Garantia'],
+        ['id' => '1', 'name' => 'Forma de Pago'],
+        ['id' => '2', 'name' => 'Entidad Financiera/Caja'],        
     ];
 
     public function index(Request $request){
@@ -39,6 +37,7 @@ class ParameterController extends Controller
             'title'     => $this->title,
         ]);
     }
+    
     public function create(){
         $grupos = WhParam::where('group_id','0')->get();
         $row = new WhParam();

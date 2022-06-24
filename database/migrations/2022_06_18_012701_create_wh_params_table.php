@@ -29,6 +29,11 @@ class CreateWhParamsTable extends Migration
         });
         $row = new WhParam();
         $row->create(['group_id' => 1,'identity' => 'CONTADO']);
+        $row->create(['group_id' => 1,'identity' => 'CREDITO']);
+        $row->create(['group_id' => 2,'shortname'=>'BCP','identity' => 'BANCO DE CREDITO DEL PERU']);
+        $row->create(['group_id' => 2,'shortname'=>'BBVA','identity' => 'BANCO CONTINENTAL']);
+        $row->create(['group_id' => 2,'shortname'=>'INTB','identity' => 'BANCO INTERBANK DEL PERU']);
+        $row->create(['group_id' => 2,'shortname'=>'EFEC','identity' => 'CAJA EFECTIVO']);
     }
 
     /**

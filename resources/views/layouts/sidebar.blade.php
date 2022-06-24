@@ -58,7 +58,7 @@
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_system_bankaccount')? 'd-none': '' }}">
-                    <a href="{{ route('warehouse.index') }}"
+                    <a href="{{ route('bankaccount.index') }}"
                         class="nav-link  {{ request()->is('system/bankaccount*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Cuentas Bancarias</p>
@@ -181,7 +181,7 @@
                 </li>
             </ul>
         </li>
-
+        {{-- COMPRAS / PROVEEDORES --}}
         <li
             class="nav-item {{ request()->is('bpartner/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_compras')? 'd-none': '' }}">
             <a href="#" class="nav-link {{ request()->is('bpartner/*') ? 'active' : '' }}">
@@ -215,7 +215,7 @@
                 </li>
             </ul>
         </li>
-
+        {{-- LOGISTICA --}}
         <li
             class="nav-item {{ request()->is('bpartner/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_compras')? 'd-none': '' }}">
             <a href="#" class="nav-link {{ request()->is('bpartner/*') ? 'active' : '' }}">
@@ -249,7 +249,7 @@
                 </li>
             </ul>
         </li>
-
+        {{-- CAJA Y BANCOS --}}
         <li
             class="nav-item {{ request()->is('bank/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_bank')? 'd-none': '' }}">
             <a href="#" class="nav-link {{ request()->is('bank/*') ? 'active' : '' }}">

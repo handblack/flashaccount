@@ -7,6 +7,7 @@ use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\System\BankAccountController;
 use App\Http\Controllers\System\CurrencyController;
 use App\Http\Controllers\System\ParameterController;
 use App\Http\Controllers\System\SequenceController;
@@ -61,6 +62,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/system/warehouse',WarehouseController::class, ['names' => 'warehouse']);
     Route::resource('/system/sequence',SequenceController::class, ['names' => 'sequence']);
     Route::resource('/system/parameter',ParameterController::class, ['names' => 'parameter']);
+    Route::resource('/system/bankaccount',BankAccountController::class, ['names' => 'bankaccount']);
 
     Route::resource('/config/product',ProductController::class, ['names' => 'product']);
     Route::resource('/config/productfamily',ProductFamilyController::class, ['names' => 'productfamily']);

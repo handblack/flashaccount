@@ -50,6 +50,10 @@ class User extends Authenticatable
         return WhUm::all();
     }
 
+    public function currency(){
+        return WhCurrency::all();
+    }
+
     
     public function grant($module = ''){
         $filter = [
