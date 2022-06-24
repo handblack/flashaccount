@@ -15,9 +15,6 @@
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
-
-
-
                 </div>
                 <div class="col-sm-6">
                     <div class="float-sm-right">

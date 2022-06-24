@@ -36,9 +36,57 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="{{ ($mode == 'edit') ? 'PUT' : '' }}">
     <input type="hidden" name="token" value="{{ $row->token }}">
-    <input type="text" name="bpartnercode" value="{{ $row->bpartnercode }}" placeholder="Codigo" maxlength="12">
-    <input type="text" name="bpartnername" value="{{ $row->bpartnername }}" placeholder="Descripcion" maxlength="150">
-    <button type="submit">{{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" >
+            <li class="nav-item">
+                <span class="nav-link active">
+                    @if($mode =='new')
+                        <i class="far fa-edit fa-fw"></i>
+                    @else
+                        <i class="fas fa-edit fa-fw"></i>
+                    @endif
+                    <span class="d-none d-sm-inline-block">
+                        Informacion del Socio de Negocio [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                    </span>                
+                </span>
+                 
+            </li>
+            
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="mb-0">Codigo SN</label>
+                <input type="text" name="bpartnercode" class="form-control" value="{{ $row->bpartnercode }}" placeholder="Codigo" maxlength="12">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-12">
+                <label class="mb-0">Razon Social / Denominacion</label>
+                <input type="text" name="bpartnername" class="form-control" value="{{ $row->bpartnername }}" placeholder="Descripcion" maxlength="150">
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="btn-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Estado</span>
+                </div>
+                <select name="isactive" id="isactive" class="form-control">
+                    <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
+                    <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
+                </select>
+            </div>
+        </div>
+        <div class="float-right">
+            <a href="{{ route('bpartner.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>                
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+        </div>
+    </div>
+</div>
 </form>    
     
 @endsection

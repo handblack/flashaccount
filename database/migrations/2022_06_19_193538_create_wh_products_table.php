@@ -18,8 +18,9 @@ class CreateWhProductsTable extends Migration
             $table->id();
             $table->string('productcode',15)->unique();
             $table->string('productname',200);
-            $table->foreignId('productfamily_id');
-            $table->foreignId('productline_id');
+            $table->string('shortname',50)->nullable();
+            $table->foreignId('family_id');
+            $table->foreignId('line_id');
             $table->foreignId('um_id');
             $table->string('token',60);
             $table->timestamps();
@@ -28,40 +29,40 @@ class CreateWhProductsTable extends Migration
         $row->create([
             'productcode' => '1000',
             'productname' => 'LAPICERO TRILUX 032 MEDIUM NEGRO',
-            'productfamily_id' => 1,
-            'productline_id' => 1,
+            'family_id' => 1,
+            'line_id' => 1,
             'um_id' => 1,
             'token' => md5('1'),
         ]);
         $row->create([
             'productcode' => '1001',
             'productname' => 'LAPICERO TRILUX 032 MEDIUM AZUL',
-            'productfamily_id' => 1,
-            'productline_id' => 1,
+            'family_id' => 1,
+            'line_id' => 1,
             'um_id' => 1,
             'token' => md5('2'),
         ]);
         $row->create([
             'productcode' => '1002',
             'productname' => 'LAPICERO TRILUX 032 MEDIUM ROJO',
-            'productfamily_id' => 1,
-            'productline_id' => 1,
+            'family_id' => 1,
+            'line_id' => 1,
             'um_id' => 1,
             'token' => md5('3'),
         ]);
         $row->create([
             'productcode' => '1003',
             'productname' => 'LAPICERO PILOT BPS-GP-F-B NEGRO',
-            'productfamily_id' => 1,
-            'productline_id' => 1,
+            'family_id' => 1,
+            'line_id' => 1,
             'um_id' => 1,
             'token' => md5('3'),
         ]);
         $row->create([
             'productcode' => '1004',
             'productname' => 'DOÑA PEPA',
-            'productfamily_id' => 1,
-            'productline_id' => 1,
+            'family_id' => 1,
+            'line_id' => 1,
             'um_id' => 1,
             'token' => md5('3'),
         ]);

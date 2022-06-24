@@ -11,8 +11,9 @@ class WhProduct extends Model
     protected $fillable = [
         'productcode',
         'productname',
-        'productfamily_id',
-        'productline_id',
+        'shortname',
+        'family_id',
+        'line_id',
         'um_id',
         'token',
     ];
@@ -22,10 +23,10 @@ class WhProduct extends Model
     }
 
     public function family(){
-        
+        return $this->hasOne(WhFamily::class,'id','family_id');
     }
 
     public function line(){
-        
+        return $this->hasOne(WhLine::class,'id','line_id');
     }
 }

@@ -66,7 +66,7 @@
                                 <input type="text" id="qty" name="qty" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <select name="um_id" id="um_id" class="form-control" style="border-top-left-radius:0px;border-bottom-left-radius:0px;" disabled>
-                                        @foreach (auth()->user()->ums() as $item)
+                                        @foreach (auth()->user()->um() as $item)
                                             <option value="{{ $item->id }}">{{ $item->umname }}</option>
                                         @endforeach
                                     </select>

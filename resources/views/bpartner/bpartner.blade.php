@@ -59,7 +59,7 @@
             <tbody>
                 @forelse ($result as $item)
                     <tr id="tr-{{ $item->id }}">
-                        <td width="100">
+                        <td width="130">
                             <a href="{{ route('bpartner.edit',[$item->token]) }}">
                             {{ $item->bpartnercode }}
                             </a>
@@ -77,6 +77,11 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 mt-0">
+        {{ $result->links('layouts.paginate') }}
     </div>
 </div>
 

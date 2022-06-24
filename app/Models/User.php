@@ -46,7 +46,7 @@ class User extends Authenticatable
         return $this->hasOne(WhTeam::class,'id','current_team_id');
     }
 
-    public function ums(){
+    public function um(){
         return WhUm::all();
     }
 

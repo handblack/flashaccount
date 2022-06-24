@@ -46,26 +46,35 @@
  
 
 @section('container')
-    <table>
-        <tbody>
-            @forelse ($result as $item)
-                <tr id="tr-{{ $item->id }}">
-                    <td>
-                        <a href="{{ route('product.edit',[$item->token]) }}">
-                        {{ $item->productcode }}
-                        </a>
-                    </td>
-                    <td>{{ $item->productname }}</td>
-                    <td>
-                        <a class="delete-record" data-url="{{ route('product.destroy', $item->token) }}"
-                            data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="10">No hay resultado en la busqueda</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+<div class="card">
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap table-sm table-borderless"> 
+            <tbody>
+                @forelse ($result as $item)
+                    <tr id="tr-{{ $item->id }}">
+                        <td width="70">
+                            <a href="{{ route('product.edit',[$item->token]) }}">
+                            {{ $item->productcode }}
+                            </a>
+                        </td>
+                        <td>{{ $item->productname }}</td>
+                        <td class="text-right">
+                            <a class="delete-record" data-url="{{ route('product.destroy', $item->token) }}"
+                                data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="10">No hay resultado en la busqueda</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 mt-0">
+        {{ $result->links('layouts.paginate') }}
+    </div>
+</div>
 @endsection

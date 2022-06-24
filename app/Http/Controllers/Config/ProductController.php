@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhFamily;
+use App\Models\WhLine;
 use App\Models\WhProduct;
-use App\Models\WhProductFamily;
-use App\Models\WhProductLine;
 use Illuminate\Http\Request;
 use Hashids\Hashids;
 use Illuminate\Support\Facades\DB;
@@ -46,10 +46,10 @@ class ProductController extends Controller
         $row->token = old('token',date("His"));
         $row->productcode = old('productcode');
         $row->productname = old('productname');
-        $row->productfamily_id = old('productfamily_id');
-        $row->productline_id   = old('productline_id');
-        $fam = WhProductFamily::all();
-        $lin = WhProductLine::all();
+        $row->family_id = old('family_id');
+        $row->line_id   = old('line_id');
+        $fam = WhFamily::all();
+        $lin = WhLine::all();
         return view('config.product_form',[
             'mode' => 'new',
             'row'  => $row,
@@ -106,8 +106,8 @@ class ProductController extends Controller
             return back()->with('error','No tienes privilegio para modificar');
         }
         $row = WhProduct::where('token',$id)->first();
-        $fam = WhProductFamily::all();
-        $lin = WhProductLine::all();
+        $fam = WhFamily::all();
+        $lin = WhLine::all();
         return view('config.product_form',[
             'mode' => 'edit',
             'row'  => $row,
@@ -126,14 +126,15 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request);
         if(auth()->user()->grant($this->module)->isupdate == 'N'){
             return back()->with('error','No tienes privilegio para modificar');
         }
+        $row = WhProduct::where('token',$id)->first();
         $request->validate([
-            'productcode' => "required|unique:wh_products,productcode,{$request->productcode}",
+            'productcode' => "required|unique:wh_products,productcode,{$row->id}",
             'productname' => 'required',
         ]);
-        $row = WhProduct::where('token',$id)->first();
         $row->fill($request->all());
         $row->save();
         return redirect()->route('product.index')->with('message','Registro actualizado');
