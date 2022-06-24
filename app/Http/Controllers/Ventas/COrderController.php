@@ -11,6 +11,7 @@ use App\Models\WhCurrency;
 use App\Models\WhSequence;
 use App\Models\WhTax;
 use App\Models\WhTempLine;
+use App\Models\WhWarehouse;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 
@@ -40,7 +41,7 @@ class COrderController extends Controller
         $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
         $item = new WhTempLine();
         $item->typeproduct = 'P';
-        $sequence = WhSequence::where('tag','corder')->get();
+        $sequence = auth()->user()->sequence('OVE');
         return view('ventas.order_form_new',[
             'row' => $row,
             'lines' => $lines,
@@ -48,6 +49,7 @@ class COrderController extends Controller
             'taxes' => WhTax::all(),
             'sequence' => $sequence,
             'currency' => WhCurrency::all(),
+            'warehouse' => WhWarehouse::all(),
         ]);
     }
 
@@ -59,12 +61,14 @@ class COrderController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
         $request->validate([
             'bpartner_id' => 'required',
             'currency_id' => 'required',
             'sequence_id' => 'required',
             'session' => 'required',
         ]);
+        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
         $hash = new Hashids(env('APP_HASH'));
         $row = new WhCOrder();
         $row->fill($request->all());
@@ -72,9 +76,10 @@ class COrderController extends Controller
         $row->serial     = auth()->user()->get_serial($row->sequence_id);
         $row->documentno = auth()->user()->set_lastnumber($row->sequence_id);
         $row->token = $hash->encode($row->sequence_id.$row->documentno);        
-        $row->save();
+        $row->amount = $lines->sum('it_grand');
+        $row->save();        
         //Guardamos las lineas
-        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
+        
         foreach($lines as $line){
             $lin = new WhCOrderLine();
             $lin->fill($line->toArray());

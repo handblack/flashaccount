@@ -15,12 +15,18 @@ class CreateWhCInvoicesTable extends Migration
     {
         Schema::create('wh_c_invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->nullable();
-            $table->foreignId('bpartner_id');
             $table->date('dateinvoiced');
+            $table->foreignId('order_id')->nullable();
+            $table->foreignId('sequence_id');
+            $table->string('serial',4);
+            $table->string('documentno',15);
+            $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
+            $table->foreignId('warehouse_id')->nullable();
+            $table->string('token',60);
             $table->float('amountgrand',12,5)->default(0);
             $table->float('amountopen',12,5)->default(0);
+            $table->enum('docstatus',['O','C'])->default('O');
             $table->timestamps();
         });
     }

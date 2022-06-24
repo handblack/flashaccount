@@ -58,14 +58,29 @@
                             <div class="col-md-12">
                                 <div class="float-sm-right">
                                     <div class="btn-group">
-                                        <select name="sequence_id" id="" class="form-control">
-                                            @foreach ($sequence as $item)
-                                                <option value="{{ $item->id }}">{{ $item->serial }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><i class="fas fa-hashtag fa-fw"></i></span>
+                                            </div>
+                                        
+                                            <select name="sequence_id" id="" class="form-control">
+                                                @foreach ($sequence as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->serial }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="btn-group">                            
-                                        <input type="text" class="form-control">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><i class="fas fa-warehouse fa-fw"></i></span>
+                                            </div>
+                                            <select name="warehouse_id" class="form-control" required>
+                                                @foreach ($warehouse as $item )
+                                                    <option value="{{ $item->id }}">{{ $item->shortname }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="btn-group">                            
                                         <input type="date" class="form-control">

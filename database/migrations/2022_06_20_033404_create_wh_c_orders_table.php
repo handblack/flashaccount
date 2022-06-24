@@ -24,6 +24,7 @@ class CreateWhCOrdersTable extends Migration
             $table->foreignId('warehouse_id')->nullable();
             $table->string('token',60);
             $table->float('amount',12,2)->default(0);
+            $table->enum('docstatus',['O','C'])->default('O');
             $table->timestamps();
         });
     }

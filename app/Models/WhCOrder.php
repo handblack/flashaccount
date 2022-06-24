@@ -12,6 +12,7 @@ class WhCOrder extends Model
         'bpartner_id',
         'currency_id',
         'sequence_id',
+        'warehouse_id'
     ];
 
     public function bpartner(){

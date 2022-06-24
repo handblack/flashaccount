@@ -53,6 +53,10 @@ class User extends Authenticatable
     public function currency(){
         return WhCurrency::all();
     }
+    public function sequence($doctype){
+        $dt = WhDocType::where('shortname',$doctype)->first();
+        return WhSequence::where('doctype_id',$dt->id)->get();
+    }
 
     
     public function grant($module = ''){
