@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="mb-0">Nro de Cuenta</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Identificador del Equipo" value="" required="">
+                    <input type="text" class="form-control" id="accountno" name="accountno" placeholder="Nro de Cuenta/Identificador" value="{{ $row->accountno }}" required>
                 </div>
                 <div class="col-md-3">
                     <label class="mb-0">Moneda</label>
@@ -92,8 +92,8 @@
                         <span class="input-group-text" id="basic-addon1">Estado</span>
                     </div>
                     <select name="isactive" id="isactive" class="form-control">
-                        <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
-                        <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
+                        <option value="Y" {{ ($row->isactive == 'Y') ? 'selected' : '' }}>ACTIVO</option>
+                        <option value="N" {{ ($row->isactive == 'N') ? 'selected' : '' }}>DESACTIVADO</option>
                     </select>
                 </div>
             </div>
