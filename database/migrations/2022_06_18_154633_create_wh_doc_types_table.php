@@ -69,8 +69,15 @@ class CreateWhDocTypesTable extends Migration
             'group_id'    => 2,
         ]);
         $row->create([
-            'doctypename' => 'GUIA REMISION',
-            'shortname'   => 'NDB',
+            'doctypename' => 'GUIA REMISION REMITENTE',
+            'shortname'   => 'GRR',
+            'isactive'    => 'Y',
+            'doctypecode' => '09',
+            'group_id'    => 2,
+        ]);
+        $row->create([
+            'doctypename' => 'GUIA REMISION TRANSPORTISTA',
+            'shortname'   => 'GRT',
             'isactive'    => 'Y',
             'doctypecode' => '09',
             'group_id'    => 2,

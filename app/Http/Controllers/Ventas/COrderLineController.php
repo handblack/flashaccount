@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ventas;
 use App\Http\Controllers\Controller;
 use App\Models\WhCOrderLine;
 use App\Models\WhTax;
-use App\Models\WhTempLine;
+use App\Models\TempLine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
@@ -42,14 +42,15 @@ class COrderLineController extends Controller
         $data['status']   = '100';
         $data['message']  = 'Se agrego ITEM';                
         if($request->modeline == 'edit'){
-            $row = WhTempLine::where('token',$request->itemtoken)->first();
+            $row = TempLine::where('token',$request->itemtoken)->first();
         }else{
-            $row = new WhTempLine();
+            $row = new TempLine();
         }        
         $row->fill($request->all());  
         $row->token    = md5(date("YmdHis"));
         $row->it_base  = $request->qty * $request->priceunit;        
         $row->save();
+        $row->priceunittax = round(($row->tax->ratio / 100) * $row->priceunit,5) + $row->priceunit; 
         $row->it_tax   = round(($row->tax->ratio / 100) * $row->it_base,2);
         $row->it_grand = $row->it_base + $row->it_tax;
         //Completamos demas informacion
@@ -72,7 +73,7 @@ class COrderLineController extends Controller
         //Responsemod en JSON
         
         $data['tr_item']  = view('ventas.order_form_list_item',['item' => $row])->render();
-        $lines = WhTempLine::where('session','corder-'.session()->getId())->get();
+        $lines = TempLine::where('session','corder-'.session()->getId())->get();
         $data['tr_total'] = view('ventas.order_form_list_total',['lines' => $lines])->render();
         $data['item']     = $row->toArray();
         $data['modeline'] = $request->modeline;
@@ -98,7 +99,7 @@ class COrderLineController extends Controller
      */
     public function edit($id)
     {
-        $item = WhTempLine::where('token',$id)->first();
+        $item = TempLine::where('token',$id)->first();
         $taxes = WhTax::all();
         /*return view('ventas.order_form_additem',[
             'item' => $item,
@@ -133,7 +134,7 @@ class COrderLineController extends Controller
     {
         $data['status'] = 100;
         $data['message'] = 'Registro eliminado';
-        $row = WhTempLine::where('token',$id)->first();
+        $row = TempLine::where('token',$id)->first();
         if($row){
             $row->delete();
         }else{

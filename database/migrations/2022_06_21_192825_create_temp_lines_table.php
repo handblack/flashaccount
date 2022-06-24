@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWhTempLinesTable extends Migration
+class CreateTempLinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWhTempLinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wh_temp_lines', function (Blueprint $table) {
+        Schema::create('temp_lines', function (Blueprint $table) {
             $table->id();
             $table->string('session',80)->nullable();
             $table->string('token',60)->nullable();
@@ -27,6 +27,7 @@ class CreateWhTempLinesTable extends Migration
             $table->text('description')->nullable();
             $table->double('qty',12,5)->nullable();
             $table->double('priceunit',12,5)->nullable();
+            $table->double('priceunittax',12,5)->nullable();
             $table->double('it_base',12,5)->nullable();
             $table->double('it_exo',12,5)->nullable();
             $table->double('it_tax',12,5)->nullable();
@@ -42,6 +43,6 @@ class CreateWhTempLinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wh_temp_lines');
+        Schema::dropIfExists('temp_lines');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\WhProduct;
+use Hashids\Hashids;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,14 +26,15 @@ class CreateWhProductsTable extends Migration
             $table->string('token',60);
             $table->timestamps();
         });
+        $hash = new Hashids(env('APP_HASH'));
         $row = new WhProduct();
         $row->create([
             'productcode' => '1000',
             'productname' => 'LAPICERO TRILUX 032 MEDIUM NEGRO',
-            'family_id' => 1,
-            'line_id' => 1,
-            'um_id' => 1,
-            'token' => md5('1'),
+            'family_id'   => 1,
+            'line_id'     => 1,
+            'um_id'       => 1,
+            'token' => $hash->encode(1),
         ]);
         $row->create([
             'productcode' => '1001',
@@ -40,7 +42,7 @@ class CreateWhProductsTable extends Migration
             'family_id' => 1,
             'line_id' => 1,
             'um_id' => 1,
-            'token' => md5('2'),
+            'token' => $hash->encode(2),
         ]);
         $row->create([
             'productcode' => '1002',
@@ -48,7 +50,7 @@ class CreateWhProductsTable extends Migration
             'family_id' => 1,
             'line_id' => 1,
             'um_id' => 1,
-            'token' => md5('3'),
+            'token' => $hash->encode(3),
         ]);
         $row->create([
             'productcode' => '1003',
@@ -56,15 +58,39 @@ class CreateWhProductsTable extends Migration
             'family_id' => 1,
             'line_id' => 1,
             'um_id' => 1,
-            'token' => md5('3'),
+            'token' => $hash->encode(4),
         ]);
         $row->create([
             'productcode' => '1004',
-            'productname' => 'DOÑA PEPA',
+            'productname' => 'SOLVENTE 3 PETRO',
             'family_id' => 1,
             'line_id' => 1,
             'um_id' => 1,
-            'token' => md5('3'),
+            'token' => $hash->encode(6),
+        ]);
+        $row->create([
+            'productcode' => '1005',
+            'productname' => 'RESINA POLICLARK UG300 CILINDRO 220KG',
+            'family_id' => 1,
+            'line_id' => 1,
+            'um_id' => 1,
+            'token' => $hash->encode(7),
+        ]);
+        $row->create([
+            'productcode' => '1006',
+            'productname' => 'RESINA POLICLARK UG400 CILINDRO 220KG',
+            'family_id' => 1,
+            'line_id' => 1,
+            'um_id' => 1,
+            'token' => $hash->encode(8),
+        ]);
+        $row->create([
+            'productcode' => '1007',
+            'productname' => 'RESINA PREACELERADA RLMT400 CILINDRO 220KG                                                                                                                                                                                       ',
+            'family_id' => 1,
+            'line_id' => 1,
+            'um_id' => 1,
+            'token' => $hash->encode(8),
         ]);
 
     }

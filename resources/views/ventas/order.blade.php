@@ -64,39 +64,38 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="110">{{ $item->dateorder }}</td>
-                            <td>{{ $item->serial }}-{{ $item->documentno }}</td>
+                            <td>
+                                <a href="{{ route('corder.show',$item->token) }}">
+                                    {{ $item->serial }}-{{ $item->documentno }}
+                                </a>
+                            </td>
                             <td width="115">{{ $item->bpartner->bpartnercode }}</td>
                             <td width="110">{{ $item->bpartner->bpartnername }}</td>
-                            <td class="text-right pr-2">
+                            <td class="text-right pr-2 border-left border-right">
                                 {{ number_format($item->amount, 2) }} {{ $item->currency->currencyiso }}
                             </td>
                             <td>{{ $item->warehouse->shortname }}</td>
 
                             <td class="text-right">
-                                <div class="btn-group">
-                                    <a href="#" class="dropdown-toggle dropdown-icon" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                        Opciones <span class="sr-only">Toggle Dropdown</span>
+                                @if($grant->isdelete == 'Y')
+                                    <a href="{{ route('corder.edit', [$item->token]) }}"> 
+                                        <i class="fas fa-edit"></i>
+                                        Modificar
                                     </a>
-                                    <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item"
-                                            href="{{ route('corder_createinvoice', [$item->token]) }}">Emitir
-                                            Comprobante</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                            data-target="#ModalCreateInvoice">Emitir Comprobante</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                            data-target="#ModalCancelDocument">Cerrar Orden de Venta</a>
-                                    </div>
-                                </div>
+                                @else
+                                    <i class="fas fa-trash-alt fa-fw"></i>
+                                @endif
                                 |
-                                <div class="btn-group">
-                                    <a href="#"><i class="fas fa-file-pdf"></i> PDF</a>
-                                </div>
-                                |
-                                <div class="btn-group">
-                                    <a href="#"><i class="fas fa-envelope"></i> Enviar</a>
-                                </div>
+                                @if($grant->isdelete == 'Y')
+                                    <a class="delete-record" 
+                                        data-url="{{ route('corder.destroy', $item->token) }}"
+                                        data-id="{{ $item->id }}">
+                                        <i class="fas fa-trash-alt fa-fw"></i>
+                                    </a>
+                                @else
+                                    <i class="fas fa-trash-alt fa-fw"></i>
+                                @endif
+
                             </td>
                         </tr>
                     @empty
@@ -116,32 +115,7 @@
 
     {{-- MODALES --}}
 
-    <!-- Modal -->
-    <div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Emitir Comprobante</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <select name="" id="" class="form-control">
-                            <option value="">FACTURA F001</option>
-                            <option value="">BOLETA F002</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Crear</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    
     <!-- ANULAR -->
     <div class="modal fade" id="ModalCancelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

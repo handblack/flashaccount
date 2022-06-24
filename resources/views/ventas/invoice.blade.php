@@ -34,7 +34,6 @@
                         Comprobante de Venta
                         &nbsp;
                         <i class="fas fa-edit fa-fw"></i>
-
                     </h1>
                 </div>
             </div>
@@ -47,13 +46,28 @@
 <div class="card">
     <div class="card-body  p-0">
         <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Numero</th>
+                    <th>CodigoSN</th>
+                    <th>Socio de Negocio</th>
+                    <th class="text-right pr-2">Importe</th>
+                    <th>Almacen</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
-
-                
                 @forelse($result as $item)
                 <tr>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->dateinvoiced }}</td>
+                    <td width="110">{{ $item->dateinvoiced }}</td>
+                    <td>{{ $item->serial }}-{{ $item->documentno }}</td>
+                    <td width="115">{{ $item->bpartner->bpartnercode }}</td>
+                    <td width="110">{{ $item->bpartner->bpartnername }}</td>
+                    <td class="text-right pr-2 border-left border-right">
+                        {{ number_format($item->amount, 2) }} {{ $item->currency->currencyiso }}
+                    </td>
+                    <td>{{ $item->warehouse->shortname }}</td>
                 </tr>
                 @empty
                 <tr>

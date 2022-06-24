@@ -44,6 +44,9 @@
             background-color: rgba(0,0,0,.03);
             border-bottom: 1px solid rgba(0,0,0,.125);
         }
+        p{
+            margin-bottom: 0;
+        } 
     </style>
     @yield('style')
 </head>
@@ -108,7 +111,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12" style="line-height: 1.2">
                             @yield('container')
                         </div>
                     </div>

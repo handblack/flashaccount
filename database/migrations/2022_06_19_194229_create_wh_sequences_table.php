@@ -2,6 +2,7 @@
 
 use App\Models\WhDocType;
 use App\Models\WhSequence;
+use Hashids\Hashids;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,19 +29,37 @@ class CreateWhSequencesTable extends Migration
             $table->foreignId('warehouse_id')->nullable();
             $table->timestamps();
         });
-       
-        //Orden de Venta
-        $row = new WhSequence();
+        $hash = new Hashids(env('APP_HASH'));
+        /*
+            Comproban de Venta
+        */
+        $row  = new WhSequence();
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','FAC')->first()->id,
+            'serial'     => 'F001',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','BVE')->first()->id,
+            'serial'     => 'B001',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        /*
+            Orden de Venta
+        */
+        $row  = new WhSequence();
         $row->create([
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
             'serial'     => 'O001',
-            'token'      => md5('1'),
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
         $row->create([
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
             'serial'     => 'O002',
-            'token'      => md5('2'),
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
     }

@@ -168,8 +168,12 @@ class ProductController extends Controller
 
     public function search(Request $request){
         $result = WhProduct::where(function($query) use ($request){
-            $query->where('productcode','LIKE',"{$request->productcode}%");
-            $query->whereOr('productname','LIKE',"{$request->productcode}%");
+            $qq = str_replace(' ','%',$request->q);
+            if(is_numeric($request->q)){
+                $query->where('productcode','LIKE',"{$request->q}%");
+            }else{
+                $query->where('productname','LIKE',"{$qq}%");
+            }
         })
         ->get(['id',DB::raw('CONCAT(productcode,\' - \',productname) as text')]);
         return response()->json([

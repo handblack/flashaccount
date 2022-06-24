@@ -75,7 +75,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     //ORDEN DE VENTA
     Route::resource('/ventas/order/manager',COrderController::class, ['names' => 'corder']);
     Route::resource('/ventas/order/managers/line',COrderLineController::class, ['names' => 'corderline']);
-    Route::get('ventas/order/managers/ci/{token}',[COrderController::class,'create_invoice'])->name('corder_createinvoice');
+    Route::post('ventas/order/managers/copy_to_invoice',[COrderController::class,'copy_to_invoice'])->name('corder_copy_to_invoice');
+    
     //INVOICE
     Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
     //NOTA CREDITO

@@ -127,4 +127,23 @@ class User extends Authenticatable
         return WhSequence::find($id)->serial;        
     }
 
+    public function get_param($identity, $default = ''){
+        $filtro = [
+            ['group_id','0'],
+            ['identity',$identity],
+        ];
+        $row = WhParam::where($filtro)->first();
+        if(!$row){
+            $row = new WhParam();
+            $row->group_id = 0;
+            $row->identity = $identity;
+            $row->value    = $default;
+            $row->save();
+            $value = $default;
+        }else{
+            $value = $row->value;
+        }
+        return $value;
+    }
+
 }

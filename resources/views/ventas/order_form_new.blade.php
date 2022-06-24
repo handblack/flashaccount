@@ -165,7 +165,7 @@
                 </tbody>                
             </table>
         </div>
-        <div class="card-body border-top" id="order-items-totales">
+        <div class="card-body border-top bg-light" id="order-items-totales">
             @include('ventas.order_form_list_total',['lines'=>$lines])
         </div>
     </div>
