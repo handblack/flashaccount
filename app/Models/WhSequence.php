@@ -14,9 +14,13 @@ class WhSequence extends Model
         'lastnumber',
         'doctype_id',
         'isdocref',
+        'warehouse_id',
     ];
 
     public function doctype(){
         return $this->hasOne(WhDocType::class,'id','doctype_id');
+    }
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
     }
 }

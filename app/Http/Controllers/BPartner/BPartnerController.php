@@ -72,7 +72,7 @@ class BPartnerController extends Controller
         $row->save();
         $row->token = $hash->encode($row->id);
         $row->save();
-        return redirect()->route('bpartner.index')->with('message','Producto creado');
+        return redirect()->route('bpartner.index')->with('message','Registro creado');
     }
 
     /**

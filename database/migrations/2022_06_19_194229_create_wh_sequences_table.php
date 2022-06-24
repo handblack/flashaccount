@@ -35,11 +35,13 @@ class CreateWhSequencesTable extends Migration
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
             'serial'     => 'O001',
             'token'      => md5('1'),
+            'warehouse_id' => 1,
         ]);
         $row->create([
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
             'serial'     => 'O002',
             'token'      => md5('2'),
+            'warehouse_id' => 1,
         ]);
     }
 

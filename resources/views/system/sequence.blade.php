@@ -49,10 +49,22 @@
     <div class="card">
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
+                <thead>
+                    <tr>
+                        <th>Tipo Documento</th>
+                        <th>Serie</th>
+                        <th class="text-right pr-3">Ultimo</th>
+                        <th>Almacen</th>
+                        <th></th>
+                    </tr>
+                </thead>
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
+                            <td>{{ $item->doctype->doctypename }}</td>
                             <td>{{ $item->serial }}</td>
+                            <td class="text-right pr-3">{{ $item->lastnumber }}</td>
+                            <td>{{ $item->warehouse->shortname }}</td>
                             <td class="text-right">
                                 <a href="{{ route('sequence.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
                                     Modificar</a> |
