@@ -1,12 +1,12 @@
 <tr id="tr-{{ $item->id }}">
-    <td>{{ $item->productcode }}</td>
+    <td>{{ ($item->typeproduct == 'P') ? $item->product->productcode : '' }}</td>
     <td>{{ $item->description }}</td>
-    <td class="text-right border-left">{{ $item->qty }}</td>
-    <td>{{ $item->umshortname }}</td>
+    <td class="text-right border-left">{{ $item->quantity }}</td>
+    <td>{{ $item->um->shortname }}</td>
     <td class="text-right border-left">{{ $item->priceunit }}</td>
-    <td class="text-right border-left">{{ number_format($item->it_base,2) }}</td>
-    <td></td>
-    <td></td>
+    <td class="text-right border-left">{{ number_format($item->amountbase,2) }}</td>
+    <td class="text-right border-left">{{ number_format($item->amounttax,2) }}</td>
+    <td class="text-right border-left">{{ number_format($item->amountgrand,2) }}</td>
     <td class="text-right border-left">
         <a href="#" 
             onclick="edit_item(this);"

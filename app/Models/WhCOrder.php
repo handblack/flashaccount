@@ -26,5 +26,8 @@ class WhCOrder extends Model
     public function warehouse(){
         return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
     }
+    public function orderline(){
+        return $this->hasMany(WhCOrderLine::class,'order_id','id');
+    }
 
 }

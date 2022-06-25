@@ -14,6 +14,7 @@ use App\Models\WhSequence;
 use App\Models\WhTax;
 use App\Models\WhWarehouse;
 use App\Models\TempLine;
+use App\Models\WhParam;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 
@@ -61,6 +62,7 @@ class COrderController extends Controller
             'sequence' => $sequence,
             'currency' => WhCurrency::all(),
             'warehouse' => WhWarehouse::all(),
+            'typeoperation' => WhParam::where('group_id',3)->get(),
         ]);
     }
 
@@ -85,7 +87,7 @@ class COrderController extends Controller
         $row->dateorder  = date("Y-m-d");
         $row->serial     = auth()->user()->get_serial($row->sequence_id);
         $row->documentno = auth()->user()->set_lastnumber($row->sequence_id);
-        $row->amount = $lines->sum('it_grand');
+        $row->amount = $lines->sum('amountgrand');
         $row->token = date("YmdHIs");
         $row->save();        
         $row->token = $hash->encode($row->id); 
@@ -97,15 +99,9 @@ class COrderController extends Controller
             $lin = new WhCOrderLine();
             $lin->fill($line->toArray());
             $lin->order_id = $row->id; 
-            $lin->quantity    = $line->qty; 
-            $lin->priceunit   = $line->priceunit;
-            $lin->priceunittax = $line->priceunittax;  
-            $lin->amountbase  = $line->it_base;
-            $lin->amounttax   = $line->it_tax;
-            $lin->amountgrand = $line->it_grand;
-            $lin->token       = date("YmdHis"); 
+            $lin->token    = $line->token; 
             $lin->save();
-            $lin->token       = $hash->encode($lin->id);
+            $lin->token    = $hash->encode($lin->id);
             $lin->save();
         }
         //Limpiamos el cotenedor
@@ -199,7 +195,8 @@ class COrderController extends Controller
         $source = WhCOrder::where('id',$request->order_id)->first();
         if(!$source){
             abort(403,'No hay registro');
-        }              
+        }    
+        //Cabecera #########################################################          
         $target = new TempHeader();
         $target->fill($source->toArray());
         $target->order_id    = $request->order_id;
@@ -208,6 +205,13 @@ class COrderController extends Controller
         $target->save();
         $target->session     = $hash->encode($target->id);
         $target->save();
+        //Detalle ##########################################################
+        foreach($source->orderline as $line){
+            $templ = new TempLine();
+            $templ->fill($line->toArray());
+            $templ->temp_id = $target->id;
+            $templ->save();                
+        }        
         return redirect()->route('cinvoice.edit',$target->session);
         /*
         $head = WhCOrder::where('token',$request->token)->first();

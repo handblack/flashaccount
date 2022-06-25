@@ -16,22 +16,24 @@ class CreateTempLinesTable extends Migration
         Schema::create('temp_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('temp_id')->nullable();
+            $table->string('session',60)->nullable();
             $table->string('token',60)->nullable();
             $table->enum('typeproduct',['P','S'])->default('P');
-            $table->foreignId('tax_id')->nullable();
+            $table->foreignId('typeoperation_id')->nullable();
             $table->foreignId('product_id')->nullable();
+            $table->foreignId('tax_id')->nullable();
             $table->foreignId('um_id')->nullable();
             $table->string('umname',30)->nullable();
             $table->string('umshortname',15)->nullable();
             $table->string('productcode',15)->nullable();
             $table->text('description')->nullable();
-            $table->double('qty',12,5)->nullable();
-            $table->double('priceunit',12,5)->nullable();
-            $table->double('priceunittax',12,5)->nullable();
-            $table->double('it_base',12,5)->nullable();
-            $table->double('it_exo',12,5)->nullable();
-            $table->double('it_tax',12,5)->nullable();
-            $table->double('it_grand',12,5)->nullable();
+            $table->float('quantity',12,5)->default(0);
+            $table->float('priceunit',12,5)->default(0);
+            $table->float('priceunittax',12,5)->default(0)->nullable();
+            $table->float('amountbase',12,5)->default(0);
+            $table->float('amountexo',12,5)->default(0);
+            $table->float('amounttax',12,5)->default(0);
+            $table->float('amountgrand',12,5)->default(0);
             $table->timestamps();
         });
     }

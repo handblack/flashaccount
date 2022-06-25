@@ -34,6 +34,9 @@ class CreateWhParamsTable extends Migration
         $row->create(['group_id' => 2,'shortname'=>'BBVA','identity' => 'BANCO CONTINENTAL']);
         $row->create(['group_id' => 2,'shortname'=>'INTB','identity' => 'BANCO INTERBANK DEL PERU']);
         $row->create(['group_id' => 2,'shortname'=>'EFEC','identity' => 'CAJA EFECTIVO']);
+        $row->create(['group_id' => 3,'identity' => 'OPERACION GRABADA']);
+        $row->create(['group_id' => 3,'identity' => 'OPERACION INAFECTA']);
+        $row->create(['group_id' => 3,'identity' => 'OPERACION EXONERADA']);
     }
 
     /**

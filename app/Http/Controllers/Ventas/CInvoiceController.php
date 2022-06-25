@@ -115,7 +115,7 @@ class CInvoiceController extends Controller
         foreach($templ as $tline){
             $line = new WhCInvoiceLine();
             $line->invoice_id = $header->id;
-            $line->save()
+            $line->save();
         }
         if($temph->order_id){
             //Si hay referencia de Orden de Venta, cerramos la ORDEN
@@ -123,7 +123,7 @@ class CInvoiceController extends Controller
             $order->docstatus = 'C';
             $order->save();
         }
-        return redirect()->route('cinvoice.show',$row->token)
+        return redirect()->route('cinvoice.show',$row->token);
     }
 
     /**

@@ -18,6 +18,7 @@ class ParameterController extends Controller
         ['id' => '0', 'name' => 'Parametros de sistema'],
         ['id' => '1', 'name' => 'Forma de Pago'],
         ['id' => '2', 'name' => 'Entidad Financiera/Caja'],        
+        ['id' => '3', 'name' => 'Ventas - Tipo de Operacion'],        
     ];
 
     public function index(Request $request){

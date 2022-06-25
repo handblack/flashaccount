@@ -39,8 +39,28 @@ class COrderLineController extends Controller
      */
     public function store(Request $request)
     {
+        //Validaciones
         $data['status']   = '100';
-        $data['message']  = 'Se agrego ITEM';                
+        $data['message']  = 'Se agrego ITEM';                        
+        if($request->typeproduct == 'P'){
+            if(!$request->has('product_id') || !($request->product_id)){                
+                $data['status']   = '101';
+                $data['message']  = 'Debes especificar el producto';                                
+            }
+        }
+        if(!($request->quantity <> 0)){
+            $data['status']   = '102';
+            $data['message']  = 'Debes especificar la cantidad';                                
+        }        
+        if(!($request->priceunit <> 0)){
+            $data['status']   = '102';
+            $data['message']  = 'Falta el Precio Unitario';                                
+        }        
+        if($data['status'] <> '100'){
+            //Se generar error y se responde en JSON para mostrar error
+            return response()->json($data);
+        }
+        // Hacemos el proceso de creaciones del registro en orden de venta
         if($request->modeline == 'edit'){
             $row = TempLine::where('token',$request->itemtoken)->first();
         }else{
@@ -48,26 +68,26 @@ class COrderLineController extends Controller
         }        
         $row->fill($request->all());  
         $row->token    = md5(date("YmdHis"));
-        $row->it_base  = $request->qty * $request->priceunit;        
+        $row->amountbase  = $request->quantity * $request->priceunit;        
         $row->save();
         $row->priceunittax = round(($row->tax->ratio / 100) * $row->priceunit,5) + $row->priceunit; 
-        $row->it_tax   = round(($row->tax->ratio / 100) * $row->it_base,2);
-        $row->it_grand = $row->it_base + $row->it_tax;
+        $row->amounttax   = round(($row->tax->ratio / 100) * $row->amountbase,2);
+        $row->amountgrand = $row->amountbase + $row->amounttax;
         //Completamos demas informacion
         if($request->typeproduct == 'P'){
             if(!$request->has('product_id')){
                 $data['status']   = '101';
                 $data['message']  = 'Especificar el producto';
             }
-            $row->productcode = $row->product->productcode;
+            //$row->productcode = $row->product->productcode;
             $row->description = $row->product->productname;
             $row->um_id       = $row->product->um->id;
-            $row->umname      = $row->product->um->umname;
-            $row->umshortname = $row->product->um->shortname;
+            #$row->umname      = $row->product->um->umname;
+            #$row->umshortname = $row->product->um->shortname;
         }else{
             $row->description = $request->servicename;
-            $row->umname      = $row->um->umname;
-            $row->umshortname = $row->um->shortname;
+            #$row->umname      = $row->um->umname;
+            #$row->umshortname = $row->um->shortname;
         }
         $row->save();
         //Responsemod en JSON

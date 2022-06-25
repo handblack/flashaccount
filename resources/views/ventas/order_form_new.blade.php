@@ -175,6 +175,7 @@
         @include('ventas.order_form_additem',[
             'item' => $item,
             'taxes' => $taxes,
+            'typeoperation' => $typeoperation
         ])
     </div>
     {{-- fin / FormModalAddItems --}}

@@ -24,10 +24,10 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-tag fa-fw"></i></span>
                             </div>
-                            <select name="" id="" class="form-control">
-                            <option value="1">Operacion Grabada</option>
-                            <option value="2">Operacion Inafecta</option>
-                            <option value="3">Operacion Exonerada</option>
+                            <select name="typeoperation_id" id="" class="form-control">
+                                @foreach ($typeoperation as $item)
+                                    <option value="{{ $item->id }}">{{ $item->identity }}</option>
+                                @endforeach
                         </select> 
                         </div>                        
                     </div>
@@ -63,7 +63,7 @@
                         <div class="col-md-4 col-sm-6">
                             <label class="mb-0">Cantidad</label>
                             <div class="input-group">
-                                <input type="text" id="qty" name="qty" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
+                                <input type="text" id="qty" name="quantity" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <select name="um_id" id="um_id" class="form-control" style="border-top-left-radius:0px;border-bottom-left-radius:0px;" disabled>
                                         @foreach (auth()->user()->um() as $item)
@@ -75,7 +75,12 @@
                         </div>
                         <div class="col-md-4 col-sm-6">
                             <label class="mb-0">PU (Sin IGV)</label>
-                            <input type="text" id="priceunit" name="priceunit" class="form-control text-right" placeholder="Precio Unitario" aria-label="Precio Unitario" aria-describedby="basic-addon2">
+                            <input type="text" id="priceunit" name="priceunit" class="form-control text-right" placeholder="Precio SIN IGV" aria-label="Precio Unitario" aria-describedby="basic-addon2">
+                             
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <label class="mb-0">PU (Con IGV)</label>
+                            <input type="text" id="priceunittax" name="priceunittax" class="form-control text-right" placeholder="Precio CON IGV" aria-label="Precio Unitario" aria-describedby="basic-addon2">
                              
                         </div>
                     </div>

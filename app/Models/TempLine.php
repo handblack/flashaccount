@@ -11,14 +11,18 @@ class TempLine extends Model
     protected $fillable =[
         'session',
         'typeproduct',
+        'typeoperation_id',
         'product_id',
-        'description',
-        'qty',
-        'priceunit',
         'tax_id',
         'um_id',
-        'token',
-       
+        'description',
+        'quantity',
+        'priceunit',
+        'priceunittax',
+        'amountbase',
+        'amountexo',
+        'amounttax',
+        'amountgrand',
     ];
 
     public function product(){
