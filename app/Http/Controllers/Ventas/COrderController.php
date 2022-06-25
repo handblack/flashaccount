@@ -76,7 +76,7 @@ class COrderController extends Controller
             'bpartner_id' => 'required',
             'currency_id' => 'required',
             'sequence_id' => 'required',
-            'session' => 'required',
+        
         ]);
         $lines = TempLine::where('session','corder-'.session()->getId())->get();
         $hash = new Hashids(env('APP_HASH'));

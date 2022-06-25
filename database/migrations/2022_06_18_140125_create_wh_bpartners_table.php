@@ -49,6 +49,11 @@ class CreateWhBpartnersTable extends Migration
             'bpartnername' => 'RIMAC SEGUROS Y REASEGUROS',
             'token' => $hash->encode(5),
         ]);
+        $row->create([
+            'bpartnercode' => 'C10099766838',
+            'bpartnername' => 'RIVAS CAMPOS MARIA LOURDES',
+            'token' => $hash->encode(6),
+        ]);
     }
 
     /**

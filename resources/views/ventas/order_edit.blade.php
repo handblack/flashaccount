@@ -43,30 +43,55 @@
 
 @section('container')
     <div class="card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-6">
-                    <strong>Cliente</strong>
-                    <p class="text-muted">{{ $header->bpartner->bpartnername }}</p>
-                </div>
-                <div class="col-md-2">
-                    <strong>Almacen</strong>
-                    <p class="text-muted">{{ $header->warehouse->shortname }}</p>
-                </div>
-                <div class="col-md-2">
-                    <strong>Fecha</strong>
-                    <p class="text-muted">{{ $header->dateorder }}</p>
-                </div>
-                <div class="col-md-2">
-                    <strong>Moneda</strong>
-                    <p class="text-muted">{{ $header->currency->currencyname }}</p>
+        <form action="{{ route('corder.store') }}" method="POST">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name='session' value="corder-{{ session()->getId() }}">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Cliente</strong>
+                        <p class="text-muted">{{ $header->bpartner->bpartnername }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Almacen</strong>
+                        <p class="text-muted">{{ $header->warehouse->shortname }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Fecha</strong>
+                        <p class="text-muted">{{ $header->dateorder }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Moneda</strong>
+                        <p class="text-muted">{{ $header->currency->currencyname }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card-body">
-            
-        </div>
+            <div class="card-body pt-1 pb-2 bg-light border-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="float-sm-right mt-1">
+
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem" data-backdrop="static" data-keyboard="false">
+                                    <i class="fas fa-plus-square fa-fw"></i>
+                                    Agregar Item
+                                </a>    
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-save fa-fw"></i>
+                                    Procesar
+                                </button>                                
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
         <div class="card-body border-top bg-light" id="order-items-totales">             
             <div class="row">

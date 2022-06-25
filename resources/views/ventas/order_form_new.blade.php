@@ -49,7 +49,7 @@
     <div class="card">
         <form action="{{ route('corder.store') }}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            <input type="hidden" name='session' value="corder-{{ session()->getId() }}">
+            
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6"> </div>

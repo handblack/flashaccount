@@ -5,7 +5,6 @@
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
-
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
@@ -16,7 +15,6 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <div class="row">
                         <div class="col-md-12">
@@ -26,7 +24,6 @@
                                     &nbsp;
                                     <i class="fas fa-cash-register fa-fw"></i>
                                 </h1>
-                                
                             </div>
                         </div>
                     </div>
@@ -37,5 +34,28 @@
 @endsection
 
 @section('container')
-    {{ $header->bpartner->bpartnername }}
+    <form action="{{ route('cinvoice.update',[$header->session]) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name='session' value="{{ $header->session }}">
+        {{ $header->bpartner->bpartnername }}
+        <select name="sequence_id" id="">
+            @foreach ($sequence as $item)
+            <option value="{{ $item->id }}">{{ $item->serial }}</option>
+            @endforeach
+        </select>
+        <button type="submit"> Crear </button>
+
+        <table>
+            <thead></thead>
+            <tbody>
+                @foreach ($lines as $item)
+                    <tr>
+                        <td>{{ ($item->product_id) ? $item->product->productcode : '' }}</td>
+                        <td>{{ $item->description }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </form>
 @endsection

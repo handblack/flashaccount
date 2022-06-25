@@ -16,7 +16,6 @@ class CreateTempLinesTable extends Migration
         Schema::create('temp_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('temp_id')->nullable();
-            $table->string('session',80)->nullable();
             $table->string('token',60)->nullable();
             $table->enum('typeproduct',['P','S'])->default('P');
             $table->foreignId('tax_id')->nullable();
