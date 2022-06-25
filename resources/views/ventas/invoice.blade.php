@@ -33,7 +33,7 @@
                     <h1 class="h4 mb-0 d-none d-md-inline-block">
                         Comprobante de Venta
                         &nbsp;
-                        <i class="fas fa-edit fa-fw"></i>
+                        <i class="fas fa-cash-register fa-fw"></i>
                     </h1>
                 </div>
             </div>

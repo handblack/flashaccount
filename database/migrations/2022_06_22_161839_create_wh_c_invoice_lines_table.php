@@ -15,6 +15,7 @@ class CreateWhCInvoiceLinesTable extends Migration
     {
         Schema::create('wh_c_invoice_lines', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('temp_id');
             $table->foreignId('invoice_id');
             $table->foreignId('orderline_id')->nullable();
             $table->foreignId('product_id');

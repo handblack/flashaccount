@@ -19,12 +19,8 @@ class TempHeader extends Model
         return $this->hasOne(WhSequence::class,'id','sequence_id');
     }
 
-    public function product(){
-        return $this->hasOne(WhProduct::class,'id','product_id');
-    }
-    
-    public function um(){
-        return $this->hasOne(WhUm::class,'id','um_id');
+    public function bpartner(){
+        return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
 
 }

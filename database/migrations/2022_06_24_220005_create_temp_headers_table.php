@@ -15,6 +15,7 @@ class CreateTempHeadersTable extends Migration
     {
         Schema::create('temp_headers', function (Blueprint $table) {
             $table->id();
+            $table->string('session',60)->nullable();
             $table->foreignId('order_id');
             $table->foreignId('sequence_id');
             $table->foreignId('bpartner_id');

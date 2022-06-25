@@ -90,7 +90,7 @@ class COrderController extends Controller
         $row->save();        
         $row->token = $hash->encode($row->id); 
         $row->save();        
-        die();
+        
         //Guardamos las lineas
         
         foreach($lines as $line){
@@ -202,10 +202,13 @@ class COrderController extends Controller
         }              
         $target = new TempHeader();
         $target->fill($source->toArray());
+        $target->order_id    = $request->order_id;
         $target->sequence_id = $request->sequence_id;
         $target->amountgrand = $source->amount;
         $target->save();
-        return redirect()->route('cinvoice.create')
+        $target->session     = $hash->encode($target->id);
+        $target->save();
+        return redirect()->route('cinvoice.edit',$target->session);
         /*
         $head = WhCOrder::where('token',$request->token)->first();
         if($head){
