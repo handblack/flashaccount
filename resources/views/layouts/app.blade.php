@@ -10,6 +10,7 @@
     <title>flashaccount</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css')}}">
@@ -30,6 +31,9 @@
             text-decoration:line-through;
             color: red;
         }
+        .console{
+            font-family: 'Inconsolata', monospace;
+        }
         .table-sm td, .table-sm th {
             padding: 0.08rem;
         }
@@ -47,6 +51,9 @@
         p{
             margin-bottom: 0;
         } 
+        dd {
+            margin-bottom: 0.1rem;
+        }
     </style>
     @yield('style')
 </head>

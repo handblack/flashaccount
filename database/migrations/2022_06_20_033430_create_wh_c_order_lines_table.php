@@ -17,7 +17,6 @@ class CreateWhCOrderLinesTable extends Migration
             $table->id();
             $table->enum('typeproduct',['S','P']);
             $table->foreignId('typeoperation_id');
-            $table->foreignId('order_id')->nullable();
             $table->foreignId('product_id')->nullable();
             $table->text('description')->nullable();
             $table->foreignId('um_id');          
@@ -30,6 +29,14 @@ class CreateWhCOrderLinesTable extends Migration
             $table->float('amounttax',12,5)->default(0);
             $table->float('amountgrand',12,5)->default(0);
             $table->string('token',60)->nullable();
+            
+            
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')
+                                    ->references('id')
+                                    ->on('wh_c_orders')
+                                    ->cascadeOnDelete();
+            
             $table->timestamps();
         });
     }

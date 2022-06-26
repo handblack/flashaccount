@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\TempBankIncome;
 use App\Models\TempBankIncomeLine;
 use App\Models\TempBankIncomePayment;
+use App\Models\WhBankAccount;
 use App\Models\WhBIncome;
 use App\Models\WhCInvoice;
+use App\Models\WhCurrency;
+use App\Models\WhParam;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BankIncomeController extends Controller
 {
@@ -21,8 +25,14 @@ class BankIncomeController extends Controller
     public function index()
     {
         $result = WhBIncome::all();
+        $bankaccount = WhBankAccount::all();
+        $method = WhParam::where('group_id',4)->get();
+        $currency = WhCurrency::all();
         return view('bank.income',[
             'result' => $result,
+            'bankaccount' => $bankaccount,
+            'method' => $method,
+            'currency' => $currency,
         ]);
     }
 
@@ -44,16 +54,45 @@ class BankIncomeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'bpartner_id' => 'required'
-        ]);
-        $row = new TempBankIncome();
-        $row->bpartner_id = $request->bpartner_id;
-        $row->save();
-        $hash = new Hashids(env('APP_HASH'));
-        $row->token = $hash->encode($row->id);
-        $row->save();
-        return redirect()->route('bincome.edit',$row->token);
+        $data['status'] = '100';
+        $data['message'] = 'Seleccione los documentos a consignar';
+        $fields = [
+            'bpartner_id',
+            'currency_id',
+            'bankaccount_id',
+            'paymentmethod_id',
+        ];
+        foreach($fields as $field){
+            if(!$request->has($field)){
+                $data['status'] = '101';
+                $data['message'] = "Falta especificar {$field}";
+            }
+        }
+
+        if(!($data['status'] == '100')){
+            // hacemos esto poque se presento un error-validacion
+            return response()->json($data);
+        }
+
+        DB::transaction(function () use($request) {
+            $hash = new Hashids(env('APP_HASH'));
+            // Creando cabecera -------------------------------------------------
+            $row = new TempBankIncome();
+            $row->bpartner_id = $request->bpartner_id;
+            $row->datetrx     = $request->datetrx;
+            $row->save();
+            $row->token       = $hash->encode($row->id);
+            $row->save();
+            // Creando payment -------------------------------------------------
+            $payment = New TempBankIncomePayment();
+            $payment->fill($request->all());
+            $payment->income_id = $row->id;
+            $payment->save();
+            session(['invoice_session' => $row->token]);
+        });
+        $data['url'] = route('bincome.edit',session('invoice_session'));
+        return response()->json($data);
+        //return redirect()->route('bincome.edit',session('invoice_session'));
     }
 
     /**
@@ -78,7 +117,8 @@ class BankIncomeController extends Controller
         $row     = TempBankIncome::where('token',$id)->first();
         $lines   = TempBankIncomeLine::where('income_id',$row->id)->get();
         $open    = WhCInvoice::where('bpartner_id',$row->bpartner_id)->get();
-        $payment = TempBankIncomePayment::where('income_id',$row->id)->get();
+        $payment = TempBankIncomePayment::where('income_id',$row->id)->first();
+  
         return view('bank.income_form',[
             'row'     => $row,
             'lines'   => $lines,

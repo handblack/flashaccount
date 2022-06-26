@@ -12,6 +12,7 @@ use App\Models\WhDocType;
 use App\Models\WhSequence;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CInvoiceController extends Controller
 {
@@ -23,7 +24,7 @@ class CInvoiceController extends Controller
     private $module = 'ventas.invoice';
     public function index()
     {
-        $result = WhCInvoice::all();
+        $result = WhCInvoice::paginate(env('PAGINATE_INVOICE',20));
         return view('ventas.invoice',[
             'result' => $result,
         ]);
@@ -102,28 +103,42 @@ class CInvoiceController extends Controller
             return back()->with('error','No tienes privilegio para crear');
         }
         $request->validate([
-            'sequence_id' => 'required'
+            'sequence_id' => 'required',
+            'dateinvoiced' => 'required',
         ]);
-        $hash = new Hashids(env('APP_HASH'));
         // Guadamos Cabecera
-        $temph = TempHeader::where('session',$id)->first();
-        $header = new WhCInvoice();
-        $header->order_id = $temph->order_id;
-        $header->save();
-        // Guaramos Lineas
-        $templ = TempLine::where('temp_id',$temph->id)->get();
-        foreach($templ as $tline){
-            $line = new WhCInvoiceLine();
-            $line->invoice_id = $header->id;
-            $line->save();
-        }
-        if($temph->order_id){
-            //Si hay referencia de Orden de Venta, cerramos la ORDEN
-            $order = WhCOrder::find($temph->order_id);
-            $order->docstatus = 'C';
-            $order->save();
-        }
-        return redirect()->route('cinvoice.show',$row->token);
+        //dd($request);
+        DB::transaction(function () use($request,$id) {
+            $hash = new Hashids(env('APP_HASH'));
+            $temph = TempHeader::where('session',$id)->first();
+            $header = new WhCInvoice();
+            $header->fill($temph->toArray());
+            $header->fill($request->all());
+            $header->token       = $request->session;
+            $header->serial      = auth()->user()->get_serial($request->sequence_id);
+            $header->documentno  = auth()->user()->set_lastnumber($request->sequence_id);        
+            $header->order_id    = $temph->order_id;
+            $header->amountopen  = $temph->amountgrand;
+            $header->save();
+            $header->token = $hash->encode($header->id);
+            $header->save();
+            // Guaramos Lineas
+            $templ = TempLine::where('temp_id',$temph->id)->get();
+            foreach($templ as $tline){
+                $line = new WhCInvoiceLine();
+                $line->fill($tline->toArray());
+                $line->invoice_id = $header->id;
+                $line->save();
+            }
+            if($temph->order_id){
+                //Si hay referencia de Orden de Venta, cerramos la ORDEN
+                $order = WhCOrder::find($temph->order_id);
+                $order->docstatus = 'C';
+                $order->save();
+            }
+            session(['invoice_session'=> $header->token]);
+        });
+        return redirect()->route('cinvoice.show',session('invoice_session'));
     }
 
     /**

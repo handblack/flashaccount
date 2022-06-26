@@ -17,6 +17,7 @@ class CreateTempBankIncomesTable extends Migration
             $table->id();
             $table->string('token',60)->nullable();
             $table->foreignId('bpartner_id');
+            $table->date('datetrx');
             $table->timestamps();
         });
     }

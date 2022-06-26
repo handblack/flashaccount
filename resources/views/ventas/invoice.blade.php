@@ -53,6 +53,7 @@
                     <th>CodigoSN</th>
                     <th>Socio de Negocio</th>
                     <th class="text-right pr-2">Importe</th>
+                    <th class="text-right pr-2">Abierto</th>
                     <th>Almacen</th>
                     <th></th>
                 </tr>
@@ -64,9 +65,11 @@
                     <td>{{ $item->serial }}-{{ $item->documentno }}</td>
                     <td width="115">{{ $item->bpartner->bpartnercode }}</td>
                     <td width="110">{{ $item->bpartner->bpartnername }}</td>
+
                     <td class="text-right pr-2 border-left border-right">
-                        {{ number_format($item->amount, 2) }} {{ $item->currency->currencyiso }}
+                        {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
                     </td>
+                    <td class="text-right pr-2">{{ $item->amountopen }}</td>
                     <td>{{ $item->warehouse->shortname }}</td>
                 </tr>
                 @empty
@@ -76,6 +79,11 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 pt-2">
+        {{ $result->links('layouts.paginate') }}
     </div>
 </div>
 @endsection

@@ -66,8 +66,9 @@
                             <td width="110">{{ $item->dateorder }}</td>
                             <td>
                                 <a href="{{ route('corder.show',$item->token) }}">
-                                    {{ $item->serial }}-{{ $item->documentno }}
+                                    {{ $item->serial }}-{{ $item->documentno }} 
                                 </a>
+                                {{ $item->docstatus }}
                             </td>
                             <td width="115">{{ $item->bpartner->bpartnercode }}</td>
                             <td width="110">{{ $item->bpartner->bpartnername }}</td>

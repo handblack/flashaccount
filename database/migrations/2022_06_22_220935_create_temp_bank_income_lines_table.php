@@ -14,8 +14,14 @@ class CreateTempBankIncomeLinesTable extends Migration
     public function up()
     {
         Schema::create('temp_bank_income_lines', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('income_id');
+            $table->id();           
+
+            $table->unsignedBigInteger('income_id');
+            $table->foreign('income_id')
+                                    ->references('id')
+                                    ->on('temp_bank_incomes')
+                                    ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

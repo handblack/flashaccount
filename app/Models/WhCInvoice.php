@@ -16,8 +16,7 @@ class WhCInvoice extends Model
         'documentno',
         'bpartner_id',
         'currency_id',
-        'warehouse_id',
-        'token',
+        'warehouse_id',     
         'amountgrand',
         'amountopen',
         'docstatus'
@@ -34,4 +33,9 @@ class WhCInvoice extends Model
     public function warehouse(){
         return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
     }
+
+    public function sequence(){
+        return $this->hasOne(WhSequence::class,'id','sequence_id');
+    }
+
 }

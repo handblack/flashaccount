@@ -181,7 +181,28 @@ class COrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        if(auth()->user()->grant($this->module)->isdelete == 'N'){
+            $data['status'] = 102;
+            $data['message'] = 'No tienes privilegio para eliminar';
+        }
+        
+        $row = WhCOrder::where('token',$id)->first();
+        if($row->docstatus = 'C'){
+            $data['status'] = 103;
+            $data['message'] = 'El documento esta cerrado, no se puede eliminar';
+        }
+        if($row){ 
+            if($data['status'] == 100){ 
+                $row->delete();
+            }
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 
     public function copy_to_invoice(Request $request){
@@ -209,6 +230,7 @@ class COrderController extends Controller
         foreach($source->orderline as $line){
             $templ = new TempLine();
             $templ->fill($line->toArray());
+            $templ->orderline_id = $line->id;
             $templ->temp_id = $target->id;
             $templ->save();                
         }        

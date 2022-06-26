@@ -15,7 +15,19 @@ class CreateTempBankIncomePaymentsTable extends Migration
     {
         Schema::create('temp_bank_income_payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('income_id');
+            $table->date('datetrx')->nullable();
+            $table->foreignId('bankaccount_id');
+            $table->foreignId('currency_id');
+            $table->foreignId('bpartner_id');
+            $table->foreignId('paymentmethod_id');
+            $table->float('amount',12,5);
+            $table->string('documentno',30)->nullable();
+
+            $table->unsignedBigInteger('income_id');
+            $table->foreign('income_id')
+                                    ->references('id')
+                                    ->on('temp_bank_incomes')
+                                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

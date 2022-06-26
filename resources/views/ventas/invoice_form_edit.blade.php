@@ -34,7 +34,7 @@
 @endsection
 
 @section('container')
-    <form action="{{ route('cinvoice.update',[$header->session]) }}">
+    <form action="{{ route('cinvoice.update',[$header->session]) }}" method="POST">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name='session' value="{{ $header->session }}">
@@ -44,6 +44,8 @@
             <option value="{{ $item->id }}">{{ $item->serial }}</option>
             @endforeach
         </select>
+
+        <input type="date" name="dateinvoiced" value="{{ $header->datetrx }}">
         <button type="submit"> Crear </button>
 
         <table>

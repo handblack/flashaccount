@@ -16,11 +16,13 @@ class CreateWhCInvoicesTable extends Migration
         Schema::create('wh_c_invoices', function (Blueprint $table) {
             $table->id();
             $table->date('dateinvoiced');
+            $table->date('dateacct')->nullable();
+            $table->date('datedue')->nullable();
             $table->foreignId('order_id')->nullable();
+            $table->foreignId('bpartner_id');
             $table->foreignId('sequence_id');
             $table->string('serial',4);
             $table->string('documentno',15);
-            $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
             $table->foreignId('warehouse_id')->nullable();
             $table->string('token',60);

@@ -13,6 +13,9 @@ class TempHeader extends Model
         'bpartner_id',
         'currency_id',
         'amountgrand',
+        'warehouse_id',
+        'datetrx',
+        'dateacct',
     ];
 
     public function sequence(){

@@ -57,7 +57,7 @@
     <div class="modal fade" id="ModalCreate"role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('bincome.store') }}" method="POST">
+            <form action="{{ route('bincome.store') }}" method="POST" id="form-payment">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
@@ -66,10 +66,75 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <label class="mb-0">Socio de Negocio</label>
-                        <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="mb-0">Socio de Negocio</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>
+                        </div>
                         <p class="lead mt-3">Para todo ingreso a CAJA/BANCO se debe de identificar al Socio de Negocio, asi tambien podra especificar como ANTICIPO a su cuenta</p>
+
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                <label class="mb-0">Fecha TRX</label>
+                                <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="mb-0">Tipo de Cambio</label>
+                                <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="mb-0">Cuenta Bancaria / Caja</label>
+                                <select class="form-control" name="bankaccount_id" required>
+                                    <option value="" disabled selected>-- SELECCIONA --</option>
+                                    @foreach ($bankaccount as $item)
+                                        <option value="{{ $item->id }}">{{ $item->shortname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        
+                            
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label class="mb-0">Medio de Pago</label>
+                                <select class="form-control" name="paymentmethod_id" style="border-top-right-radius:0px;border-bottom-right-radius:0px;" required>
+                                    <option value="" selected disabled>-- SELECCIONAR --</option>
+                                    @foreach ($method as $item)
+                                        <option value="{{ $item->id }}">{{ $item->identity }}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="mb-0">Nro OPE / Doc Referencia / Oficina</label>
+                                <input type="text" class="form-control" name="documentno" required>
+                            </div>
+
+ 
+                            
+                            <div class="col-md-4">
+                                <label class="mb-0">Importe</label>
+                                <div class="input-group">
+                                    <input type="text" id="amount" name="amount" class="form-control text-right text-monospace" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required="">
+                                    <div class="input-group-append">
+                                        <select name="currency_id" id="currency_id" class="form-control" required style="border-top-left-radius:0px;border-bottom-left-radius:0px;">
+                                            @foreach ($currency as $item)
+                                                <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <label class="mb-0">Glosa</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -85,7 +150,28 @@
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
 <script>
 $(function(){
-        // SocioNegocio
+    // PaymentModal
+    let fai = $('#form-payment');
+    fai.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:fai.attr('method'),
+            url: fai.attr('action'),
+            data: fai.serialize(),
+            success: function(data){
+                if(data.status == '100'){    
+                    window.location.href = data.url;              
+                }else{
+                    toastr.error(data.message);
+                }
+            },
+            error: function(data){
+                console.log('error genero');
+            },
+
+        });
+    });
+    // SocioNegocio ----------------------------------------------------------------
     $('.select2-bpartner').select2({
         ajax: {
             url: '{{ route('api.bpartner') }}',

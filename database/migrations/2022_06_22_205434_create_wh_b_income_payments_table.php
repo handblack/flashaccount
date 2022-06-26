@@ -15,6 +15,16 @@ class CreateWhBIncomePaymentsTable extends Migration
     {
         Schema::create('wh_b_income_payments', function (Blueprint $table) {
             $table->id();
+            $table->date('datetrx');
+            $table->foreignId('bankaccount_id');
+            $table->foreignId('paymentmethod_id');
+            $table->foreignId('currency_id');
+            $table->double('rate',3)->default(1);
+            $table->string('documentno',20)->nullable();
+            $table->float('amount',12,5)->default(0);
+            $table->float('amountconverted',12,5)->default(0);
+
+           
             $table->timestamps();
         });
     }
