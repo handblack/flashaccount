@@ -21,6 +21,7 @@ class TempBankIncome extends Model
     }
 
     public function payment(){
-        return $this->hasOne(TempBankIncomePayment::class,'id','income_id');
+        return $this->hasOne(TempBankIncomePayment::class,'income_id','id');
+        //return $this->hasMany(TempBankIncomePayment::class,'id','income_id');
     }
 }

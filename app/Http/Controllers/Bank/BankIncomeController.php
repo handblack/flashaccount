@@ -145,9 +145,14 @@ class BankIncomeController extends Controller
                 Aqui creamos el registro correctaente
             */
             DB::transaction(function () use($id) {
-                $source = TempBankIncome::where('token',$id)->first();
+                $source = TempBankIncome::where('token',$id)->first();  
+                $tpay = TempBankIncomePayment::where('income_id',$source->id)->first();
+                
                 $header = new WhBIncome();
-                $header->fill($source->all()->toArray());
+                $header->fill($source->toArray());
+                #echo $source->id;
+                #dd($source->payment);
+                $header->bankaccount_id = $tpay->bankaccount_id;
                 $header->save(); 
             });
             return redirect()->route('bincome.index');

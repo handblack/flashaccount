@@ -48,11 +48,14 @@
                     <tr>
                         <td>CONCEPTOS</td>
                         <td>FECHA</td>
-                        <td>ABONOS</td>
-                        <td>CARGOS</td>
+                        <td class="text-right">ABONOS</td>
+                        <td class="text-right">CARGOS</td>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>{{ $row->payment->amount  }}</td>
+                    </tr>
                     @foreach ($row->line as $item)                   
                     <tr>
                         <td>{{ $item->invoice_id }}</td>
@@ -65,15 +68,14 @@
                     <tr>
                         <td>{{ $item->descripction }}</td>
                         <td>{{ $item->datetrx }}</td>
-                        <td>0.00</td>
-                        <td>0.00</td>
+                        <td class="text-right">0.00</td>
+                        <td class="text-right">0.00</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
         <div class="col-md-6"></div>
-    </div>
-    Aqui se muestra la preliquidacion 
+    </div> 
 </form>
 
 @endsection

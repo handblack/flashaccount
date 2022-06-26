@@ -57,6 +57,11 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Fecha</th>
+                        <th>Cuenta</th>
+                        <th>Cliente</th>
+                        <th>Divisa</th>
+                        <th>Importe</th>
                         <th></th>
                     </tr>
                 </thead>

@@ -11,6 +11,7 @@ class WhBIncome extends Model
     protected $fillable= [
         'datetrx',
         'bpartner_id',
+        'bankaccount_id',
         'amount',
     ];
 
