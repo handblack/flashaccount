@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TempBankIncome;
 use App\Models\TempBankIncomeLine;
 use App\Models\TempBankIncomePayment;
+use App\Models\TempLine;
 use App\Models\WhBankAccount;
 use App\Models\WhBIncome;
 use App\Models\WhCInvoice;
@@ -124,6 +125,7 @@ class BankIncomeController extends Controller
             'lines'   => $lines,
             'open'    => $open,
             'payment' => $payment,
+            'url'     => route('bincome.update',$row->token),
         ]);
     }
 
@@ -136,7 +138,11 @@ class BankIncomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request);
+        $row = TempBankIncome::where('token',$id)->first();
+        $target = new WhBIncome();
+        
+        $target->save();
     }
 
     /**

@@ -53,6 +53,9 @@
 @endsection
 
 @section('container')
+<form action="{{ $url }}" method="POST">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+    <input type="hidden" name="_method" value="PUT">
     <div class="card">
         <div class="card-header">
             
@@ -60,6 +63,7 @@
                 <div class="col-md-6">
                     {{ $row->bpartner->bpartnername }}
                     <br>{{ $row->bpartner->bpartnercode }}
+                    <button type="submit">Crar</button>
                 </div>
                 <div class="col-md-3 console" style="line-height: 1; border-left:1px solid #dcdcdc;">
                     <dl class="row mb-0" >
@@ -76,13 +80,13 @@
                 <div class="col-md-3 console" style="line-height: 1; border-left:1px solid #dcdcdc;">
                     <dl class="row mb-0">
                         <dt class="col-sm-5">Ingreso</dt>
-                        <dd class="col-sm-7 text-right">{{ number_format($payment->amount,env('DECIMAL_AMOUNT',2)) }}</dd>
+                        <dd class="col-sm-7 text-right"><span class="total-sum-pay">{{ number_format($payment->amount,env('DECIMAL_AMOUNT',2)) }}</span></dd>
                         <dt class="col-sm-5">Asignacion</dt>
-                        <dd class="col-sm-7 text-right">0.00</dd>
+                        <dd class="col-sm-7 text-right"><span class="total-sum-apply">0.00</span></dd>
                         <dt class="col-sm-5">Anticipo</dt>
-                        <dd class="col-sm-7 text-right">0.00</dd>
+                        <dd class="col-sm-7 text-right"><span class="total-sum-anticipo">0.00</span></dd>
                         <dt class="col-sm-5">Disponible</dt>
-                        <dd class="col-sm-7 text-right">0.00</dd>                       
+                        <dd class="col-sm-7 text-right"><span class="total-sum-free">0.00</span></dd>                       
                     </dl>
                 </div>
             </div>
@@ -108,7 +112,7 @@
                         <tr id="{{ $line->token }}">
                             <td class="align-middle">
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input checkBoxInvoice" type="checkbox" id="customCheckbox{{ $line->id }}" value="{{ $line->token }}">
+                                    <input class="custom-control-input checkBoxInvoice"name="chk[]" type="checkbox" id="customCheckbox{{ $line->id }}" data-token="{{ $line->token }}" value="{{ $line->id }}">
                                     <label for="customCheckbox{{ $line->id }}" class="custom-control-label"></label>
                                 </div>
                             </td>
@@ -118,7 +122,7 @@
                             <td width="120" class="text-right align-middle">{{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
                             <td width="120" class="text-right align-middle">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>                            
                             <td width="140">
-                                <input type="text" id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm" value="0.00" disabled>
+                                <input type="text" name="apply[]" data-id="{{ $line->id }}" id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
                             </td>
                             <td class="text-right align-middle">
                                 saldo
@@ -141,6 +145,7 @@
             </table>
         </div>
     </div>
+</form>
 @endsection
 
 @section('script')
@@ -148,7 +153,7 @@
 $(function(){
     // Trabajamos con los checkbox ------------------------------------------------------------
     $('.checkBoxInvoice').change(function() {
-        let tk = $(this).val(); 
+        let tk = $(this).data('token'); 
         if ($(this).is(':checked')) {
             $('#' + tk).delay(3000).css("background-color","#F1F6FF");
             $('#input-apply-' + tk).prop("disabled",false);
@@ -156,7 +161,30 @@ $(function(){
             $('#' + tk).delay(3000).css("background-color","");
             $('#input-apply-' + tk).prop("disabled",true);
         }
+        calculate();
+    });
+    $(".apply-sum").keyup(function(){
+        calculate();
     });
 });
+
+function calculate(){
+    var gtotal = {{ $payment->amount }};
+    var total = 0;
+    var id = '';
+    $( ".apply-sum" ).each( function(){
+        id = $(this).data('id');
+        if ($('#customCheckbox' + id).is(':checked')) {
+            total += parseFloat( $(this).val() ) || 0;
+        }
+    });    
+    $('.total-sum-apply').text(total);
+    total = gtotal - total;
+    $('.total-sum-anticipo').text(total);
+
+}
+
+
+console.log('a');
 </script>
 @endsection

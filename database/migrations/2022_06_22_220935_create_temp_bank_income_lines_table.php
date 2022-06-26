@@ -15,6 +15,7 @@ class CreateTempBankIncomeLinesTable extends Migration
     {
         Schema::create('temp_bank_income_lines', function (Blueprint $table) {
             $table->id();           
+            $table->foreignId('invoice_id');
 
             $table->unsignedBigInteger('income_id');
             $table->foreign('income_id')
