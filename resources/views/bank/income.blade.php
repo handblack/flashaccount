@@ -52,7 +52,30 @@
 
 
 @section('container')
-    INGRESOS
+    <div class="card">
+        <div class="card-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($result as $item)
+                        <tr>
+                            <td>{{ $item->datetrx }}</td>
+                            <td>{{ $item->bpartner->bpartnername }}</td>
+                            <td>{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10">No hay informacion</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
     {{-- MODALES --}}
     <div class="modal fade" id="ModalCreate"role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">

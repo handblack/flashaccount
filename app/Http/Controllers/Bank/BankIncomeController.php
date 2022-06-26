@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Ventas\CInvoiceLineController;
 use App\Models\TempBankIncome;
 use App\Models\TempBankIncomeLine;
 use App\Models\TempBankIncomePayment;
@@ -119,12 +120,13 @@ class BankIncomeController extends Controller
         $lines   = TempBankIncomeLine::where('income_id',$row->id)->get();
         $open    = WhCInvoice::where('bpartner_id',$row->bpartner_id)->get();
         $payment = TempBankIncomePayment::where('income_id',$row->id)->first();
-  
+        
         return view('bank.income_form',[
             'row'     => $row,
             'lines'   => $lines,
             'open'    => $open,
             'payment' => $payment,
+            'mode'    => 'step1',
             'url'     => route('bincome.update',$row->token),
         ]);
     }
@@ -138,11 +140,41 @@ class BankIncomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
-        $row = TempBankIncome::where('token',$id)->first();
-        $target = new WhBIncome();
-        
-        $target->save();
+        if($request->mode == 'step2'){
+            /*
+                Aqui creamos el registro correctaente
+            */
+            DB::transaction(function () use($id) {
+                $source = TempBankIncome::where('token',$id)->first();
+                $header = new WhBIncome();
+                $header->fill($source->all()->toArray());
+                $header->save(); 
+            });
+            return redirect()->route('bincome.index');
+        }else{
+            /*
+                Muestra para el PREVIEW y el llenado de los temporales, aqui hacemos el recalculo para mostrar valores correctos
+            */
+            // Guardamos la cabecera ---------------------------------------------------------------
+            $row = TempBankIncome::where('token',$id)->first();
+            //dd($request);
+            // Guardamos la LINEA ---------------------------------------------------------------
+            DB::transaction(function () use($request,$row) {
+                $lines = new TempBankIncomeLine();
+                foreach($request->chk as $k => $v){
+                    $lines->create([
+                        'income_id'  => $row->id,
+                        'invoice_id' => $v,
+                        'amount'     => $request->apply[$k],
+                    ]);
+                }
+            });
+            return view('bank.income_preview',[
+               'row'  => $row,
+               'mode' => 'step2',
+               'url'  => route('bincome.update',$row->token),
+            ]);
+        }
     }
 
     /**

@@ -15,9 +15,6 @@
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
-
-                    
-
                 </div>
                 <div class="col-sm-6">
                     <div class="float-sm-right">
@@ -56,6 +53,7 @@
 <form action="{{ $url }}" method="POST">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="PUT">
+    <input type="hidden" name="mode" value="{{ $mode }}">
     <div class="card">
         <div class="card-header">
             

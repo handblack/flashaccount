@@ -15,6 +15,9 @@ class CreateWhBIncomesTable extends Migration
     {
         Schema::create('wh_b_incomes', function (Blueprint $table) {
             $table->id();
+            $table->date('datetrx');
+            $table->foreignId('bankaccount_id');
+            $table->foreignId('bpartner_id');
             $table->float('amount',12,5)->default(0);
             $table->timestamps();
         });
