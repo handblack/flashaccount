@@ -46,33 +46,62 @@
     <div class="row console" style="line-height:1">
         <div class="col-md-6">
             {{ $row->bpartner->bpartnername }}
-            <table>
+            <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
                 <thead>
-                    <tr>
-                        <td>CONCEPTOS</td>
-                        <td>FECHA</td>
-                        <td class="text-right">ABONOS</td>
-                        <td class="text-right">CARGOS</td>
+                    <tr style="border-bottom:1px solid #696969;">
+                        <td width="100">FECHA</td>
+                        <td width="200">CONCEPTOS</td>
+                        <td width="100" class="text-right">ABONOS</td>
+                        <td width="100" class="text-right">CARGOS</td>
                     </tr>
                 </thead>
+                @php
+                    $abono = 0;
+                    $cargo = 0;
+                @endphp
                 <tbody>
+                    <!-- DEPOSITO -->
                     <tr>
-                        <td>{{ $row->payment->amount  }}</td>
+                        <td>{{ $row->payment->datetrx }}</td>
+                        <td style="border-right:1px solid #696969;">
+                            {{ $row->payment->paymentmethod->shortname }}
+                        </td>
+                        <td class="text-right">
+                            {{ number_format($row->payment->amount,2)  }}
+                            @php
+                                $abono = $abono + $row->payment->amount;
+                            @endphp
+                        </td>
                     </tr>
-                    @foreach ($row->line as $item)                   
+                    <!-- ANTICIPO -->
                     <tr>
-                        <td>{{ $item->invoice_id }}</td>
+                        <td>{{ $row->datetrx }}</td>
+                        <td style="border-right:1px solid #696969;">
+                            ANTICIPO
+                        </td>
                         <td></td>
-                        <td>{{ $item->amount }}</td>
+                        <td class="text-right">{{ number_format($row->payment->amount,2)  }}</td>
                     </tr>
+                    <!-- COMPROBANTES -->
+                    @foreach ($row->line as $item)                   
+                        <tr>
+                            <td>{{ $item->invoice_id }}</td>
+                            <td class="text-right"></td>
+                            <td class="text-right">
+                                {{ number_format($item->amount,2) }}
+                                @php
+                                    $cargo = $cargo + $item->amount;
+                                @endphp
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td>{{ $item->descripction }}</td>
-                        <td>{{ $item->datetrx }}</td>
-                        <td class="text-right">0.00</td>
-                        <td class="text-right">0.00</td>
+                    <tr style="border-top:1px solid #696969;">
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">{{ number_format($abono,2) }}</td>
+                        <td class="text-right">{{ number_format($cargo,2) }}</td>
                     </tr>
                 </tfoot>
             </table>

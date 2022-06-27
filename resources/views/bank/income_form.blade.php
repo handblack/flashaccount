@@ -89,7 +89,7 @@
                         <dt class="col-sm-5">Asignacion</dt>
                         <dd class="col-sm-7 text-right"><span class="total-sum-apply">0.00</span></dd>
                         <dt class="col-sm-5">Anticipo</dt>
-                        <dd class="col-sm-7 text-right"><span class="total-sum-anticipo">0.00</span></dd>
+                        <dd class="col-sm-7 text-right"><span class="total-sum-anticipo">{{ number_format($payment->amount,env('DECIMAL_AMOUNT',2)) }}</span></dd>
                     </dl>
                 </div>
             </div>
@@ -103,32 +103,38 @@
                         <th></th>
                         <th>Fecha</th>
                         <th>Documento</th>
-                        <th>Moneda</th>
-                        <th class="text-right mr-2">Total</th>
-                        <th class="text-right mr-2">Abierto</th>
-                        <th class="text-right mr-2">Aplicar</th>
+                        <th class="text-right pr-2" style="border-right:1px solid #fff;">Importe</th>
+                        <th class="text-right pr-2">Abierto {{ $payment->currency->currencyiso }}</th>
+                        <th class="text-right mr-2">Aplicar {{ $payment->currency->currencyiso }}</th>
+                        <th class="text-right mr-2">Saldo</th>
                         <th class="text-right"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($open as $line)
                         <tr id="{{ $line->token }}">
-                            <td class="align-middle">
+                            <td class="align-middle" width="60">
                                 <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input checkBoxInvoice"name="chk[]" type="checkbox" id="customCheckbox{{ $line->id }}" data-token="{{ $line->token }}" value="{{ $line->id }}">
                                     <label for="customCheckbox{{ $line->id }}" class="custom-control-label"></label>
                                 </div>
                             </td>
-                            <td class="align-middle">{{ $line->dateinvoiced }}</td>
-                            <td class="align-middle">{{ $line->sequence->doctype->doctypecode }}-{{ $line->serial }}-{{ $line->documentno }}</td>
-                            <td class="align-middle">{{ $line->currency->currencyiso }}</td>
-                            <td width="120" class="text-right align-middle pr-2">{{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
-                            <td width="120" class="text-right align-middle pr-2">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>                            
-                            <td width="140">
+                            <td width="90" class="align-middle">{{ $line->dateinvoiced }}</td>
+                            <td width="140" class="align-middle">
+                                {{ $line->sequence->doctype->doctypecode }}-{{ $line->serial }}-{{ $line->documentno }}
+                            </td>
+                            <td width="120" class="text-right align-middle pr-2"  style="border-right:1px solid #dcdcdc;">
+                                {{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }} 
+                                {{ $line->currency->currencyiso }}
+                            </td>
+                            <td width="120" class="text-right align-middle pr-2">
+                                {{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}
+                            </td>
+                            <td width="120">
                                 <input type="text" name="apply[]" data-id="{{ $line->id }}" id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
                             </td>
-                            <td class="text-right align-middle">
-                                
+                            <td class="text-right align-middle">                                
+                                 
                             </td>
                         </tr>
                     @empty

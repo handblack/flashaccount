@@ -63,6 +63,10 @@ class User extends Authenticatable
         return WhSequence::where('doctype_id',$dt->id)->get();
     }
 
+    public function bankaccount(){
+        return WhBankAccount::all();
+    }
+
     
     public function grant($module = ''){
         $filter = [

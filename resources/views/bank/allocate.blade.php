@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('header')
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-@endsection
 
 @section('breadcrumb')
     <section class="content-header">
@@ -12,7 +8,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('bincome.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('ballocate.index') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -20,7 +16,7 @@
                     <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#ModalCreate"
                         title="Marcar como página de inicio">
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Nuevo Ingreso</span>
+                        <span class="d-none d-sm-inline-block">Nueva Asignacion</span>
                     </a>
                     <div class="btn-group">
                         <div class="input-group input-group-sm">
@@ -38,8 +34,9 @@
                 <div class="col-sm-6">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Banco / Ingresos
-                            &nbsp;<i class="fab fa-cc-visa fa-fw"></i>
+                            Bancos / Aplicacion de Saldos
+                            &nbsp;
+                            <i class="fas fa-random fa-fw"></i>
 
                         </h1>
                     </div>
@@ -142,7 +139,7 @@
 
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <label class="mb-0">Banco / Caja [INGRESO]</label>
+                                <label class="mb-0">Banco / Caja [EGRESO]</label>
                                 <select class="form-control" name="bankaccount_id" required>
                                     <option value="" disabled selected>-- SELECCIONA --</option>
                                     @foreach ($bankaccount as $item)
@@ -204,7 +201,7 @@
                     <div class="modal-footer bg-light">
                         <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear INGRESO</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear EGRESO</button>
                 
                     </div>
                 </div>
@@ -212,6 +209,8 @@
         </div>
     </div>
 @endsection
+
+
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>

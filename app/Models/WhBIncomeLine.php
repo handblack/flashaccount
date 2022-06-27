@@ -14,4 +14,9 @@ class WhBIncomeLine extends Model
         'description',
         'amount'
     ];
+
+    public function invoice(){
+        return $this->hasOne(WhCInvoice::class,'id','invoice_id');
+    }
+
 }

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhBAllocate;
+use App\Models\WhBankAccount;
+use App\Models\WhCurrency;
+use App\Models\WhParam;
 use Illuminate\Http\Request;
 
 class BankAllocateController extends Controller
@@ -14,7 +18,16 @@ class BankAllocateController extends Controller
      */
     public function index()
     {
-        return view('building');
+        $result = WhBAllocate::paginate(env('PAGINATE_BANK'));
+        $bankaccount = WhBankAccount::all();
+        $method = WhParam::where('group_id',4)->get();
+        $currency = WhCurrency::all();
+        return view('bank.allocate',[
+            'result' => $result,
+            'bankaccount' => $bankaccount,
+            'method' => $method,
+            'currency' => $currency,
+        ]);
     }
 
     /**

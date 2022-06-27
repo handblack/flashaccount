@@ -142,7 +142,7 @@
 
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <label class="mb-0">Banco / Caja</label>
+                                <label class="mb-0">Banco / Caja [EGRESO]</label>
                                 <select class="form-control" name="bankaccount_id" required>
                                     <option value="" disabled selected>-- SELECCIONA --</option>
                                     @foreach ($bankaccount as $item)
@@ -204,7 +204,7 @@
                     <div class="modal-footer bg-light">
                         <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear INGRESO</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear EGRESO</button>
                 
                     </div>
                 </div>

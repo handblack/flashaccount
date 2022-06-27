@@ -163,13 +163,24 @@ class BankIncomeController extends Controller
                 $payment->fill($tpay->toArray());
                 $payment->income_id = $header->id;
                 $payment->save();
-                // lines ----------------------------------------------------------------------
+                // lines ------------------------------------------------------------------------
                 foreach($tlines as $tline){
                     $line = new WhBIncomeLine();
                     $line->fill($tline->toArray());
                     $line->income_id = $header->id;
                     $line->save();
+                    // actualizamos -------------------------------------------------------------   
+                    if($line->invoice_id){
+                        WhCInvoice::where('id',$line->invoice_id)
+                        ->update([
+                            'amountopen' => $line->invoice->amountgrand - WhBIncomeLine::select('amount')
+                                                                                        ->where('invoice_id',$line->invoice_id)
+                                                                                        ->get()
+                                                                                        ->sum('amount') 
+                        ]);
+                    }                  
                 }
+
             });
             return redirect()->route('bincome.index');
         }elseif($request->mode == 'step1'){
@@ -177,19 +188,24 @@ class BankIncomeController extends Controller
                 Muestra para el PREVIEW y el llenado de los temporales, aqui hacemos el recalculo para mostrar valores correctos
             */
             // Guardamos la cabecera ---------------------------------------------------------------
+           
             $row = TempBankIncome::where('token',$id)->first();
+            
             //dd($request);
             // Guardamos la LINEA ---------------------------------------------------------------
-            DB::transaction(function () use($request,$row) {
-                $lines = new TempBankIncomeLine();
-                foreach($request->chk as $k => $v){
-                    $lines->create([
-                        'income_id'  => $row->id,
-                        'invoice_id' => $v,
-                        'amount'     => $request->apply[$k],
-                    ]);
-                }
-            });
+            if($request->chk){
+                DB::transaction(function () use($request,$row) {
+                    $lines = new TempBankIncomeLine();
+                    foreach($request->chk as $k => $v){
+                        $lines->create([
+                            'income_id'  => $row->id,
+                            'invoice_id' => $v,
+                            'amount'     => $request->apply[$k],
+                        ]);
+                    }
+                });
+            }
+            //$row->amountanticipation = $line->
             return view('bank.income_preview',[
                'row'  => $row,
                'mode' => 'step2',

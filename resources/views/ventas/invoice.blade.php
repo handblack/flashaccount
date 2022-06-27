@@ -69,7 +69,9 @@
                     <td class="text-right pr-2 border-left border-right">
                         {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
                     </td>
-                    <td class="text-right pr-2">{{ $item->amountopen }}</td>
+                    <td class="text-right pr-2">
+                        {{ number_format($item->amountopen,2) }}
+                    </td>
                     <td>{{ $item->warehouse->shortname }}</td>
                 </tr>
                 @empty

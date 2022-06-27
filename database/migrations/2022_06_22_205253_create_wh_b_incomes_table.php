@@ -21,6 +21,8 @@ class CreateWhBIncomesTable extends Migration
             //$table->foreignId('currency_id');
             $table->float('amount',12,5)->default(0);
             $table->float('amountopen',12,5)->default(0);
+            $table->float('amountanticipation',12,5)->default(0);
+
             $table->timestamps();
         });
     }
