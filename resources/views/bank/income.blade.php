@@ -53,24 +53,61 @@
 
 @section('container')
     <div class="card">
-        <div class="card-body">
-            <table>
+        <div class="card-header pt-2 pb-2">
+            <form action="" method="GET" style="margin:0px;padding:0px;">
+                <input type="hidden" name="cia_codcia" id="cia_codcia">
+                <input type="hidden" name="cco_codcco" id="cco_codcco">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" name="dateinit" value="" class="form-control float-right" id="reservation">
+                        </div>
+                    </div>
+                     
+                    
+                   
+                    <div class="col-md-4">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                            </div>
+                            <input type="text" name="op_q" value="" class="form-control" placeholder="Empresa/RUC/Codigo">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+    
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </form>
+        </div>
+        
+        <div class="card-body p-0">
+            <table class="table table-hover text-nowrap table-sm table-borderless">    
                 <thead>
                     <tr>
                         <th>Fecha</th>
                         <th>Cuenta</th>
                         <th>Cliente</th>
                         <th>Divisa</th>
-                        <th>Importe</th>
+                        <th class="text-right">Importe</th>
+                        <th class="text-right">Abierto</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
-                            <td>{{ $item->datetrx }}</td>
+                            <td width="110">{{ $item->datetrx }}</td>
+                            <td width="110">{{ $item->bpartner->bpartnercode }}</td>
                             <td>{{ $item->bpartner->bpartnername }}</td>
-                            <td>{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td class="text-right"></td>
                         </tr>
                     @empty
                         <tr>
@@ -104,6 +141,15 @@
                         <p class="lead mt-3">Para todo ingreso a CAJA/BANCO se debe de identificar al Socio de Negocio, asi tambien podra especificar como ANTICIPO a su cuenta</p>
 
                         <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="mb-0">Banco / Caja</label>
+                                <select class="form-control" name="bankaccount_id" required>
+                                    <option value="" disabled selected>-- SELECCIONA --</option>
+                                    @foreach ($bankaccount as $item)
+                                        <option value="{{ $item->id }}">{{ $item->shortname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-3">
                                 <label class="mb-0">Fecha TRX</label>
                                 <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
@@ -111,15 +157,6 @@
                             <div class="col-md-3">
                                 <label class="mb-0">Tipo de Cambio</label>
                                 <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="mb-0">Cuenta Bancaria / Caja</label>
-                                <select class="form-control" name="bankaccount_id" required>
-                                    <option value="" disabled selected>-- SELECCIONA --</option>
-                                    @foreach ($bankaccount as $item)
-                                        <option value="{{ $item->id }}">{{ $item->shortname }}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                         
@@ -165,8 +202,10 @@
                         
                     </div>
                     <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Crear INGRESO</button>
+                        <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear INGRESO</button>
+                
                     </div>
                 </div>
             </form>

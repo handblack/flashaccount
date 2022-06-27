@@ -17,14 +17,20 @@ class CreateWhBIncomePaymentsTable extends Migration
             $table->id();
             $table->date('datetrx');
             $table->foreignId('bankaccount_id');
-            $table->foreignId('paymentmethod_id');
             $table->foreignId('currency_id');
+            $table->foreignId('bpartner_id');
+            $table->foreignId('paymentmethod_id');
             $table->double('rate',3)->default(1);
             $table->string('documentno',20)->nullable();
             $table->float('amount',12,5)->default(0);
-            $table->float('amountconverted',12,5)->default(0);
+            $table->float('amountreference',12,5)->default(0);
 
-           
+            $table->unsignedBigInteger('income_id');
+            $table->foreign('income_id')
+                                    ->references('id')
+                                    ->on('wh_b_incomes')
+                                    ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

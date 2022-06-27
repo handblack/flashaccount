@@ -29,6 +29,12 @@ class CreateWhWarehousesTable extends Migration
             'isactive' => 'Y',
             'token' => 'abcde',
         ]);
+        $row->create([
+            'warehousename' => 'TIENDA GAMARRA',
+            'shortname' => 'TG',
+            'isactive' => 'Y',
+            'token' => 'ab',
+        ]);
     }
 
     /**

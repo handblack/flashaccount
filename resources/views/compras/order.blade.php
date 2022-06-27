@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
+
 @section('breadcrumb')
     <section class="content-header">
         <div class="container-fluid">
@@ -7,15 +12,14 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('porder.index') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
-
-                    <a class="btn btn-sm btn-success" href="{{ route('corder.create') }}"
-                        title="Marcar como página de inicio">
+ 
+                    <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#ModalCreate" >
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Nueva OV</span>
+                        <span class="d-none d-sm-inline-block">Nueva OC</span>
                     </a>
                     <div class="btn-group">
                         <div class="input-group input-group-sm">
@@ -33,9 +37,9 @@
                 <div class="col-sm-6">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Orden de Venta
+                            Orden de Compra
                             &nbsp;
-                            <i class="fas fa-edit fa-fw"></i>
+                            <i class="nav-icon fas fa-dolly fa-fw"></i>
 
                         </h1>
                     </div>
@@ -101,7 +105,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10">No hay Orden de Venta</td>
+                            <td colspan="10">No hay Orden de Compra</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -115,7 +119,64 @@
     </div>
 
     {{-- MODALES --}}
+    <!-- NUEVO -->
+    <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="{{ route('porder.create') }}" method="POST" id="form-create">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Crear nueva Orden de Compra</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <label class="mb-0">Socio de Negocio</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="mb-0">Moneda</label>
+                                <select name="currency_id" class="form-control" required>
+                                    @foreach (auth()->user()->currency() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="mb-0">Almacen</label>
+                                <select class="form-control" name="bankaccount_id" required>
+                                    <option value="" disabled selected>-- SELECCIONA --</option>
+                                    @foreach (auth()->user()->warehouse() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->warehousename }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="mb-0">Fecha TRX</label>
+                                <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="mb-0">Tipo de Cambio</label>
+                                <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary">Iniciar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- ANULAR -->
     <div class="modal fade" id="ModalCancelDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -139,4 +200,52 @@
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script>
+$(function(){
+    // PaymentModal
+    let fai = $('#form-create');
+    fai.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:fai.attr('method'),
+            url: fai.attr('action'),
+            data: fai.serialize(),
+            success: function(data){
+                if(data.status == '100'){    
+                    window.location.href = data.url;              
+                }else{
+                    toastr.error(data.message);
+                }
+            },
+            error: function(data){
+                console.log('error genero');
+            },
+
+        });
+    });
+    // SocioNegocio ----------------------------------------------------------------
+    $('.select2-bpartner').select2({
+        ajax: {
+            url: '{{ route('api.bpartner') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2,
+        theme:'bootstrap4'
+    });
+});
+</script>
 @endsection

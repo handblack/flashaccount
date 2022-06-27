@@ -9,14 +9,15 @@ class TempBankIncomePayment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'income_id',
         'datetrx',
-        'bpartner_id',
         'bankaccount_id',
-        'paymentmethod_id',
         'currency_id',
+        'bpartner_id',
+        'paymentmethod_id',
+        'rate',
         'documentno',
         'amount',
+        'amountreference',
     ];
 
     public function bankaccount(){

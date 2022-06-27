@@ -15,7 +15,8 @@ class CreateTempBankIncomeLinesTable extends Migration
     {
         Schema::create('temp_bank_income_lines', function (Blueprint $table) {
             $table->id();           
-            $table->foreignId('invoice_id');
+            $table->foreignId('invoice_id')->nullable();
+            $table->foreignId('payment_id')->nullable();
             $table->text('description')->nullable();
             $table->date('datetrx')->nullable();
             $table->date('datedue')->nullable();

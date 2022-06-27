@@ -20,8 +20,10 @@ class CreateTempBankIncomePaymentsTable extends Migration
             $table->foreignId('currency_id');
             $table->foreignId('bpartner_id');
             $table->foreignId('paymentmethod_id');
-            $table->float('amount',12,5);
+            $table->double('rate',3)->default(1);
             $table->string('documentno',30)->nullable();
+            $table->float('amount',12,5);
+            $table->float('amountreference',12,5)->default(0);
 
             $table->unsignedBigInteger('income_id');
             $table->foreign('income_id')

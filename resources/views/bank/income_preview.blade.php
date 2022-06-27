@@ -15,7 +15,11 @@
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
-
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-sm btn-success" onclick="document.getElementById('form-preview').submit(); return false;">
+                            <i class="fas fa-save fa-fw"></i> Finalizar
+                        </a>
+                    </div>
                     
 
                 </div>
@@ -35,12 +39,11 @@
 @endsection
 
 @section('container')
-<form action="{{ $url }}" method="POST">
+<form action="{{ $url }}" method="POST" id="form-preview">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="mode" value="{{ $mode }}">
-    <button type="submit">Crear</button>
-    <div class="row console">
+    <div class="row console" style="line-height:1">
         <div class="col-md-6">
             {{ $row->bpartner->bpartnername }}
             <table>

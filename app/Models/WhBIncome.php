@@ -12,6 +12,7 @@ class WhBIncome extends Model
         'datetrx',
         'bpartner_id',
         'bankaccount_id',
+        'currency_id',
         'amount',
     ];
 

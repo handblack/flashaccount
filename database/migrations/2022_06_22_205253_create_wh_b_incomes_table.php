@@ -18,7 +18,9 @@ class CreateWhBIncomesTable extends Migration
             $table->date('datetrx');
             $table->foreignId('bankaccount_id');
             $table->foreignId('bpartner_id');
+            //$table->foreignId('currency_id');
             $table->float('amount',12,5)->default(0);
+            $table->float('amountopen',12,5)->default(0);
             $table->timestamps();
         });
     }

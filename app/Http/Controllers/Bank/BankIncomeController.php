@@ -10,6 +10,8 @@ use App\Models\TempBankIncomePayment;
 use App\Models\TempLine;
 use App\Models\WhBankAccount;
 use App\Models\WhBIncome;
+use App\Models\WhBIncomeLine;
+use App\Models\WhBIncomePayment;
 use App\Models\WhCInvoice;
 use App\Models\WhCurrency;
 use App\Models\WhParam;
@@ -78,19 +80,19 @@ class BankIncomeController extends Controller
 
         DB::transaction(function () use($request) {
             $hash = new Hashids(env('APP_HASH'));
-            // Creando cabecera -------------------------------------------------
-            $row = new TempBankIncome();
-            $row->bpartner_id = $request->bpartner_id;
-            $row->datetrx     = $request->datetrx;
-            $row->save();
-            $row->token       = $hash->encode($row->id);
-            $row->save();
+            // Creando cabecera ------------------------------------------------
+            $header = new TempBankIncome();
+            $header->bpartner_id = $request->bpartner_id;
+            $header->datetrx     = $request->datetrx;
+            $header->save();
+            $header->token       = $hash->encode($header->id);
+            $header->save();
             // Creando payment -------------------------------------------------
             $payment = New TempBankIncomePayment();
             $payment->fill($request->all());
-            $payment->income_id = $row->id;
-            $payment->save();
-            session(['invoice_session' => $row->token]);
+            $payment->income_id = $header->id;
+            $payment->save();            
+            session(['invoice_session' => $header->token]);
         });
         $data['url'] = route('bincome.edit',session('invoice_session'));
         return response()->json($data);
@@ -145,18 +147,32 @@ class BankIncomeController extends Controller
                 Aqui creamos el registro correctaente
             */
             DB::transaction(function () use($id) {
+                // cabecera ----------------------------------------------------------------------
                 $source = TempBankIncome::where('token',$id)->first();  
-                $tpay = TempBankIncomePayment::where('income_id',$source->id)->first();
+                $tpay   = TempBankIncomePayment::where('income_id',$source->id)->first();
+                $tlines = TempBankIncomeLine::where('income_id',$source->id)->get();
                 
                 $header = new WhBIncome();
                 $header->fill($source->toArray());
-                #echo $source->id;
-                #dd($source->payment);
                 $header->bankaccount_id = $tpay->bankaccount_id;
+                $header->amount         = $tpay->amount;
+                $header->datetrx        = $tpay->datetrx;              
                 $header->save(); 
+                // payment ----------------------------------------------------------------------
+                $payment = new WhBIncomePayment();
+                $payment->fill($tpay->toArray());
+                $payment->income_id = $header->id;
+                $payment->save();
+                // lines ----------------------------------------------------------------------
+                foreach($tlines as $tline){
+                    $line = new WhBIncomeLine();
+                    $line->fill($tline->toArray());
+                    $line->income_id = $header->id;
+                    $line->save();
+                }
             });
             return redirect()->route('bincome.index');
-        }else{
+        }elseif($request->mode == 'step1'){
             /*
                 Muestra para el PREVIEW y el llenado de los temporales, aqui hacemos el recalculo para mostrar valores correctos
             */

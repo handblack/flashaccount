@@ -15,6 +15,12 @@
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
+                    <div class="btn-group">
+                        
+                        <a href="#" class="btn btn-sm btn-success" onclick="document.getElementById('form-payment').submit(); return false;">
+                            <i class="far fa-file-alt fa-fw"></i> Preliminar
+                        </a>
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="float-sm-right">
@@ -50,7 +56,7 @@
 @endsection
 
 @section('container')
-<form action="{{ $url }}" method="POST">
+<form action="{{ $url }}" method="POST" id="form-payment">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="mode" value="{{ $mode }}">
@@ -61,18 +67,19 @@
                 <div class="col-md-6">
                     {{ $row->bpartner->bpartnername }}
                     <br>{{ $row->bpartner->bpartnercode }}
-                    <button type="submit">Crar</button>
                 </div>
                 <div class="col-md-3 console" style="line-height: 1; border-left:1px solid #dcdcdc;">
                     <dl class="row mb-0" >
                         <dt class="col-sm-5">Cuenta</dt>
                         <dd class="col-sm-7">{{ $payment->bankaccount->shortname }}</dd>
                         <dt class="col-sm-5">Forma Pago</dt>
-                        <dd class="col-sm-7">{{ $payment->paymentmethod->shortname }}</dd>
+                        <dd class="col-sm-7">
+                            {{ $payment->paymentmethod->shortname }}
+                            /
+                            {{ $payment->documentno }}
+                        </dd>
                         <dt class="col-sm-5">Moneda</dt>
                         <dd class="col-sm-7">{{ $payment->currency->currencyiso }} </dd>
-                        <dt class="col-sm-5">DocRef</dt>
-                        <dd class="col-sm-7">{{ $payment->documentno }}</dd>
                     </dl>
                 </div>
                 <div class="col-md-3 console" style="line-height: 1; border-left:1px solid #dcdcdc;">
@@ -83,8 +90,6 @@
                         <dd class="col-sm-7 text-right"><span class="total-sum-apply">0.00</span></dd>
                         <dt class="col-sm-5">Anticipo</dt>
                         <dd class="col-sm-7 text-right"><span class="total-sum-anticipo">0.00</span></dd>
-                        <dt class="col-sm-5">Disponible</dt>
-                        <dd class="col-sm-7 text-right"><span class="total-sum-free">0.00</span></dd>                       
                     </dl>
                 </div>
             </div>
@@ -99,10 +104,10 @@
                         <th>Fecha</th>
                         <th>Documento</th>
                         <th>Moneda</th>
-                        <th class="text-right">Total</th>
-                        <th class="text-right">Abierto</th>
-                        <th class="text-right">Aplicar</th>
-                        <th class="text-right">Saldo</th>
+                        <th class="text-right mr-2">Total</th>
+                        <th class="text-right mr-2">Abierto</th>
+                        <th class="text-right mr-2">Aplicar</th>
+                        <th class="text-right"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,13 +122,13 @@
                             <td class="align-middle">{{ $line->dateinvoiced }}</td>
                             <td class="align-middle">{{ $line->sequence->doctype->doctypecode }}-{{ $line->serial }}-{{ $line->documentno }}</td>
                             <td class="align-middle">{{ $line->currency->currencyiso }}</td>
-                            <td width="120" class="text-right align-middle">{{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
-                            <td width="120" class="text-right align-middle">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>                            
+                            <td width="120" class="text-right align-middle pr-2">{{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td width="120" class="text-right align-middle pr-2">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>                            
                             <td width="140">
                                 <input type="text" name="apply[]" data-id="{{ $line->id }}" id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
                             </td>
                             <td class="text-right align-middle">
-                                saldo
+                                
                             </td>
                         </tr>
                     @empty
@@ -132,14 +137,16 @@
                         </tr>
                     @endforelse
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td class="text-right font-weight-bold">{{ number_format($line->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}</td>
-                        <td class="text-right font-weight-bold">{{ number_format($line->sum('amountopen'),env('DECIMAL_AMOUNT',2)) }}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
+                @if(!$open->isEmpty())
+                    <tfoot>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td class="text-right font-weight-bold pr-2">{{ number_format($line->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td class="text-right font-weight-bold pr-2">{{ number_format($line->sum('amountopen'),env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                @endif
             </table>
         </div>
     </div>
@@ -175,10 +182,12 @@ function calculate(){
         if ($('#customCheckbox' + id).is(':checked')) {
             total += parseFloat( $(this).val() ) || 0;
         }
-    });    
-    $('.total-sum-apply').text(total);
+    });
+    total = total.toFixed(2);
+    $('.total-sum-apply').text(total.toLocaleString('en-US'));
     total = gtotal - total;
-    $('.total-sum-anticipo').text(total);
+    total = total.toFixed(2);
+    $('.total-sum-anticipo').text(total.toLocaleString('en-US'));
 
 }
 

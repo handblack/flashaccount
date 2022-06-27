@@ -9,8 +9,15 @@ class WhBIncomePayment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'income_id',
-        'currency_id'
+        'datetrx',
+        'bankaccount_id',
+        'currency_id',
+        'bpartner_id',
+        'paymentmethod_id',
+        'rate',
+        'documentno',
+        'amount',
+        'amountreference',
     ];
 
 

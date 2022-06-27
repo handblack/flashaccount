@@ -183,8 +183,8 @@
         </li>
         {{-- COMPRAS / PROVEEDORES --}}
         <li
-            class="nav-item {{ request()->is('bpartner/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_compras')? 'd-none': '' }}">
-            <a href="#" class="nav-link {{ request()->is('bpartner/*') ? 'active' : '' }}">
+            class="nav-item {{ request()->is('compras/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_compras')? 'd-none': '' }}">
+            <a href="#" class="nav-link {{ request()->is('compras/*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-dolly"></i>
                 <p>
                     Compras / Proveedores
@@ -193,8 +193,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item  {{ !auth()->user()->menu('m_compras_order')? 'd-none': '' }}">
-                    <a href="{{ route('product.index') }}"
-                        class="nav-link {{ request()->is('bpartner/manager*') ? 'active' : '' }}">
+                    <a href="{{ route('porder.index') }}"
+                        class="nav-link {{ request()->is('compras/order/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Orden de Compra</p>
                     </a>

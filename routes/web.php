@@ -4,6 +4,8 @@ use App\Http\Controllers\Bank\BankAllocateController;
 use App\Http\Controllers\Bank\BankExpensesController;
 use App\Http\Controllers\Bank\BankIncomeController;
 use App\Http\Controllers\BPartner\BPartnerController;
+use App\Http\Controllers\Compras\POrderController;
+use App\Http\Controllers\Compras\POrderLineController;
 use App\Http\Controllers\Config\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
@@ -71,7 +73,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
 
-    // Ventas - Clientes
+    /*
+        ---------------------------------------------------------------------------------------------------------------
+        Ventas - Clientes
+        ---------------------------------------------------------------------------------------------------------------
+    */
     //ORDEN DE VENTA
     Route::resource('/ventas/order/manager',COrderController::class, ['names' => 'corder']);
     Route::resource('/ventas/order/managers/line',COrderLineController::class, ['names' => 'corderline']);
@@ -81,7 +87,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
     //NOTA CREDITO
     Route::resource('/ventas/credit/manager',CCreditController::class, ['names' => 'ccredit']);
-
+    /*
+        ---------------------------------------------------------------------------------------------------------------
+        Compras - Proveedores
+        ---------------------------------------------------------------------------------------------------------------
+    */
+    Route::resource('/compras/order/manager',POrderController::class, ['names' => 'porder']);
+    Route::resource('/compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
     /*
         Bancos
     */
