@@ -28,7 +28,7 @@ class BankIncomeController extends Controller
      */
     public function index()
     {
-        $result = WhBIncome::all();
+        $result = WhBIncome::paginate(env('PAGINATE_BANK'));
         $bankaccount = WhBankAccount::all();
         $method = WhParam::where('group_id',4)->get();
         $currency = WhCurrency::all();

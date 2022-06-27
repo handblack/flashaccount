@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhBankAccount;
+use App\Models\WhBExpense;
+use App\Models\WhCurrency;
+use App\Models\WhParam;
 use Illuminate\Http\Request;
 
 class BankExpensesController extends Controller
@@ -14,7 +18,18 @@ class BankExpensesController extends Controller
      */
     public function index()
     {
-        return view('building');
+      
+
+        $result = WhBExpense::paginate(env('PAGINATE_BANK'));
+        $bankaccount = WhBankAccount::all();
+        $method = WhParam::where('group_id',4)->get();
+        $currency = WhCurrency::all();
+        return view('bank.expense',[
+            'result' => $result,
+            'bankaccount' => $bankaccount,
+            'method' => $method,
+            'currency' => $currency,
+        ]);
     }
 
     /**

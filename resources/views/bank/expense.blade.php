@@ -20,7 +20,7 @@
                     <a href="#" class="btn btn-sm btn-success" data-toggle="modal" data-target="#ModalCreate"
                         title="Marcar como página de inicio">
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Nuevo Ingreso</span>
+                        <span class="d-none d-sm-inline-block">Nuevo Egreso</span>
                     </a>
                     <div class="btn-group">
                         <div class="input-group input-group-sm">
@@ -38,7 +38,7 @@
                 <div class="col-sm-6">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Banco / Ingresos
+                            Banco / Egresos
                             &nbsp;<i class="fab fa-cc-visa fa-fw"></i>
 
                         </h1>
@@ -212,6 +212,8 @@
         </div>
     </div>
 @endsection
+
+
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
