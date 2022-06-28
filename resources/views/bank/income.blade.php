@@ -93,9 +93,9 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Cuenta</th>
-                        <th>Cliente</th>
-                        <th>Divisa</th>
+                        <th>Cliente</th>                        
                         <th class="text-right">Importe</th>
+                        <th class="text-right">Anticipo</th>
                         <th class="text-right">Abierto</th>
                         <th></th>
                     </tr>
@@ -107,6 +107,8 @@
                             <td width="110">{{ $item->bpartner->bpartnercode }}</td>
                             <td>{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td class="text-right">{{ number_format($item->amountanticipation,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td class="text-right">{{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
                             <td class="text-right"></td>
                         </tr>
                     @empty

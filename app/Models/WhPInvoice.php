@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhBIncome extends Model
+class WhPInvoice extends Model
 {
     use HasFactory;
-    protected $fillable= [
-        'datetrx',
+    protected $fillable = [
         'bpartner_id',
-        'bankaccount_id',
         'currency_id',
-        'amount',
     ];
 
     public function bpartner(){
@@ -24,4 +21,7 @@ class WhBIncome extends Model
         return $this->hasOne(WhCurrency::class,'id','currency_id');
     }
 
+    public function doctype(){
+        return $this->hasOne(WhDocType::class,'id','doctype_id');
+    }
 }

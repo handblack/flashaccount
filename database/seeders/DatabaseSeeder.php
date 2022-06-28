@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         \App\Models\WhCInvoice::factory(50)->create();
+        \App\Models\WhPInvoice::factory(5)->create();
 
     }
 }

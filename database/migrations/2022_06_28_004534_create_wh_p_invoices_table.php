@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWhBIncomesTable extends Migration
+class CreateWhPInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateWhBIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wh_b_incomes', function (Blueprint $table) {
+        Schema::create('wh_p_invoices', function (Blueprint $table) {
             $table->id();
-            $table->date('datetrx');
-            $table->foreignId('bankaccount_id');
+            $table->date('dateinvoiced');
             $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
-            $table->float('amount',12,5)->default(0);
-            $table->float('amountopen',12,5)->default(0);
-            $table->float('amountanticipation',12,5)->default(0);
+            $table->foreignId('doctype_id');
+            $table->string('serial',10);
+            $table->string('documentno',15);
+            $table->float('amountgrand')->default(0);
+            $table->float('amountopen')->default(0);
             $table->string('token',60)->nullable();
             $table->timestamps();
         });
@@ -34,6 +35,6 @@ class CreateWhBIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wh_b_incomes');
+        Schema::dropIfExists('wh_p_invoices');
     }
 }

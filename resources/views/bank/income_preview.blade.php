@@ -80,7 +80,12 @@
                             ANTICIPO
                         </td>
                         <td></td>
-                        <td class="text-right">{{ number_format($row->payment->amount,2)  }}</td>
+                        <td class="text-right">
+                            {{ number_format($row->payment->amount,2)  }}
+                            @php
+                                $cargo = $cargo + $row->amountanticipation;
+                            @endphp
+                        </td>
                     </tr>
                     <!-- COMPROBANTES -->
                     @foreach ($row->line as $item)                   

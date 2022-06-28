@@ -155,6 +155,7 @@ class BankIncomeController extends Controller
                 $header = new WhBIncome();
                 $header->fill($source->toArray());
                 $header->bankaccount_id = $tpay->bankaccount_id;
+                $header->currency_id    = $tpay->bankaccount->currency_id;
                 $header->amount         = $tpay->amount;
                 $header->datetrx        = $tpay->datetrx;              
                 $header->save(); 
@@ -164,12 +165,14 @@ class BankIncomeController extends Controller
                 $payment->income_id = $header->id;
                 $payment->save();
                 // lines ------------------------------------------------------------------------
+                $amt = 0;
                 foreach($tlines as $tline){
                     $line = new WhBIncomeLine();
                     $line->fill($tline->toArray());
                     $line->income_id = $header->id;
                     $line->save();
                     // actualizamos -------------------------------------------------------------   
+                    $amt = $amt + $line->amount;
                     if($line->invoice_id){
                         WhCInvoice::where('id',$line->invoice_id)
                         ->update([
@@ -180,7 +183,10 @@ class BankIncomeController extends Controller
                         ]);
                     }                  
                 }
-
+                // verificamos si hay anticipo --------------------------------------------------
+                $header->amountanticipation = $header->amount - $amt;
+                $header->amountopen = $header->amount - $amt;
+                $header->save();
             });
             return redirect()->route('bincome.index');
         }elseif($request->mode == 'step1'){

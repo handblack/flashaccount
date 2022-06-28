@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
 
 @section('breadcrumb')
     <section class="content-header">
@@ -119,11 +123,11 @@
     <div class="modal fade" id="ModalCreate"role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('bincome.store') }}" method="POST" id="form-payment">
+            <form action="{{ route('ballocate.store') }}" method="POST" id="form-payment">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Registrar INGRESO a Caja / Bancos</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Asignacion de Valores</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -139,7 +143,7 @@
 
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <label class="mb-0">Banco / Caja [EGRESO]</label>
+                                <label class="mb-0">Banco / Caja [MATCH]</label>
                                 <select class="form-control" name="bankaccount_id" required>
                                     <option value="" disabled selected>-- SELECCIONA --</option>
                                     @foreach ($bankaccount as $item)
@@ -153,43 +157,10 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="mb-0">Tipo de Cambio</label>
-                                <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
+                                <input type="text" name="rate" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
                             </div>
                         </div>
-                        
-                            
-                        <div class="row mt-2">
-                            <div class="col-md-4">
-                                <label class="mb-0">Medio de Pago</label>
-                                <select class="form-control" name="paymentmethod_id" style="border-top-right-radius:0px;border-bottom-right-radius:0px;" required>
-                                    <option value="" selected disabled>-- SELECCIONAR --</option>
-                                    @foreach ($method as $item)
-                                        <option value="{{ $item->id }}">{{ $item->identity }}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="mb-0">Nro OPE / Doc Referencia / Oficina</label>
-                                <input type="text" class="form-control" name="documentno" required>
-                            </div>
-
- 
-                            
-                            <div class="col-md-4">
-                                <label class="mb-0">Importe</label>
-                                <div class="input-group">
-                                    <input type="text" id="amount" name="amount" class="form-control text-right text-monospace" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required="">
-                                    <div class="input-group-append">
-                                        <select name="currency_id" id="currency_id" class="form-control" required style="border-top-left-radius:0px;border-bottom-left-radius:0px;">
-                                            @foreach ($currency as $item)
-                                                <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <label class="mb-0">Glosa</label>
@@ -201,7 +172,7 @@
                     <div class="modal-footer bg-light">
                         <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear EGRESO</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear ASIGNACION</button>
                 
                     </div>
                 </div>

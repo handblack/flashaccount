@@ -54,6 +54,16 @@ class CreateWhBpartnersTable extends Migration
             'bpartnername' => 'RIVAS CAMPOS MARIA LOURDES',
             'token' => $hash->encode(6),
         ]);
+        $row->create([
+            'bpartnercode' => 'P20331898008',
+            'bpartnername' => 'LUZ DEL SUR S.A.A.',
+            'token' => $hash->encode(7),
+        ]);
+        $row->create([
+            'bpartnercode' => 'P20330791412',
+            'bpartnername' => 'ENEL GENERACION PERU S.A.A.',
+            'token' => $hash->encode(7),
+        ]);
     }
 
     /**

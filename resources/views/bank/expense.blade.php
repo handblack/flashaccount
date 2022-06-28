@@ -12,7 +12,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('bincome.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('bexpense.index') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -104,8 +104,8 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="110">{{ $item->datetrx }}</td>
-                            <td width="110">{{ $item->bpartner->bpartnercode }}</td>
-                            <td>{{ $item->bpartner->bpartnername }}</td>
+                            <td width="110">{{ $item->bpartner->bpartnercode  }}</td>
+                            <td width="110">{{ $item->bpartner->bpartnername  }}</td>
                             <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
                             <td class="text-right"></td>
                         </tr>
@@ -118,20 +118,21 @@
             </table>
         </div>
     </div>
+
     {{-- MODALES --}}
     <div class="modal fade" id="ModalCreate"role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('bincome.store') }}" method="POST" id="form-payment">
+            <form action="{{ route('bexpense.store') }}" method="POST" id="form-payment">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Registrar INGRESO a Caja / Bancos</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Registrar EGRESO</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                    <div class="modal-body" style="background-color:#dcc5c57d;">
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="mb-0">Socio de Negocio</label>
