@@ -48,7 +48,14 @@
 @section('container')
 <div class="card">
     <div class="card-body table-responsive p-0">
-        <table class="table table-hover text-nowrap table-sm table-borderless"> 
+        <table class="table table-hover text-nowrap table-sm table-borderless">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Producto / Descripcion</th>
+                    <th></th>
+                </tr>    
+            </thead> 
             <tbody>
                 @forelse ($result as $item)
                     <tr id="tr-{{ $item->id }}">

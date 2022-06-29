@@ -34,9 +34,11 @@
         .console{
             font-family: 'Inconsolata', monospace;
         }
+        /*
         .table-sm td, .table-sm th {
             padding: 0.08rem;
         }
+        */
         .table thead {
             background-color: rgba(0,0,0,.03);
             border-bottom: 2px solid #dee2e6;
