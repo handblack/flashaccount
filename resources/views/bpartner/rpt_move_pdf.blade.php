@@ -1,0 +1,1 @@
+Aqui se debe poner los valores de la consulta move bpartner

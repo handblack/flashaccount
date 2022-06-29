@@ -82,8 +82,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         ---------------------------------------------------------------------------------------------------------------
     */
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
-    Route::get('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
-    Route::post('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
+
+    Route::get('/bpartner/report/move/form',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
+    Route::match(array('GET','POST'),'/bpartner/report/move/result',[BPartnerController::class,'rpt_move_form'])->name('bpartner_rpt_move_form');
+    Route::get('/bpartner/report/move/pdf',[BPartnerController::class,'rpt_move_pdf'])->name('bpartner_rpt_move_pdf');
+    Route::get('/bpartner/report/move/csv',[BPartnerController::class,'rpt_move_csv'])->name('bpartner_rpt_move_csv');
 
     Route::get('/bpartner/report/receivable/form',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');    
     Route::match(array('GET','POST'),'/bpartner/report/receivable/result',[BPartnerController::class,'rpt_receivable_form'])->name('bpartner_rpt_receivable_form');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BPartner;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempBpartnerMove;
 use App\Models\TempInvoiceOpen;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
@@ -136,8 +137,7 @@ class BPartnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $data['status'] = 100;
         $data['message'] = 'Registro eliminado';
 
@@ -169,7 +169,9 @@ class BPartnerController extends Controller
 
 
     /*
+        ---------------------------------------------------------------------------------------------------
         Reporte de MOVIMIENTOS
+        ---------------------------------------------------------------------------------------------------
     */
     public function rpt_move(Request $request){
         if($request->has('dateinit')){
@@ -181,20 +183,78 @@ class BPartnerController extends Controller
             $finit = date('Y-m-d', strtotime($_date . ' - 20 days'));
             $fend  = date("Y-m-d");
         }
-        if($request->has('bpartner_id')){
-            $bp = WhBpartner::where('id',$request->bpartner_id)->first();
-        }else{
-            $bp = null;
-        }
         $result = null;
         return view('bpartner.rpt_move',[
-            'result' => $result,
-            'bpartner' => $bp,
             'op_dateinit' => $finit,
             'op_dateend' => $fend,
         ]);
     }
+    public function rpt_move_form(Request $request){
+        $request->validate([
+            'dateinit' => 'required',
+            'bpartner_id' => 'required',
+        ]);
+        if ($request->method() == 'POST'){
+            if($request->has('dateinit')){
+                $split = explode('-',$request->dateinit);
+                $finit = \Carbon\Carbon::createFromFormat('d/m/Y',trim($split[0]))->format('Y-m-d');
+                $fend  = \Carbon\Carbon::createFromFormat('d/m/Y',trim($split[1]))->format('Y-m-d');
+            }
+            $session = date("YmdHis");
+            DB::select('CALL pax_rpt_bpartner_move(?,?,?,?)',[
+                $session,
+                $finit,
+                $fend,
+                $request->bpartner_id
+            ]);
+            session(['session_rpt_bpartner_move' => $session]);
+        }else{
+            if(!session()->has('session_rpt_bpartner_move')){
+                return redirect()->route('bpartner_rpt_move');
+            }
+        }
+        $result = TempBpartnerMove::where('session',session('session_rpt_bpartner_move'))
+            ->paginate(env('PAGINATE_MOVE',10));
+        return view('bpartner.rpt_move_result',[
+            'result' => $result,
+        ]);
+    }
 
+    public function rpt_move_pdf(){
+        $filename = 'movimientos_'.date("Y_m_d_His").'.pdf';
+        $result = TempBpartnerMove::where('session',session('session_rpt_bpartner_move'))->get();
+        $pdf = PDF::loadView('bpartner.rpt_move_pdf', [
+            'result' => $result,
+        ]);
+        return $pdf->download($filename);
+    }
+
+    public function rpt_move_csv(){
+        $filename = 'movimiento_'.date("Y_m_d_His").'.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename={$filename}",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $result = TempBpartnerMove::where('session',session('session_rpt_bpartner_move'))->get();
+        $callback = function() use($result) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, [
+                'Fecha'
+            ]);
+            foreach ($result as $item) {
+                $row = [
+                    'id'        => $item->id,
+                ];
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
     /*
         ---------------------------------------------------------------------------------------------------
         Cuentas por COBRAR
@@ -326,16 +386,12 @@ class BPartnerController extends Controller
             fputcsv($file, [
                 'Fecha'
             ]);
-            echo date("YmdHIs");
-        
             foreach ($result as $item) {
                 $row = [
                     'fecha' => $item->datetrx
                 ];
                 fputcsv($file, $row);
             }
-            echo 'close';
-            die();  
             fclose($file);
         };
         return response()->stream($callback, 200, $headers);

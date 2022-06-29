@@ -14,11 +14,11 @@
                 </div>
                  
                 <div class="btn-group">
-                    <a href="{{ route('bpartner_rpt_receivable_pdf') }}" class="btn btn-default btn-sm">
+                    <a href="{{ route('bpartner_rpt_move_pdf') }}" class="btn btn-default btn-sm">
                         <i class="fas fa-download fa-fw"></i>
                         PDF
                     </a>
-                    <a href="{{ route('bpartner_rpt_receivable_csv') }}" class="btn btn-default btn-sm">
+                    <a href="{{ route('bpartner_rpt_move_csv') }}" class="btn btn-default btn-sm">
                         <i class="fas fa-download fa-fw"></i>
                         CSV
                     </a>
@@ -27,7 +27,7 @@
             <div class="col-sm-6">
                 <div class="float-sm-right">
                     <h1 class="h4 mb-0 d-none d-md-inline-block">
-                        Reporte Cuentas por Cobrar
+                        Reporte de Movimientos
                         &nbsp;
                         <i class="fas fa-print fa-fw"></i>
 
