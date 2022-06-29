@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BPartner;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhBpartner;
+use App\Models\WhCInvoice;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -165,24 +166,44 @@ class BPartnerController extends Controller
     }
 
 
-    public function rpt_move(){
-        /*
-            Reporte de MOVIMIENTOS
-        */
-        return view('building');
+    /*
+        Reporte de MOVIMIENTOS
+    */
+    public function rpt_move(Request $request){
+        if($request->has('dateinit')){
+            $split = explode('-',$request->dateinit);
+            $finit = \Carbon\Carbon::createFromFormat('d/m/Y',trim($split[0]))->format('Y-m-d');
+            $fend  = \Carbon\Carbon::createFromFormat('d/m/Y',trim($split[1]))->format('Y-m-d');
+        }else{
+            $_date = date("Y-m-d");
+            $finit = date('Y-m-d', strtotime($_date . ' - 20 days'));
+            $fend  = date("Y-m-d");
+        }
+        if($request->has('bpartner_id')){
+            $bp = WhBpartner::where('id',$request->bpartner_id)->first();
+        }else{
+            $bp = null;
+        }
+        $result = null;
+        return view('bpartner.rpt_move',[
+            'result' => $result,
+            'bpartner' => $bp,
+            'op_dateinit' => $finit,
+            'op_dateend' => $fend,
+        ]);
     }
 
     public function rpt_receivable(){
         /*
             Cuentas por COBRAR
         */
-        return view('building');
+        return view('bpartner.rpt_receivable');
     }
 
     public function rpt_payable(){
         /*
             Cuentas por PAGAR
         */
-        return view('building');
+        return view('bpartner.rpt_payable');
     }
 }

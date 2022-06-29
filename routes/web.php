@@ -75,6 +75,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
     Route::get('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
+    Route::post('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
     Route::get('/bpartner/report/receivable',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');
     Route::get('/bpartner/report/payable',[BPartnerController::class,'rpt_payable'])->name('bpartner_rpt_payable');
 
