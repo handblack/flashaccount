@@ -76,11 +76,21 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/config/productfamily',ProductFamilyController::class, ['names' => 'productfamily']);
     Route::resource('/config/productline',ProductLineController::class, ['names' => 'productline']);
     Route::get('config/products/ajax',[ProductController::class,'search'])->name('product_ajax');
-
+    /*
+        ---------------------------------------------------------------------------------------------------------------
+        SOCIO DE NEGOCIO
+        ---------------------------------------------------------------------------------------------------------------
+    */
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
     Route::get('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
     Route::post('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
-    Route::get('/bpartner/report/receivable',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');
+
+    Route::get('/bpartner/report/receivable/form',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');
+    //Route::post('/bpartner/report/receivable/result',[BPartnerController::class,'rpt_receivable_form'])->name('bpartner_rpt_receivable_form');
+    Route::match(array('GET','POST'),'/bpartner/report/receivable/result',[BPartnerController::class,'rpt_receivable_form'])->name('bpartner_rpt_receivable_form');
+    Route::get('/bpartner/report/receivable/pdf',[BPartnerController::class,'rpt_receivable_pdf'])->name('bpartner_rpt_receivable_pdf');
+    Route::get('/bpartner/report/receivable/csv',[BPartnerController::class,'rpt_receivable_csv'])->name('bpartner_rpt_receivable_csv');
+
     Route::get('/bpartner/report/payable',[BPartnerController::class,'rpt_payable'])->name('bpartner_rpt_payable');
 
     /*

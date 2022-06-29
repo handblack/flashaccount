@@ -18,15 +18,21 @@
                 </div>
 
                 <div class="btn-group">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Fecha CORTE</span>
+                    <form action="{{ route('bpartner_rpt_receivable_form') }}" method="POST" id="form-payment">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Fecha CORTE</span>
+                            </div>
+                            <input type="date" name="dateend" value="{{ date("Y-m-d"); }}" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-play fa-fw"></i>
+                                    Ejecutar
+                                </button>                            
+                            </div>
                         </div>
-                        <input type="date" name="dateend" value="{{ date("Y-m-d"); }}" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-primary btn-sm">Buscar</button>                            
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="btn-group">
                     <a href="#" class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#ModalFilter">
@@ -49,15 +55,17 @@
 </section>
 @endsection
 
+ 
 @section('container')
-    
-
-
+<div class="bd-callout bd-callout-info">
+    <h4>Cuentas por Cobrar</h4>
+    Realiza la busqueda con documentos con saldos a la fecha de corte.
+</div>
 {{-- MODALES --}}
 <div class="modal fade" id="ModalFilter"role="dialog" aria-labelledby="exampleModalLongTitle"
 aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('bpartner_rpt_move') }}" method="POST" id="form-payment">
+        <form action="{{ route('bpartner_rpt_receivable_form') }}" method="POST" id="form-payment">
             @csrf
             <div class="modal-content">
                 <div class="modal-header bg-light">
@@ -68,13 +76,13 @@ aria-hidden="true">
                 </div>
                 <div class="modal-body" style="background-color:#dcdcdc9c;">
                     <div class="row">
-                        <div class="col-md-3">
-                            <label class="mb-0">Fecha de Corte</label>
-                            <input type="date" class="form-control">
-                        </div>
                         <div class="col-md-9">
                             <label class="mb-0">Socio de Negocio</label>
                             <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="mb-0">Fecha de Corte</label>
+                            <input type="date" name="dateend" class="form-control" value="{{ date("Y-m-d") }}">
                         </div>
                     </div>
 

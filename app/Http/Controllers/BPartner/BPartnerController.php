@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BPartner;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempInvoiceOpen;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
 use Hashids\Hashids;
@@ -193,13 +194,48 @@ class BPartnerController extends Controller
         ]);
     }
 
-    public function rpt_receivable(Request $request){
-        /*
-            Cuentas por COBRAR
-        */
+    /*
+        ---------------------------------------------------------------------------------------------------
+        Cuentas por COBRAR
+        ---------------------------------------------------------------------------------------------------
+    */
+    public function rpt_receivable(){
         return view('bpartner.rpt_receivable');
     }
-
+    public function rpt_receivable_form(Request $request){
+        
+        if ($request->method() == 'POST'){
+            $request->validate([
+                'dateend' => 'required',
+            ]);
+            // Aqui hacmeos construccion del reporte
+            $session = date("YmdHis");
+            $bp = ($request->has('bpartner_id')) ? $request->bpartner_id : '0';
+            DB::select('CALL pax_rpt_invoice_open_customers(?,?,?)',[
+                $session,
+                $request->dateend,
+                $bp,
+            ]);
+            session(['session_rpt_invoice_open' => $session]);
+            $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
+                ->paginate(env('PAGINATE_RECEIVABLE',5));
+        }else{
+            $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
+                ->paginate(env('PAGINATE_RECEIVABLE',5));
+        }
+        //$result->paginate(env('PAGINATE_RECEIVABLE',5));        
+        return view('bpartner.rpt_receivable_result',[
+            'result' => $result,
+        ]);
+    }
+    public function rpt_receivable_pdf(){
+    }
+    public function rpt_receivable_xls(){}
+    /*
+        ---------------------------------------------------------------------------------------------------
+        Cuentas por PAGAR
+        ---------------------------------------------------------------------------------------------------
+    */
     public function rpt_payable(Request $request){
         /*
             Cuentas por PAGAR
