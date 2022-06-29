@@ -64,6 +64,11 @@ class CreateWhBpartnersTable extends Migration
             'bpartnername' => 'ENEL GENERACION PERU S.A.A.',
             'token' => $hash->encode(7),
         ]);
+        $row->create([
+            'bpartnercode' => 'C00000000000',
+            'bpartnername' => 'CLIENTE GENERICO',
+            'token' => $hash->encode(7),
+        ]);
     }
 
     /**

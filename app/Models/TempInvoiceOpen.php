@@ -12,4 +12,12 @@ class TempInvoiceOpen extends Model
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
+
+    public function cinvoice(){
+        return $this->hasOne(WhCInvoice::class,'id','cinvoice_id');
+    }
+
+    public function pinvoice(){
+        return $this->hasOne(WhPInvoice::class,'id','pinvoice_id');
+    }
 }

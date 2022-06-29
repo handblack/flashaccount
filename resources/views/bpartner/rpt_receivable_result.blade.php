@@ -49,21 +49,29 @@
             <thead>
                 <tr>
                     <th width="100">Fecha</th>
-                    <th>Documento</th>
+                    <th width="100">Codigo</th>
                     <th>Socio de Negocio</th>
-                    <th>Glosa</th>
-                    <th>Moneda</th>
-                    <th>Importe</th>
-                    <th>Abierto</th>
+                    <th>Documento</th>                    
+                    <th class="text-right">Importe</th>
+                    <th class="text-right">Abierto</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($result as $item)
                     <tr>
                         <td>{{ $item->datetrx }}</td>
+                        <td>{{ $item->bpartner->bpartnercode }}</td>
                         <td>{{ $item->bpartner->bpartnername }}</td>
-                        <td>{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
-                        <td>{{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
+                        <td>
+                            {{ $item->cinvoice->sequence->doctype->doctypecode }}-{{ $item->cinvoice->serial }}-{{ $item->cinvoice->documentno }} 
+                        </td>
+                        <td class="text-right">
+                            {{ number_format($item->amount,env('DECIMAL_AMOUNT',2),2) }}
+                            <small>{{ $item->cinvoice->currency->currencyiso }}</small>
+                        </td>
+                        <td class="text-right">
+                            {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2),2) }}
+                        </td>
                     </tr>
                 @empty
                     <tr>

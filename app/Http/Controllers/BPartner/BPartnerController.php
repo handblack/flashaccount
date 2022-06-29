@@ -218,10 +218,10 @@ class BPartnerController extends Controller
             ]);
             session(['session_rpt_invoice_open' => $session]);
             $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
-                ->paginate(env('PAGINATE_RECEIVABLE',5));
+                ->paginate(env('PAGINATE_RECEIVABLE',20));
         }else{
             $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
-                ->paginate(env('PAGINATE_RECEIVABLE',5));
+                ->paginate(env('PAGINATE_RECEIVABLE',20));
         }
         //$result->paginate(env('PAGINATE_RECEIVABLE',5));        
         return view('bpartner.rpt_receivable_result',[
@@ -256,9 +256,13 @@ class BPartnerController extends Controller
             ]);
             foreach ($result as $item) {
                 $row = [
-                    'fecha' => $item->datetrx
+                    'fecha'        => $item->datetrx,
+                    'bpartnercode' => $item->bpartner->bpartnercode,
+                    'bpartnername' => $item->bpartner->bpartnername,
+                    'bpartnername' => $item->cinvoice->sequence->doctype->doctypecode .'-'. $item->cinvoice->serial .'-'. $item->cinvoice->documentno,
+                    'document'=> number_format($item->amount,env('DECIMAL_AMOUNT',2)),
                 ];
-                fputcsv($file, [$row]);
+                fputcsv($file, $row);
             }
             fclose($file);
         };
@@ -328,7 +332,7 @@ class BPartnerController extends Controller
                 $row = [
                     'fecha' => $item->datetrx
                 ];
-                fputcsv($file, [$row]);
+                fputcsv($file, $row);
             }
             echo 'close';
             die();  
