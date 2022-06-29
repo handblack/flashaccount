@@ -243,6 +243,7 @@ $(function(){
             data: function (params) {
                 return {
                     q: params.term, // search term
+                    t: 'C',
                     page: params.page
                 };
             },

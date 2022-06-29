@@ -289,6 +289,20 @@
                         <p>Inventario</p>
                     </a>
                 </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_rpt_kardex')? 'd-none': '' }}">
+                    <a href="{{ route('lkardex.index') }}"
+                        class="nav-link  {{ request()->is('logistic/kardex/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Kardex de Productos</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_rpt_stock')? 'd-none': '' }}">
+                    <a href="{{ route('lstock.index') }}"
+                        class="nav-link  {{ request()->is('logistic/stock/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Stock de Productos</p>
+                    </a>
+                </li>
             </ul>
         </li>
         {{-- PRODUCCION --}}

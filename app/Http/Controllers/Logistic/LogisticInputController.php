@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Logistic;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhLInput;
 use Illuminate\Http\Request;
 
 class LogisticInputController extends Controller
@@ -14,7 +15,10 @@ class LogisticInputController extends Controller
      */
     public function index()
     {
-        return view('building');
+        $result = WhLInput::paginate(env('PAGINATE_LOGISTIC',5));
+        return view('logistic.input',[
+            'result' => $result,
+        ]);
     }
 
     /**

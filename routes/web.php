@@ -15,6 +15,8 @@ use App\Http\Controllers\Logistic\LogisticInputController;
 use App\Http\Controllers\Logistic\LogisticInventoryController;
 use App\Http\Controllers\Logistic\LogisticOutputController;
 use App\Http\Controllers\Logistic\LogisticTransferController;
+use App\Http\Controllers\Logistic\LogisticKardexController;
+use App\Http\Controllers\Logistic\LogisticStockController;
 use App\Http\Controllers\System\BankAccountController;
 use App\Http\Controllers\System\CurrencyController;
 use App\Http\Controllers\System\ParameterController;
@@ -128,6 +130,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/logistic/output/manager',LogisticOutputController::class, ['names' => 'loutput']);
     Route::resource('/logistic/transfer/manager',LogisticTransferController::class, ['names' => 'ltransfer']);
     Route::resource('/logistic/inventory/manager',LogisticInventoryController::class, ['names' => 'linventory']);
+    Route::get('/logistic/kardex/manager',[LogisticKardexController::class,'index'])->name('lkardex.index');
+    Route::get('/logistic/stock/manager',[LogisticStockController::class,'index'])->name('lstock.index');
+
     /*
         ---------------------------------------------------------------------------------------------------------------
         Bancos

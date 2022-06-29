@@ -158,7 +158,12 @@ class BPartnerController extends Controller
 
     public function search(Request $request){
         $result = WhBpartner::where('bpartnername','LIKE',"%{$request->q}%")
-            ->whereOr('bpartnercode',)
+            ->where(function ($query) use($request) {
+                if($request->has('t')){
+                    $t = substr($request->t,0,1);
+                    $query->where('bpartnercode','LIKE',"{$t}%");
+                }
+            })            
             ->limit(20)
             ->orderBy('bpartnername','asc')
             ->get(['id',DB::raw('CONCAT(bpartnercode,\' - \',bpartnername) as text')]);
