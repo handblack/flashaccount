@@ -127,21 +127,21 @@
                 <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_move')? 'd-none': '' }}">
                     <a href="{{ route('bpartner_rpt_move') }}"
                         class="nav-link  {{ request()->is('bpartner/report/move*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-print nav-icon"></i>
                         <p>Reporte Movimientos</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_receivable')? 'd-none': '' }}">
                     <a href="{{ route('bpartner_rpt_receivable') }}"
                         class="nav-link  {{ request()->is('bpartner/report/receivable*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-print nav-icon"></i>
                         <p>Cuentas por Cobrar</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_payable')? 'd-none': '' }}">
                     <a href="{{ route('bpartner_rpt_payable') }}"
                         class="nav-link  {{ request()->is('bpartner/report/payable*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-print nav-icon"></i>
                         <p>Cuentas por Pagar</p>
                     </a>
                 </li>
@@ -292,14 +292,14 @@
                 <li class="nav-item  {{ !auth()->user()->menu('m_logistic_rpt_kardex')? 'd-none': '' }}">
                     <a href="{{ route('lkardex.index') }}"
                         class="nav-link  {{ request()->is('logistic/kardex/manager*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-print nav-icon"></i>
                         <p>Kardex de Productos</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_logistic_rpt_stock')? 'd-none': '' }}">
                     <a href="{{ route('lstock.index') }}"
                         class="nav-link  {{ request()->is('logistic/stock/manager*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class="fas fa-print nav-icon"></i>
                         <p>Stock de Productos</p>
                     </a>
                 </li>

@@ -7,15 +7,15 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('warehouse.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('linput.index') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
 
-                    <a class="btn btn-sm btn-success" href="{{ route('warehouse.create') }}"
+                    <a class="btn btn-sm btn-success" href="{{ route('linput.create') }}"
                         title="Marcar como página de inicio">
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Añadir</span>
+                        <span class="d-none d-sm-inline-block">Nuevo Ingreso</span>
                     </a>
                     <div class="btn-group">
                         <div class="input-group input-group-sm">
