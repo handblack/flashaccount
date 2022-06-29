@@ -7,6 +7,8 @@ use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Compras\POrderController;
 use App\Http\Controllers\Compras\POrderLineController;
 use App\Http\Controllers\Config\ProductController;
+use App\Http\Controllers\Config\ProductFamilyController;
+use App\Http\Controllers\Config\ProductLineController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\System\BankAccountController;
@@ -72,6 +74,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::get('config/products/ajax',[ProductController::class,'search'])->name('product_ajax');
 
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
+    Route::get('/bpartner/report/move',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
+    Route::get('/bpartner/report/receivable',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');
+    Route::get('/bpartner/report/payable',[BPartnerController::class,'rpt_payable'])->name('bpartner_rpt_payable');
 
     /*
         ---------------------------------------------------------------------------------------------------------------
@@ -95,7 +100,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/compras/order/manager',POrderController::class, ['names' => 'porder']);
     Route::resource('/compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
     /*
+        ---------------------------------------------------------------------------------------------------------------
+        LOGISTICA
+        ---------------------------------------------------------------------------------------------------------------
+    */
+    Route::resource('/logistic/input/manager',POrderController::class, ['names' => 'porder']);
+    Route::resource('/logistic/output/manager',POrderController::class, ['names' => 'porder']);
+    Route::resource('/logistic/transfer/manager',POrderController::class, ['names' => 'porder']);
+    /*
+        ---------------------------------------------------------------------------------------------------------------
         Bancos
+        ---------------------------------------------------------------------------------------------------------------
     */
     Route::resource('/bank/income/manager',BankIncomeController::class, ['names' => 'bincome']);
     Route::resource('/bank/expense/manager',BankExpensesController::class, ['names' => 'bexpense']);

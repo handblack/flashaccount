@@ -98,7 +98,7 @@
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_config_productline')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
+                    <a href="{{ route('productline.index') }}"
                         class="nav-link  {{ request()->is('config/productline*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Lineas</p>
@@ -125,24 +125,24 @@
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_move')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
+                    <a href="{{ route('bpartner_rpt_move') }}"
                         class="nav-link  {{ request()->is('bpartner/report/move*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Reporte Movimientos</p>
                     </a>
                 </li>
-                <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_account')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
-                        class="nav-link  {{ request()->is('bpartner/report/account*') ? 'active' : '' }}">
+                <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_receivable')? 'd-none': '' }}">
+                    <a href="{{ route('bpartner_rpt_receivable') }}"
+                        class="nav-link  {{ request()->is('bpartner/report/receivable*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>EECC Clientes</p>
+                        <p>Cuentas por Cobrar</p>
                     </a>
                 </li>
-                <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_account')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
-                        class="nav-link  {{ request()->is('bpartner/report/account*') ? 'active' : '' }}">
+                <li class="nav-item  {{ !auth()->user()->menu('m_bpartner_report_payable')? 'd-none': '' }}">
+                    <a href="{{ route('bpartner_rpt_payable') }}"
+                        class="nav-link  {{ request()->is('bpartner/report/payable*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>EECC Proveedores</p>
+                        <p>Cuentas por Pagar</p>
                     </a>
                 </li>
             </ul>
@@ -215,40 +215,6 @@
                 </li>
             </ul>
         </li>
-        {{-- LOGISTICA --}}
-        <li
-            class="nav-item {{ request()->is('bpartner/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_compras')? 'd-none': '' }}">
-            <a href="#" class="nav-link {{ request()->is('bpartner/*') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-truck"></i>
-                <p>
-                    Logistica
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item  {{ !auth()->user()->menu('m_compras_order')? 'd-none': '' }}">
-                    <a href="{{ route('product.index') }}"
-                        class="nav-link {{ request()->is('bpartner/manager*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Ingreso</p>
-                    </a>
-                </li>
-                <li class="nav-item  {{ !auth()->user()->menu('m_compras_invoice')? 'd-none': '' }}">
-                    <a href="{{ route('product.index') }}"
-                        class="nav-link {{ request()->is('bpartner/manager*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Salida</p>
-                    </a>
-                </li>
-                <li class="nav-item  {{ !auth()->user()->menu('m_compras_credit')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
-                        class="nav-link  {{ request()->is('bpartner/report/move*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Trasnsferencia</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
         {{-- CAJA Y BANCOS --}}
         <li
             class="nav-item {{ request()->is('bank/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_bank')? 'd-none': '' }}">
@@ -283,6 +249,90 @@
                 </li>
             </ul>
         </li>
+        
+        {{-- LOGISTICA --}}
+        <li
+            class="nav-item {{ request()->is('logistic/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_logistic')? 'd-none': '' }}">
+            <a href="#" class="nav-link {{ request()->is('logistic/*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-truck"></i>
+                <p>
+                    Logistica
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_input')? 'd-none': '' }}">
+                    <a href="{{ route('product.index') }}"
+                        class="nav-link {{ request()->is('logistic/input/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Ingreso</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_outpu')? 'd-none': '' }}">
+                    <a href="{{ route('product.index') }}"
+                        class="nav-link {{ request()->is('logistic/output/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Salida</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_transfer')? 'd-none': '' }}">
+                    <a href="{{ route('productfamily.index') }}"
+                        class="nav-link  {{ request()->is('logistic/transfer/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Transferencia</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {{-- PRODUCCION --}}
+        <li
+            class="nav-item {{ request()->is('production/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_production')? 'd-none': '' }}">
+            <a href="#" class="nav-link {{ request()->is('production/*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-industry"></i>
+                <p>
+                    Produccion
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item  {{ !auth()->user()->menu('m_production_order')? 'd-none': '' }}">
+                    <a href="{{ route('product.index') }}"
+                        class="nav-link {{ request()->is('production/order/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Orden Produccion</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_production_lfa')? 'd-none': '' }}">
+                    <a href="{{ route('product.index') }}"
+                        class="nav-link {{ request()->is('logistic/liquidation/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Liquidacion Fabricacion</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {{-- UTILITY --}}
+        <li
+            class="nav-item {{ request()->is('tools/*') ? 'menu-open' : '' }} {{ !auth()->user()->menu('m_utility')? 'd-none': '' }}">
+            <a href="#" class="nav-link {{ request()->is('tools/*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-tools"></i>
+                <p>
+                    Utilidades
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item  {{ !auth()->user()->menu('m_production_order')? 'd-none': '' }}">
+                    <a href="{{ route('product.index') }}"
+                        class="nav-link {{ request()->is('production/order/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Partidas Abiertas</p>
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
+        
 
 
         <li class="nav-header">

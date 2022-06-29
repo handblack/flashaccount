@@ -163,4 +163,26 @@ class BPartnerController extends Controller
             'results' => $result->toArray(),
         ]);
     }
+
+
+    public function rpt_move(){
+        /*
+            Reporte de MOVIMIENTOS
+        */
+        return view('building');
+    }
+
+    public function rpt_receivable(){
+        /*
+            Cuentas por COBRAR
+        */
+        return view('building');
+    }
+
+    public function rpt_payable(){
+        /*
+            Cuentas por PAGAR
+        */
+        return view('building');
+    }
 }

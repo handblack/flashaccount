@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhFamily;
 use Illuminate\Http\Request;
 
 class ProductFamilyController extends Controller
@@ -12,9 +13,19 @@ class ProductFamilyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'config.product.family'; 
     public function index()
     {
-        //
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $result = WhFamily::paginate(env('PAGINATE_PRODUCT_FAMILY',10));
+        return view('config.family',[
+            'result' => $result, 
+        ]);
     }
 
     /**
@@ -24,7 +35,17 @@ class ProductFamilyController extends Controller
      */
     public function create()
     {
-        //
+        if(auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $row = new WhFamily();
+        $row->token = old('token',date("His"));        
+        return view('config.family_form',[
+            'mode' => 'new',
+            'row'  => $row,
+            'url'  => route('productfamily.store'),
+        ]);
+
     }
 
     /**

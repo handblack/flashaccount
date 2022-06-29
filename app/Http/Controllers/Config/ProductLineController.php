@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhLine;
 use Illuminate\Http\Request;
 
 class ProductLineController extends Controller
@@ -12,9 +13,19 @@ class ProductLineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'config.product.line'; 
     public function index()
     {
-        //
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $result = WhLine::paginate(env('PAGINATE_PRODUCT_LINE',10));
+        return view('config.line',[
+            'result' => $result, 
+        ]);
     }
 
     /**
