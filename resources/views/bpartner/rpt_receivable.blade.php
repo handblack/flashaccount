@@ -22,7 +22,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Fecha CORTE</span>
                         </div>
-                        <input type="date" name="dateend" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input type="date" name="dateend" value="{{ date("Y-m-d"); }}" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-primary btn-sm">Buscar</button>                            
                         </div>

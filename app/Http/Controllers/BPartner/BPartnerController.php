@@ -193,14 +193,14 @@ class BPartnerController extends Controller
         ]);
     }
 
-    public function rpt_receivable(){
+    public function rpt_receivable(Request $request){
         /*
             Cuentas por COBRAR
         */
         return view('bpartner.rpt_receivable');
     }
 
-    public function rpt_payable(){
+    public function rpt_payable(Request $request){
         /*
             Cuentas por PAGAR
         */

@@ -262,24 +262,31 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item  {{ !auth()->user()->menu('m_logistic_input')? 'd-none': '' }}">
-                    <a href="{{ route('product.index') }}"
+                    <a href="{{ route('linput.index') }}"
                         class="nav-link {{ request()->is('logistic/input/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Ingreso</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_logistic_outpu')? 'd-none': '' }}">
-                    <a href="{{ route('product.index') }}"
+                    <a href="{{ route('loutput.index') }}"
                         class="nav-link {{ request()->is('logistic/output/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Salida</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_logistic_transfer')? 'd-none': '' }}">
-                    <a href="{{ route('productfamily.index') }}"
+                    <a href="{{ route('ltransfer.index') }}"
                         class="nav-link  {{ request()->is('logistic/transfer/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Transferencia</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_logistic_inventory')? 'd-none': '' }}">
+                    <a href="{{ route('linventory.index') }}"
+                        class="nav-link  {{ request()->is('logistic/inventory/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Inventario</p>
                     </a>
                 </li>
             </ul>

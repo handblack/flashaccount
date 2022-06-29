@@ -11,6 +11,10 @@ use App\Http\Controllers\Config\ProductFamilyController;
 use App\Http\Controllers\Config\ProductLineController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Logistic\LogisticInputController;
+use App\Http\Controllers\Logistic\LogisticInventoryController;
+use App\Http\Controllers\Logistic\LogisticOutputController;
+use App\Http\Controllers\Logistic\LogisticTransferController;
 use App\Http\Controllers\System\BankAccountController;
 use App\Http\Controllers\System\CurrencyController;
 use App\Http\Controllers\System\ParameterController;
@@ -105,9 +109,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         LOGISTICA
         ---------------------------------------------------------------------------------------------------------------
     */
-    Route::resource('/logistic/input/manager',POrderController::class, ['names' => 'porder']);
-    Route::resource('/logistic/output/manager',POrderController::class, ['names' => 'porder']);
-    Route::resource('/logistic/transfer/manager',POrderController::class, ['names' => 'porder']);
+    Route::resource('/logistic/input/manager',LogisticInputController::class, ['names' => 'linput']);
+    Route::resource('/logistic/output/manager',LogisticOutputController::class, ['names' => 'loutput']);
+    Route::resource('/logistic/transfer/manager',LogisticTransferController::class, ['names' => 'ltransfer']);
+    Route::resource('/logistic/inventory/manager',LogisticInventoryController::class, ['names' => 'linventory']);
     /*
         ---------------------------------------------------------------------------------------------------------------
         Bancos
