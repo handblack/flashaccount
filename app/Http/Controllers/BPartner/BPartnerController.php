@@ -9,6 +9,7 @@ use App\Models\WhCInvoice;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class BPartnerController extends Controller
 {
@@ -203,7 +204,6 @@ class BPartnerController extends Controller
         return view('bpartner.rpt_receivable');
     }
     public function rpt_receivable_form(Request $request){
-        
         if ($request->method() == 'POST'){
             $request->validate([
                 'dateend' => 'required',
@@ -228,18 +228,112 @@ class BPartnerController extends Controller
             'result' => $result,
         ]);
     }
+    
     public function rpt_receivable_pdf(){
+        $filename = 'cta_x_cobra_'.date("Y_m_d_His").'.pdf';
+        $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))->get();
+        $pdf = PDF::loadView('bpartner.rpt_receivable_pdf', [
+            'result' => $result,
+        ]);
+        return $pdf->download($filename);
     }
-    public function rpt_receivable_xls(){}
+    
+    public function rpt_receivable_csv(){
+        $filename = 'cta_x_cobra_'.date("Y_m_d_His").'.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename={$filename}",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))->get();
+        $callback = function() use($result) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, [
+                'Fecha'
+            ]);
+            foreach ($result as $item) {
+                $row = [
+                    'fecha' => $item->datetrx
+                ];
+                fputcsv($file, [$row]);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
     /*
         ---------------------------------------------------------------------------------------------------
         Cuentas por PAGAR
         ---------------------------------------------------------------------------------------------------
     */
     public function rpt_payable(Request $request){
-        /*
-            Cuentas por PAGAR
-        */
         return view('bpartner.rpt_payable');
+    }
+    public function rpt_payable_form(Request $request){
+        if ($request->method() == 'POST'){
+            $request->validate([
+                'dateend' => 'required',
+            ]);
+            // Aqui hacmeos construccion del reporte
+            $session = date("YmdHis");
+            $bp = ($request->has('bpartner_id')) ? $request->bpartner_id : '0';
+            DB::select('CALL pax_rpt_invoice_open_supplier(?,?,?)',[
+                $session,
+                $request->dateend,
+                $bp,
+            ]);
+            session(['session_rpt_invoice_open' => $session]);
+            $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
+                ->paginate(env('PAGINATE_PAYABLE',5));
+        }else{
+            $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
+                ->paginate(env('PAGINATE_PAYABLE',5));
+        }
+        //$result->paginate(env('PAGINATE_RECEIVABLE',5));        
+        return view('bpartner.rpt_payable_result',[
+            'result' => $result,
+        ]);
+    }
+    public function rpt_payable_pdf(Request $request){
+        $filename = 'cta_x_pagar_'.date("Y_m_d_His").'.pdf';
+        $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))->get();
+        $pdf = PDF::loadView('bpartner.rpt_receivable_pdf', [
+            'result' => $result,
+        ]);
+        return $pdf->download($filename);
+    }
+    public function rpt_payable_csv(Request $request){
+        $filename = 'cta_x_pagar_'.date("Y_m_d_His").'.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename={$filename}",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))->get();
+        
+        $callback = function() use($result) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, [
+                'Fecha'
+            ]);
+            echo date("YmdHIs");
+        
+            foreach ($result as $item) {
+                $row = [
+                    'fecha' => $item->datetrx
+                ];
+                fputcsv($file, [$row]);
+            }
+            echo 'close';
+            die();  
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
     }
 }
