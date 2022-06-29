@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhLine;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class ProductLineController extends Controller
@@ -35,7 +36,17 @@ class ProductLineController extends Controller
      */
     public function create()
     {
-        //
+        if(auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $row = new WhLine();
+        $row->token = old('token',date("His"));        
+        return view('config.line_form',[
+            'mode' => 'new',
+            'row'  => $row,
+            'url'  => route('productline.store'),
+        ]);
+
     }
 
     /**
@@ -46,7 +57,20 @@ class ProductLineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!auth()->user()->grant($this->module)->iscreate == 'N'){
+            return back()->with('error','No tienes privilegio para crear');
+        }
+        $request->validate([
+            'linename' => 'required',
+            'shortname'  => 'required',
+        ]);
+        $hash = new Hashids(env('APP_HASH'));
+        $row = new WhLine();
+        $row->fill($request->all());        
+        $row->save();
+        $row->token = $hash->encode($row->id);
+        $row->save();
+        return redirect()->route('productline.index')->with('message','Registro creado');
     }
 
     /**
@@ -68,7 +92,15 @@ class ProductLineController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $row = WhLine::where('token',$id)->first();
+        return view('config.line_form',[
+            'mode' => 'edit',
+            'row'  => $row,
+            'url'  => route('productline.update',$row->token),
+        ]);
     }
 
     /**
@@ -80,7 +112,17 @@ class ProductLineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(auth()->user()->grant($this->module)->isupdate == 'N'){
+            return back()->with('error','No tienes privilegio para modificar');
+        }
+        $row = WhLine::where('token',$id)->first();
+        $request->validate([
+            'linename' => 'required',
+            'shortname' => 'required',
+        ]);
+        $row->fill($request->all());
+        $row->save();
+        return redirect()->route('productline.index')->with('message','Registro actualizado');
     }
 
     /**
@@ -91,6 +133,21 @@ class ProductLineController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        if(auth()->user()->grant($this->module)->isdelete == 'N'){
+            $data['status'] = 102;
+            $data['message'] = 'No tienes privilegio para eliminar';
+        }
+        
+        $row = WhLine::where('token',$id)->first();
+        if($row){
+            $row->delete();
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 }
