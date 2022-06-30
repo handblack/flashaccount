@@ -15,6 +15,12 @@ class CreateWhLInputsTable extends Migration
     {
         Schema::create('wh_l_inputs', function (Blueprint $table) {
             $table->id();
+            $table->date('datetrx');
+            $table->date('dateacct')->nullable();
+            $table->foreignId('bpartner_id');
+            $table->foreignId('warehouse_id');
+            $table->foreignId('reason_id');
+            $table->enum('docstatus',['O','C','A'])->default('O');
             $table->timestamps();
         });
     }

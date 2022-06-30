@@ -15,6 +15,13 @@ class CreateWhLInputLinesTable extends Migration
     {
         Schema::create('wh_l_input_lines', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id');
+            $table->float('quantity');
+            $table->unsignedBigInteger('input_id');
+            $table->foreign('input_id')
+                                    ->references('id')
+                                    ->on('wh_l_inputs')
+                                    ->cascadeOnDelete();
             $table->timestamps();
         });
     }

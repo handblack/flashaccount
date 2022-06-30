@@ -106,10 +106,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         ---------------------------------------------------------------------------------------------------------------
     */
     //ORDEN DE VENTA
-    Route::resource('/ventas/order/manager',COrderController::class, ['names' => 'corder']);
-    Route::resource('/ventas/order/managers/line',COrderLineController::class, ['names' => 'corderline']);
-    Route::post('ventas/order/managers/copy_to_invoice',[COrderController::class,'copy_to_invoice'])->name('corder_copy_to_invoice');
-    
+    Route::resource('/ventas/order/manager/list',COrderController::class, ['names' => 'corder']);
+    Route::resource('/ventas/order/manager/line',COrderLineController::class, ['names' => 'corderline']);
+    Route::post('ventas/order/manager/copy_to_invoice',[COrderController::class,'copy_to_invoice'])->name('corder_copy_to_invoice');
+    Route::get('ventas/order/manager/pdf',[COrderController::class,'report_pdf'])->name('corder_rpt_pdf');
     //INVOICE
     Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
     //NOTA CREDITO

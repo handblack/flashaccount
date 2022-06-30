@@ -17,6 +17,7 @@ use App\Models\TempLine;
 use App\Models\WhParam;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use PDF;
 
 class COrderController extends Controller
 {
@@ -129,6 +130,7 @@ class COrderController extends Controller
         $lines = WhCOrderLine::where('order_id',$head->id)->get();
         $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
         $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+        session(['session_select_order_id' => $head->id]);
         return view('ventas.order_show',[
             'header' => $head,
             'lines'  => $lines,
@@ -223,6 +225,7 @@ class COrderController extends Controller
         $target->order_id    = $request->order_id;
         $target->sequence_id = $request->sequence_id;
         $target->amountgrand = $source->amount;
+        $target->datetrx     = $source->dateorder;
         $target->save();
         $target->session     = $hash->encode($target->id);
         $target->save();
@@ -252,5 +255,17 @@ class COrderController extends Controller
             }
         }
         */
+    }
+
+    public function report_pdf(){
+        if(!session()->has('session_select_order_id')){
+            return redirect()->route('corder.index');
+        }
+        $row = WhCOrder::where('id',session('session_select_order_id'))->first();        
+        $filename = 'orden_venta_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+        $pdf = PDF::loadView('ventas.order_pdf', [
+            'row' => $row,
+        ]);
+        return $pdf->download($filename);
     }
 }
