@@ -42,30 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function team(){
-        return $this->hasOne(WhTeam::class,'id','current_team_id');
-    }
 
-    public function um(){
-        return WhUm::all();
-    }
-
-    public function currency(){
-        return WhCurrency::all();
-    }
-
-    public function warehouse(){
-        return WhWarehouse::all();
-    }
-
-    public function sequence($doctype){
-        $dt = WhDocType::where('shortname',$doctype)->first();
-        return WhSequence::where('doctype_id',$dt->id)->get();
-    }
-
-    public function bankaccount(){
-        return WhBankAccount::all();
-    }
 
     
     public function grant($module = ''){
@@ -153,6 +130,31 @@ class User extends Authenticatable
             $value = $row->value;
         }
         return $value;
+    }
+
+    public function team(){
+        return $this->hasOne(WhTeam::class,'id','current_team_id');
+    }
+
+    public function um(){
+        return WhUm::all();
+    }
+
+    public function currency(){
+        return WhCurrency::all();
+    }
+
+    public function warehouse(){
+        return WhWarehouse::all();
+    }
+
+    public function sequence($doctype){
+        $dt = WhDocType::where('shortname',$doctype)->first();
+        return WhSequence::where('doctype_id',$dt->id)->get();
+    }
+
+    public function bankaccount(){
+        return WhBankAccount::all();
     }
 
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Bank\BankAllocateController;
 use App\Http\Controllers\Bank\BankExpensesController;
 use App\Http\Controllers\Bank\BankIncomeController;
 use App\Http\Controllers\BPartner\BPartnerController;
+use App\Http\Controllers\Compras\PInvoiceController;
 use App\Http\Controllers\Compras\POrderController;
 use App\Http\Controllers\Compras\POrderLineController;
 use App\Http\Controllers\Config\ProductController;
@@ -119,8 +120,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Compras - Proveedores
         ---------------------------------------------------------------------------------------------------------------
     */
-    Route::resource('/compras/order/manager',POrderController::class, ['names' => 'porder']);
-    Route::resource('/compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
+    Route::resource('compras/order/manager',POrderController::class, ['names' => 'porder']);
+    Route::resource('compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
+    //INVOICE
+    Route::resource('compras/invoice/manager',PInvoiceController::class, ['names' => 'pinvoice']);
     /*
         ---------------------------------------------------------------------------------------------------------------
         LOGISTICA

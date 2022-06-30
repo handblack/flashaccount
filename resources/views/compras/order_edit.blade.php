@@ -12,7 +12,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('porder.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -27,7 +27,7 @@
                         <div class="col-md-12">
                             <div class="float-sm-right">
                                 <h1 class="h5 mb-0 d-none d-md-inline-block">
-                                    Orden de Venta
+                                    Compras / Orden de Compra
                                     &nbsp;
                                     <i class="fas fa-edit fa-fw"></i>
                                 </h1>

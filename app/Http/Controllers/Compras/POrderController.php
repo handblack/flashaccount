@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Compras;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempHeader;
+use App\Models\TempLine;
 use App\Models\WhPOrder;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class POrderController extends Controller
 {
@@ -28,7 +32,7 @@ class POrderController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -39,7 +43,37 @@ class POrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data['status'] = '100';
+        $data['message'] = 'Seleccione los documentos a consignar';
+        $fields = [
+            'bpartner_id',
+            'warehouse_id',
+            'datetrx',
+            'rate',
+            'currency_id',
+        ];
+        foreach($fields as $field){
+            if(!$request->has($field)){
+                $data['status'] = '101';
+                $data['message'] = "Falta especificar {$field}";
+            }
+        }
+        if(!($data['status'] == '100')){
+            return response()->json($data);
+        }
+        DB::transaction(function () use($request) {
+            $hash = new Hashids(env('APP_HASH'));
+            // Creando cabecera ------------------------------------------------
+            $header = new TempHeader();
+            $header->fill($request->all());
+            $header->datetrx     = $request->datetrx;
+            $header->save();
+            $header->token       = $hash->encode($header->id);
+            $header->save();
+            session(['session_order_create' => $header->token]);
+        });
+        $data['url'] = route('porder.edit',session('session_order_create'));
+        return response()->json($data);
     }
 
     /**
@@ -61,7 +95,12 @@ class POrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        $header = TempHeader::where('token',$id)->first();
+        $lines = TempLine::where('temp_id',$header->id)->get();
+        return view('compras.order_edit',[
+            'header' => $header,
+            'lines' => $lines,
+        ]);
     }
 
     /**

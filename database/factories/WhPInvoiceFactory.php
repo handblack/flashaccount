@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\WhBpartner;
 use App\Models\WhCurrency;
 use App\Models\WhDocType;
+use App\Models\WhParam;
 use App\Models\WhSequence;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Factory as Faker;
@@ -37,7 +38,7 @@ class WhPInvoiceFactory extends Factory
             'currency_id'  => $faker->randomElement(WhCurrency::get()->toArray())['id'],          
             #'warehouse_id' => $faker->randomElement(WhWarehouse::get()->toArray())['id'],          
             //'sequence_id'  => $sequence->id,
-            'doctype_id'   => 1,
+            'doctype_id'   => $faker->randomElement(WhDocType::where('group_id',4)->get('id')->toArray())['id'],
             'serial'       => $sequence->serial,
             'documentno'   => $seq_nro,
             'amountgrand'  => $amount,

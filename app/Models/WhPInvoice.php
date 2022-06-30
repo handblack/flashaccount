@@ -11,6 +11,17 @@ class WhPInvoice extends Model
     protected $fillable = [
         'bpartner_id',
         'currency_id',
+        'serial',
+        'documentno',
+        'rate',
+        'dateinvoiced',
+        'datedue',
+        'dateacct',
+        'doctype_id',
+        'amountbase',
+        'amountexo',
+        'amounttax',
+        'amountgrand',
     ];
 
     public function bpartner(){
@@ -24,4 +35,5 @@ class WhPInvoice extends Model
     public function doctype(){
         return $this->hasOne(WhDocType::class,'id','doctype_id');
     }
+
 }

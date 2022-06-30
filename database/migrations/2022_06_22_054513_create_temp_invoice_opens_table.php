@@ -17,7 +17,7 @@ class CreateTempInvoiceOpensTable extends Migration
             $table->id();
             $table->string('session',60);
             $table->date('datetrx');
-            $table->date('datedue');
+            $table->date('datedue')->nullable();
             $table->foreignId('bpartner_id')->nullable();
             $table->foreignId('cinvoice_id')->nullable();
             $table->foreignId('pinvoice_id')->nullable();

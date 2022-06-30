@@ -44,6 +44,10 @@ class CreateWhParamsTable extends Migration
         $row->create(['group_id' => 5,'shortname' => 'EFE','identity' => 'EFECTIVO']);
         $row->create(['group_id' => 5,'shortname' => 'DEP','identity' => 'DEPOSITO']);        
         $row->create(['group_id' => 5,'shortname' => 'CHE','identity' => 'CHEQUE']);        
+        $row->create(['group_id' => 6,'identity' => 'SIN RETENCION']);        
+        $row->create(['group_id' => 6,'shortname' => 'D','identity' => 'DETRACCION']);        
+        $row->create(['group_id' => 6,'shortname' => 'P','identity' => 'PERCEPCION']);        
+        $row->create(['group_id' => 6,'shortname' => 'R','identity' => 'RETENCION']);        
     }
 
     /**

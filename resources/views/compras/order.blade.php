@@ -123,7 +123,7 @@
     <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('porder.create') }}" method="POST" id="form-create">
+            <form action="{{ route('porder.store') }}" method="POST" id="form-create">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -134,6 +134,17 @@
                     </div>
                     <div class="modal-body" style="background-color:#dcdcdc74;">
                         <div class="row">
+                            <div class="col-md-12">
+                                <label class="mb-0">Serie</label>
+                                <select name="sequence_id" class="form-control" required>
+                                    <option value="" selected disabled>-- SELECCIONA --</option>
+                                    @foreach (auth()->user()->sequence('OVE') as $item)
+                                        <option value="{{ $item->id }}">{{ $item->serial . ' - ' . $item->doctype->doctypename }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
                             <div class="col-md-10">
                                 <label class="mb-0">Socio de Negocio</label>
                                 <select name="bpartner_id" class="form-control select2-bpartner" required></select>
@@ -151,7 +162,7 @@
                         <div class="row mt-2">
                             <div class="col-md-6">
                                 <label class="mb-0">Almacen</label>
-                                <select class="form-control" name="bankaccount_id" required>
+                                <select class="form-control" name="warehouse_id" required>
                                     <option value="" disabled selected>-- SELECCIONA --</option>
                                     @foreach (auth()->user()->warehouse() as $item)
                                         <option value="{{ $item->id }}">{{ $item->warehousename }}</option>
@@ -159,12 +170,12 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="mb-0">Fecha TRX</label>
+                                <label class="mb-0">Fecha Emision</label>
                                 <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
                             </div>
                             <div class="col-md-3">
                                 <label class="mb-0">Tipo de Cambio</label>
-                                <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
+                                <input type="text" name="rate" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
                             </div>
                         </div>
 
@@ -238,6 +249,7 @@ $(function(){
             data: function (params) {
                 return {
                     q: params.term, // search term
+                    t:'P',
                     page: params.page
                 };
             },

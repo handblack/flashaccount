@@ -14,8 +14,9 @@ class TempHeader extends Model
         'currency_id',
         'amountgrand',
         'warehouse_id',
-        'datetrx',
-        'dateacct',
+        'serial',
+        'documentno',
+
     ];
 
     public function sequence(){
@@ -24,6 +25,14 @@ class TempHeader extends Model
 
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
+    }
+
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
+    public function currency(){
+        return $this->hasOne(WhCurrency::class,'id','currency_id');
     }
 
 }
