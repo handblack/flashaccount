@@ -106,23 +106,16 @@ class PInvoiceController extends Controller
                             $hash = new Hashids(env('APP_HASH'));
                             $source = TempHeader::where('session',session('session_invoice_create'))->first();
                             $target = new WhPInvoice();
-                        
-                            $target->fill($source->toArray());
+                            //$target->fill($source->toArray());
                             $target->fill($request->all());
                             $target->dateinvoiced = $source->datetrx;
                             $target->save();
                             $target->token = $hash->encode($target->id);
                             $target->save();
                         });
-                        break;
-            case 'edit':
-                        break;
+                        return redirect()->route('pinvoice.index');
+                        break;            
         }
-
-       
-      
-        
-        return response()->json($data);
     }
 
     /**

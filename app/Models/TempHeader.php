@@ -16,6 +16,10 @@ class TempHeader extends Model
         'warehouse_id',
         'serial',
         'documentno',
+        'amountbase',
+        'amountexo',
+        'amounttax',
+        'amountgrand',
 
     ];
 
