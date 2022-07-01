@@ -34,6 +34,7 @@ class CreateTempHeadersTable extends Migration
             $table->date('dateacct')->nullable();
             $table->date('datedue')->nullable();
             $table->float('amount',12,2)->default(0);
+            $table->text('glosa')->nullable();
             $table->timestamps();
         });
     }

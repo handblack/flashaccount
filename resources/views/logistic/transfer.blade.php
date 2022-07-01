@@ -4,7 +4,7 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
 
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('linventory.index') }}" title="Recargar">
@@ -19,7 +19,7 @@
                     
 
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-8">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
                             Logistica / Transferencia entre almacenes

@@ -190,20 +190,17 @@
                                         <label class="mb-0">Documento</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
-                                                <input type="text" name="serial" class="form-control console mr-1" style="width:65px;" maxlength="4" placeholder="####" aria-label="Username" aria-describedby="basic-addon1">
+                                                <input type="text" name="serial" class="form-control console mr-1" style="width:65px;text-transform: uppercase;" maxlength="4" placeholder="####" aria-label="Username" aria-describedby="basic-addon1">
                                             </div>
                                             <input type="text" name="documentno" class="form-control console" maxlength="15">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-md-4">
-                                        <label class="mb-0">Vencimiento</label>
-                                        <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
-                                    </div>                            
-                                    <div class="col-md-8">
+                                                               
+                                    <div class="col-md-12">
                                         <label class="mb-0">Glosa</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" name="glosa" class="form-control">
                                     </div>
                                     
                                 </div>
@@ -216,7 +213,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text console" id="basic-addon1">BASE&nbsp;</span>
                                             </div>
-                                            <input type="text" name="amountbase" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                            <input type="text" name="amountbase" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -224,7 +221,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text console" id="basic-addon1">EXO&nbsp;&nbsp;</span>
                                             </div>
-                                            <input type="text" name="amountexo" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                            <input type="text" name="amountexo" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -232,7 +229,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text console" id="basic-addon1">IGV&nbsp;&nbsp;</span>
                                             </div>
-                                            <input type="text" name="amounttax" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                            <input type="text" name="amounttax" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -240,7 +237,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text console" id="basic-addon1">TOTAL</span>
                                             </div>
-                                            <input type="text" name="amountgrand" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
+                                            <input type="text" name="amountgrand" id="amountgrand" class="form-control text-right console font-weight-bold" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -305,6 +302,7 @@
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
 <script>
 $(function(){
     // PaymentModal
@@ -346,6 +344,14 @@ $(function(){
         },
         minimumInputLength: 2,
         theme:'bootstrap4'
+    });
+    // Sumando totales --------------------------------------------------------------
+    $(".amount").change(function() {
+        var total = 0;
+        $( ".amount" ).each( function(){
+            total += parseFloat( $( this ).val() ) || 0;
+        });
+        $('#amountgrand').val($.number(total,2,'.', ','));
     });
 });
 </script>

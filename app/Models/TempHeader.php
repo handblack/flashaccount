@@ -20,6 +20,7 @@ class TempHeader extends Model
         'amountexo',
         'amounttax',
         'amountgrand',
+        'glosa',
 
     ];
 

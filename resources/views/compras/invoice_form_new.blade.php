@@ -122,7 +122,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text console" id="basic-addon1">BASE&nbsp;</span>
                                 </div>
-                                <input type="text" name="amountbase" value="{{ $row->amountbase }}" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                <input type="text" name="amountbase" value="{{ number_format($row->amountbase,env('DECIMAL_AMOUNT',2)) }}" class="form-control text-right amount console" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -130,7 +130,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text console" id="basic-addon1">EXO&nbsp;&nbsp;</span>
                                 </div>
-                                <input type="text" name="amountexo" value="{{ $row->amountexo }}" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                <input type="text" name="amountexo" value="{{ number_format($row->amountexo,env('DECIMAL_AMOUNT',2)) }}" class="form-control text-right amount console" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -138,7 +138,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text console" id="basic-addon1">IGV&nbsp;&nbsp;</span>
                                 </div>
-                                <input type="text" name="amounttax" value="{{ $row->amounttax }}" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                <input type="text" name="amounttax" value="{{ number_format($row->amounttax,env('DECIMAL_AMOUNT',2)) }}" class="form-control text-right amount console" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -146,7 +146,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text console" id="basic-addon1">TOTAL</span>
                                 </div>
-                                <input type="text" name="amountgrand" value="{{ $row->amountgrand }}" class="form-control text-right" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
+                                <input type="text" name="amountgrand" id="amountgrand" value="{{ number_format($row->amountgrand,env('DECIMAL_AMOUNT',2)) }}" class="form-control text-right console" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
             <div class="row mt-1">
                 <div class="col-md-12">
                     <label class="mb-0">Glosa</label>
-                    <input type="text" class="form-control">
+                    <input type="text" name="glosa" value="{{ $row->glosa }}" class="form-control">
                 </div>
             </div>
 
@@ -170,4 +170,22 @@
     </div>
 </form>
     
+@endsection
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
+<script>
+$(function (){
+    // Sumando totales --------------------------------------------------------------
+    $(".amount").change(function() {
+        var total = 0;
+        $( ".amount" ).each( function(){
+            var  nn = $(this).val().replace(',', '');
+            total += parseFloat( nn ) || 0;
+        });
+        $('#amountgrand').val($.number(total,2,'.', ','));
+    });
+})
+</script>
 @endsection

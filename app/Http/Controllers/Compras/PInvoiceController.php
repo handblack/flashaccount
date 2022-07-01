@@ -90,6 +90,7 @@ class PInvoiceController extends Controller
                             // TEMPORAL -- Creando cabecera ------------------------------------------------
                             $header = new TempHeader();
                             $header->fill($request->all());
+                            $header->amountgrand  = $request->amountbase + $request->amountexo + $request->amounttax;
                             $header->datetrx     = $request->datetrx;
                             $header->doctype_id  = $request->doctype_id;                  
                             $header->save();
@@ -114,6 +115,7 @@ class PInvoiceController extends Controller
                             $target->dateinvoiced = $source->datetrx;
                             $target->dateacct     = $request->dateacct;
                             $target->period       = \Carbon\Carbon::parse($request->dateacct)->format('Ym');
+                            $target->amountbase   = $this->cleanData($request->amountbase);
                             $target->amountgrand  = $source->amountbase + $source->amountexo + $source->amounttax;
                             $target->amountopen   = $source->amountgrand;
                             $target->save();
@@ -170,4 +172,9 @@ class PInvoiceController extends Controller
     {
         //
     }
+
+    function cleanData($a) {
+        $a = (int) str_replace( ',', '', $a );
+        return $a;
+   }
 }
