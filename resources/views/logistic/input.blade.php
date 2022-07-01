@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
+
 @section('breadcrumb')
     <section class="content-header">
         <div class="container-fluid">
@@ -39,7 +44,7 @@
     <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('pinvoice.store') }}" method="POST" id="form-create">
+            <form action="{{ route('linput.store') }}" method="POST" id="form-logistic-input">
                 @csrf
                 <input type="hidden" name="mode" value="temp">
                 <div class="modal-content">
@@ -71,27 +76,35 @@
                         <div class="row mt-2">
                             <div class="col-md-8">
                                 <label class="mb-0">Almacen</label>
-                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                                <select name="warehouse_id" class="form-control" required>
+                                    <option value="" selected disabled>-- SELECCION --</option>
+                                    @foreach (auth()->user()->warehouse() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->warehousename }}</option>
+                                    @endforeach
+                                </select>
                             </div>                           
                             <div class="col-md-4">
                                 <label class="mb-0">Serie</label>
-                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                                <select name="sequence_id" class="form-control" required>
+                                    <option value="" selected disabled>-- SELECCION --</option>
+                                    @foreach (auth()->user()->sequence('LIN') as $item)
+                                        <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
+                                    @endforeach
+                                </select>
                             </div>                           
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6">
                                 <label class="mb-0">Motivo</label>
-                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                                <select name="reason_id" class="form-control" required>
+                                    <option value="0">MOTIVO</option>
+                                </select>
                             </div>                           
                             <div class="col-md-6">
                                 <label class="mb-0">Glosa</label>
-                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                                <input type="text" name="glosa" class="form-control">
                             </div>                           
                         </div>
-
-                       
-                        
-
                     </div>
                     <div class="modal-footer p-1">
                         <div class="row w-100">
@@ -112,4 +125,53 @@
             </form>
         </div>
     </div>
+@endsection
+
+
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script>
+$(function(){
+    // PaymentModal
+    let fai = $('#form-logistic-input');
+    fai.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:fai.attr('method'),
+            url: fai.attr('action'),
+            data: fai.serialize(),
+            success: function(data){
+                if(data.status == '100'){    
+                    window.location.href = data.url;              
+                }else{
+                    toastr.error(data.message);
+                }
+            },
+            error: function(data){
+                console.log('error genero');
+            },
+
+        });
+    });
+    // SocioNegocio ----------------------------------------------------------------
+    $('.select2-bpartner').select2({
+        ajax: {
+            url: '{{ route('api.bpartner') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2,
+        theme:'bootstrap4'
+    });
+});
+</script>
 @endsection

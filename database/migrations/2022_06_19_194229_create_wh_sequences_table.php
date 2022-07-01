@@ -78,7 +78,35 @@ class CreateWhSequencesTable extends Migration
             'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
-
+        /*
+            ----------------------------------------------------------------------
+            LOGISTICA
+            ----------------------------------------------------------------------
+        */
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','LIN')->first()->id,
+            'serial'     => 'LOG1',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','LOU')->first()->id,
+            'serial'     => 'LOG1',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','LTR')->first()->id,
+            'serial'     => 'LOG1',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','LIV')->first()->id,
+            'serial'     => 'LOG1',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
 
     }
 
