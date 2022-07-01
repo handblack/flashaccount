@@ -39,7 +39,7 @@
 @section('container')
 <form action="{{ route('pinvoice.store') }}" method="POST">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-    <input type="hidden" name="mode" value="{{ $mode }}">
+    <input type="hidden" name="mode" value="{{ $mode }}">    
     <div class="card">
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs">
@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="mb-0">Tipo Comprobante</label>
-                            <select name="sequence_id" class="form-control" required>
+                            <select name="doctype_id" class="form-control" required>
                                 <option value="" selected disabled>-- SELECCIONA --</option>
                                 @foreach ($doctype as $item)
                                     <option value="{{ $item->id }}" {{ ($item->id == $row->doctype_id) ? 'selected' : '' }}>{{ $item->doctypename }}</option>

@@ -138,7 +138,7 @@
                                 <label class="mb-0">Serie</label>
                                 <select name="sequence_id" class="form-control" required>
                                     <option value="" selected disabled>-- SELECCIONA --</option>
-                                    @foreach (auth()->user()->sequence('OVE') as $item)
+                                    @foreach (auth()->user()->sequence('OCO') as $item)
                                         <option value="{{ $item->id }}">{{ $item->serial . ' - ' . $item->doctype->doctypename }}</option>
                                     @endforeach
                                 </select>
@@ -195,7 +195,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Anular Orden de Venta</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Anular Orden de Compra</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

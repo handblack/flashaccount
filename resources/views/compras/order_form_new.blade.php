@@ -27,7 +27,7 @@
                         <div class="col-md-12">
                             <div class="float-sm-right">
                                 <h1 class="h4 mb-0 d-none d-md-inline-block">
-                                    Orden de Venta
+                                    Orden de Compra
                                     &nbsp;
                                     <i class="fas fa-edit fa-fw"></i>
                                 </h1>
@@ -243,6 +243,7 @@ $(function(){
             data: function (params) {
                 return {
                     q: params.term, // search term
+                    t:'P',
                     page: params.page
                 };
             },

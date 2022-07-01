@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViews extends Migration
+class CreateTrigger extends Migration
 {
     /**
      * Run the migrations.

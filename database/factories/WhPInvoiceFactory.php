@@ -31,9 +31,11 @@ class WhPInvoiceFactory extends Factory
         //var_dump($sequence->serial.$seq_nro);
         $token = md5($sequence->serial.$seq_nro);         
         // importes -------------------------------------------------------------------------------
-        $amount = $faker->randomFloat(2,10,9000);
+        $amount = $faker->randomFloat(2,10,9000);        
         return [
             'dateinvoiced' => $faker->dateTime(), 
+            'dateacct'     => date("Y-m-d"),
+            'period'       => date("Ym"),
             'bpartner_id'  => $faker->randomElement(WhBpartner::where('bpartnercode','LIKE','P%')->get()->toArray())['id'],
             'currency_id'  => $faker->randomElement(WhCurrency::get()->toArray())['id'],          
             #'warehouse_id' => $faker->randomElement(WhWarehouse::get()->toArray())['id'],          

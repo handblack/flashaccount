@@ -14,7 +14,7 @@ class LogisticInventoryController extends Controller
      */
     public function index()
     {
-        return view('building');
+        return view('logistic.inventory');
     }
 
     /**

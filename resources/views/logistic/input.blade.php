@@ -12,22 +12,11 @@
                         </a>
                     </div>
 
-                    <a class="btn btn-sm btn-success" href="{{ route('linput.create') }}"
-                        title="Marcar como página de inicio">
+                    <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate">
                         <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">Nuevo Ingreso</span>
                     </a>
-                    <div class="btn-group">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" type="text" name="query" value="" autocomplete="off"
-                                placeholder="Buscar">
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-search" aria-hidden="true"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
+                    
 
                 </div>
                 <div class="col-sm-6">
@@ -43,4 +32,84 @@
             </div>
         </div>
     </section>
+
+
+    {{-- MODALES --}}
+    <!-- NUEVO -->
+    <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="{{ route('pinvoice.store') }}" method="POST" id="form-create">
+                @csrf
+                <input type="hidden" name="mode" value="temp">
+                <div class="modal-content">
+                    <div class="modal-header pt-2 pb-2">
+                        <h5 class="modal-title" id="exampleModalLabel">INGRESO</h5>
+                        <div class="card-tools float-sm-right">
+                            <div class="btn-group">
+
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <i class="fas fa-calendar-alt fa-fw"></i> Emision
+                                        </span>
+                                    </div>
+                                    <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required style="width:120px;">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="mb-0">Socio de Negocio</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-8">
+                                <label class="mb-0">Almacen</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                            <div class="col-md-4">
+                                <label class="mb-0">Serie</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="mb-0">Motivo</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                            <div class="col-md-6">
+                                <label class="mb-0">Glosa</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                        </div>
+
+                       
+                        
+
+                    </div>
+                    <div class="modal-footer p-1">
+                        <div class="row w-100">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <button type="reset" class="btn btn-default"><i class="fas fa-window-close fa-fw"></i> Limpiar</button>                                 
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

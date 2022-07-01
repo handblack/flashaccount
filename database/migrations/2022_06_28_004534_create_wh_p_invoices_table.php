@@ -18,6 +18,7 @@ class CreateWhPInvoicesTable extends Migration
             $table->date('dateinvoiced');
             $table->date('datedue')->nullable();
             $table->date('dateacct')->nullable();
+            $table->string('period',6);
             $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
             $table->foreignId('doctype_id');
@@ -30,6 +31,7 @@ class CreateWhPInvoicesTable extends Migration
             $table->float('amountopen',12,5)->default(0);
             $table->float('rate',12,5)->default(1);
             $table->string('token',60)->nullable();
+            $table->enum('docstatus',['O','C','A'])->default('O');
             $table->timestamps();
         });
     }

@@ -52,16 +52,34 @@ class CreateWhSequencesTable extends Migration
         $row  = new WhSequence();
         $row->create([
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
-            'serial'     => 'O001',
+            'serial'     => 'OV01',
             'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
         $row->create([
             'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
-            'serial'     => 'O002',
+            'serial'     => 'OV02',
             'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
+        /*
+            Orden de COMPRA
+        */
+        $row  = new WhSequence();
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','OCO')->first()->id,
+            'serial'     => 'OC01',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','OCO')->first()->id,
+            'serial'     => 'OC02',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+
+
     }
 
     /**

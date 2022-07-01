@@ -29,7 +29,7 @@ class PInvoiceController extends Controller
             ]);
         }
         $dt = WhDocType::where('group_id',4)->get();
-        $result = WhPInvoice::paginate(env('PAGINATE_INVOICE',4));
+        $result = WhPInvoice::paginate(env('PAGINATE_INVOICE',10));
         return view('compras.invoice',[
             'result'  => $result,
             'grant'   => $grant,
@@ -95,6 +95,8 @@ class PInvoiceController extends Controller
                             $header->save();
                             $header->token       = $hash->encode($header->id);
                             $header->session     = $hash->encode($header->id);
+                            $header->serial      = strtoupper($header->serial);
+                            $header->documentno  = trim($header->documentno);
                             $header->save();
                             session(['session_invoice_create' => $header->token]);
                         });
@@ -108,9 +110,15 @@ class PInvoiceController extends Controller
                             $target = new WhPInvoice();
                             //$target->fill($source->toArray());
                             $target->fill($request->all());
+                            $target->bpartner_id  = $source->bpartner_id;
                             $target->dateinvoiced = $source->datetrx;
+                            $target->dateacct     = $request->dateacct;
+                            $target->period       = \Carbon\Carbon::parse($request->dateacct)->format('Ym');
+                            $target->amountgrand  = $source->amountbase + $source->amountexo + $source->amounttax;
+                            $target->amountopen   = $source->amountgrand;
                             $target->save();
                             $target->token = $hash->encode($target->id);
+                            $target->docstatus = 'C';
                             $target->save();
                         });
                         return redirect()->route('pinvoice.index');

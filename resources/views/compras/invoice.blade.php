@@ -68,7 +68,7 @@
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
-                            <td></td>
+                            <td width="70">{{ $item->period }}</td>
                             <td width="100">{{ $item->bpartner->bpartnercode }}</td>
                             <td width="110">{{ substr($item->bpartner->bpartnername,0,30) }}</td>
                             <td width="110">{{ $item->dateinvoiced }}</td>

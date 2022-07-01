@@ -83,12 +83,8 @@ class CreateWhDocTypesTable extends Migration
             'group_id'    => 2,
         ]);
         // Tipo de documentos transaccionales ----------------------------------------------
-        $row->create([
-            'doctypename' => 'ORDEN DE VENTA',
-            'shortname'   => 'OVE',
-            'isactive'    => 'Y',
-            'group_id'    => 3,
-        ]);
+        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'OVE','doctypename' => 'ORDEN DE VENTA',]);
+        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'OCO','doctypename' => 'ORDEN DE COMPRA',]);
         // Tipo de documentos compras ------------------------------------------------------
         $row->create(['group_id' => 4,'doctypecode' => '01','shortname' => 'FAC','isactive' => 'Y','doctypename' => 'FACTURA']);
         $row->create(['group_id' => 4,'doctypecode' => '03','shortname' => 'BVE','isactive' => 'Y','doctypename' => 'BOLETA DE VENTA']);
