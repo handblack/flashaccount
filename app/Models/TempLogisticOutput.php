@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhLOutput extends Model
+class TempLogisticOutput extends Model
 {
     use HasFactory;
 
@@ -17,16 +17,13 @@ class WhLOutput extends Model
         'reason_id',
         'glosa',
     ];
-    
+
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
 
     public function lines(){
-        return $this->hasMany(WhLOutputLine::class,'output_id','id');
+        return $this->hasMany(TempLogisticOutputLine::class,'output_id','id');
     }
 
-    public function warehouse(){
-        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
-    }
 }

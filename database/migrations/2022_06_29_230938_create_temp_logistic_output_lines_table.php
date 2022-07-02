@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWhLOutputLinesTable extends Migration
+class CreateTempLogisticOutputLinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWhLOutputLinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wh_l_output_lines', function (Blueprint $table) {
+        Schema::create('temp_logistic_output_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
             $table->float('quantity',12,5)->default(0)->nullable();
@@ -21,7 +21,7 @@ class CreateWhLOutputLinesTable extends Migration
             $table->unsignedBigInteger('output_id');
             $table->foreign('output_id')
                                     ->references('id')
-                                    ->on('wh_l_outputs')
+                                    ->on('temp_logistic_outputs')
                                     ->cascadeOnDelete();
             $table->timestamps();
         });
@@ -34,6 +34,6 @@ class CreateWhLOutputLinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wh_l_output_lines');
+        Schema::dropIfExists('temp_logistic_output_lines');
     }
 }
