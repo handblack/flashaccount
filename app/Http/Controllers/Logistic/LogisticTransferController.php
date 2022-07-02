@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Logistic;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempLogisticTransfer;
 use App\Models\WhLTransfer;
 use Illuminate\Http\Request;
 
@@ -29,14 +30,14 @@ class LogisticTransferController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        if(!session('session_logistic_output_id')){
-            return redirect()->route('loutput.index');
+        if(!session('session_logistic_transfer_id')){
+            return redirect()->route('ltransfer.index');
         }        
-        $row = TempLogisticTransfer::where('id',session('session_logistic_output_id'))->first();
+        $row = TempLogisticTransfer::where('id',session('session_logistic_transfer_id'))->first();
         if(!$row){
-            return redirect()->route('loutput.index');
+            return redirect()->route('ltransfer.index');
         }
-        return view('logistic.output_form_new',[
+        return view('logistic.transfer_form_new',[
             'row' => $row,
         ]);
     }
@@ -74,16 +75,16 @@ class LogisticTransferController extends Controller
                         }
                         DB::transaction(function () use($request) {
                             // TEMPORAL -- Creando cabecera ------------------------------------------------
-                            $header = new TempLogisticOutput();
+                            $header = new TempLogisticTransfer();
                             $header->fill($request->all());
                             $header->save();
-                            session(['session_logistic_output_id' => $header->id]);
+                            session(['session_logistic_transfer_id' => $header->id]);
                         });
-                        $data['url'] = route('loutput.create');
+                        $data['url'] = route('ltransfer.create');
                         return response()->json($data);
                         break;
             case 'item-add':
-                        $tline = new TempLogisticOutputLine();
+                        $tline = new TempLogisticTransferLine();
                         $tline->fill($request->all());
                         $tline->save();
                         $data['status']  = '100';
@@ -92,7 +93,7 @@ class LogisticTransferController extends Controller
                         return response()->json($data);
                         break;
             case 'item-edit':
-                        $tline = TempLogisticOutputLine::where('id',$request->line_id)->first();
+                        $tline = TempLogisticTransferLine::where('id',$request->line_id)->first();
                         $tline->fill($request->all());
                         $tline->save();
                         $data['status']  = '100';
@@ -103,17 +104,17 @@ class LogisticTransferController extends Controller
                         return response()->json($data);
                         break;
             case 'create':
-                        if(!session()->has('session_logistic_output_id')){
+                        if(!session()->has('session_logistic_transfer_id')){
                             abort(403,'Id temporal ya no existe');
                         }
-                        $temp = TempLogisticOutputLine::where('output_id',session('session_logistic_output_id'))->get();
+                        $temp = TempLogisticTransferLine::where('transfer_id',session('session_logistic_transfer_id'))->get();
                         if($temp->isEmpty()){
                             return back()->with('error','documento no tiene detalle');
                         }
                         DB::transaction(function () use($request) {
                             $hash = new Hashids(env('APP_HASH'));
-                            $temp = TempLogisticOutput::where('id',session('session_logistic_output_id'))->first();
-                            $header = new WhLOutput();
+                            $temp = TempLogisticTransfer::where('id',session('session_logistic_transfer_id'))->first();
+                            $header = new Whltransfer();
                             $header->fill($temp->toArray());
                             $header->dateacct   = $temp->datetrx;
                             $header->serial     = auth()->user()->get_serial($temp->sequence_id);
@@ -122,13 +123,13 @@ class LogisticTransferController extends Controller
                             $header->token = $hash->encode($header->id);
                             $header->save();
                             foreach($temp->lines  as $tline){
-                                $line = new WhLOutputLine();
+                                $line = new WhltransferLine();
                                 $line->fill($tline->toArray());
-                                $line->output_id = $header->id;
+                                $line->transfer_id = $header->id;
                                 $line->save();
                             }
                         });
-                        return redirect()->route('loutput.index')->with('message','Documento creado');
+                        return redirect()->route('ltransfer.index')->with('message','Documento creado');
                         break;            
         }
     }
@@ -142,10 +143,10 @@ class LogisticTransferController extends Controller
     public function show($id)
     {
         if($id == 'pdf'){
-            if(!session()->has('session_logistic_output_id_pdf')){
-                return redirect()->route('loutput.index');
+            if(!session()->has('session_logistic_transfer_id_pdf')){
+                return redirect()->route('ltransfer.index');
             }
-            $row = WhLOutput::where('token',session('session_logistic_output_id_pdf'))->first();  
+            $row = Whltransfer::where('token',session('session_logistic_transfer_id_pdf'))->first();  
             $filename = 'salida_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
             $pdf = PDF::loadView('logistic.output_pdf', ['row' => $row]);
             return $pdf->download($filename);
@@ -153,8 +154,8 @@ class LogisticTransferController extends Controller
             if(auth()->user()->grant($this->module)->isread == 'N'){
                 return back()->with('error','No tienes privilegio para ver');
             }
-            session(['session_logistic_output_id_pdf' => $id]);
-            $row = WhLOutput::where('token',$id)->first();
+            session(['session_logistic_transfer_id_pdf' => $id]);
+            $row = Whltransfer::where('token',$id)->first();
             return view('logistic.output_show',['row' => $row]);
         }
     }
@@ -169,7 +170,7 @@ class LogisticTransferController extends Controller
     {        
         $data['status'] = 100;
         $data['messages'] = 'OK';
-        $item = TempLogisticOutputLine::where('id',$id)->first();
+        $item = TempLogisticTransferLine::where('id',$id)->first();
         if(!$item){
             $data['status'] = 101;
             $data['message'] = 'ID ya no existe en el detalle';
@@ -201,7 +202,7 @@ class LogisticTransferController extends Controller
     public function destroy($id)
     {
         $data['status'] = 100;
-        $row = TempLogisticOutputLine::where('id',$id)->first();
+        $row = TempLogisticTransferLine::where('id',$id)->first();
         if(!$row){
             $data['status'] = 101;
             $data['message'] = 'El registro no existe, o ya fue eliminado';
