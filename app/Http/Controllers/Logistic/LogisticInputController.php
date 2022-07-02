@@ -84,35 +84,29 @@ class LogisticInputController extends Controller
                         $data['url'] = route('linput.create');
                         return response()->json($data);
                         break;
-            case 'item':
-
+            case 'item-add':
                         $tline = new TempLogisticInputLine();
                         $tline->fill($request->all());
                         $tline->save();
-
                         $data['status']  = '100';
                         $data['message'] = 'Producto agregado';
-                        $data['tr_item']  = view('logistic.input_form_list_item',['item' => $tline])->render();                    
+                        $data['tr_item']  = view('logistic.input_form_list_item',['item' => $tline])->render();
+                        return response()->json($data);
+                        break;
+            case 'item-edit':
+                        $tline = TempLogisticInputLine::where('id',$request->line_id)->first();
+                        $tline->fill($request->all());
+                        $tline->save();
+                        $data['status']  = '100';
+                        $data['tr_item']  = view('logistic.input_form_list_item',['item' => $tline])->render();
+                        $data['modeline'] = 'edit';
+                        $data['item'] = $tline->toArray();
+                        $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
                         return response()->json($data);
                         break;
             case 'new': 
                         DB::transaction(function () use($request) {
-                            $hash = new Hashids(env('APP_HASH'));
-                            $source = TempHeader::where('session',session('session_logistic_input_id'))->first();
-                            $target = new WhPInvoice();
-                            //$target->fill($source->toArray());
-                            $target->fill($request->all());
-                            $target->bpartner_id  = $source->bpartner_id;
-                            $target->dateinvoiced = $source->datetrx;
-                            $target->dateacct     = $request->dateacct;
-                            $target->period       = \Carbon\Carbon::parse($request->dateacct)->format('Ym');
-                            $target->amountbase   = $this->cleanData($request->amountbase);
-                            $target->amountgrand  = $source->amountbase + $source->amountexo + $source->amounttax;
-                            $target->amountopen   = $source->amountgrand;
-                            $target->save();
-                            $target->token = $hash->encode($target->id);
-                            $target->docstatus = 'C';
-                            $target->save();
+                             
                         });
                         return redirect()->route('pinvoice.index');
                         break;            
@@ -137,8 +131,18 @@ class LogisticInputController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {        
+        $data['status'] = 100;
+        $data['messages'] = 'OK';
+        $item = TempLogisticInputLine::where('id',$id)->first();
+        if(!$item){
+            $data['status'] = 101;
+            $data['message'] = 'ID ya no existe en el detalle';
+        }else{
+            $data['item'] = $item->toArray();
+            $data['product'] = "{$item->product->productcode} - {$item->product->productname}"; 
+        }
+        return response()->json($data);
     }
 
     /**
@@ -161,6 +165,16 @@ class LogisticInputController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $row = TempLogisticInputLine::where('id',$id)->first();
+        if(!$row){
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe, o ya fue eliminado';
+        }else{
+            $row->delete();
+            $data['message'] = 'Registro eliminado';
+            $data['id'] = $id;
+        }
+        return response()->json($data);
     }
 }

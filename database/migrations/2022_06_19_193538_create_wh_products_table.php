@@ -76,25 +76,48 @@ class CreateWhProductsTable extends Migration
             'um_id' => 1,
             'token' => $hash->encode(7),
         ]);
-        $row->create([
-            'productcode' => '1006',
-            'productname' => 'RESINA POLICLARK UG400 CILINDRO 220KG',
-            'family_id' => 1,
-            'line_id' => 1,
-            'um_id' => 1,
-            'token' => $hash->encode(8),
-        ]);
-        $row->create([
-            'productcode' => '1007',
-            'productname' => 'RESINA PREACELERADA RLMT400 CILINDRO 220KG                                                                                                                                                                                       ',
-            'family_id' => 1,
-            'line_id' => 1,
-            'um_id' => 1,
-            'token' => $hash->encode(8),
-        ]);
+        
+        $row->create($this->item('RESINA POLYCLARK UG500 CILINDRO 220KG'));
+        $row->create($this->item('RESINA PREACELERA RLMT400 CILINDRO 220KG'));
+        $row->create($this->item('JERSEY 80 ALGONDON 30/1 CRUDO'));
+        $row->create($this->item('JERSEY 80 MELANGE 30/1 CRUDO'));
+        $row->create($this->item('JERSEY 80 POLYCOTON 30/1 CRUDO'));
+        $row->create($this->item('JERSEY 90 ALGONDON 30/1 CRUDO'));
+        $row->create($this->item('JERSEY 90 MELANGE 30/1 CRUDO'));
+        $row->create($this->item('JERSEY 90 POLYCOTON 30/1 CRUDO'));
+        $row->create($this->item('GAMUZA 80 POLYCOTON 30/1 CRUDO'));
+        $row->create($this->item('GAMUZA 80 ALGODON 30/1 CRUDO'));
+        $row->create($this->item('GAMUZA 80 MELANGE 30/1 CRUDO'));
+        
+        $row->create($this->item('GAMUZA 90 ALGODON 30/1 PATO BB'));
+        $row->create($this->item('GAMUZA 90 ALGODON 30/1 ROJO'));
+        $row->create($this->item('GAMUZA 90 ALGODON 30/1 AZUL'));
+        $row->create($this->item('GAMUZA 90 ALGODON 30/1 MARINO'));
+
+        $row->create($this->item('HILADO 50/1 PIMA'));
+        $row->create($this->item('HILADO 30/1 POLYALGODON'));
+        $row->create($this->item('HILADO 30/1 ALGODON'));
+        $row->create($this->item('HILADO 24/1 ALGODON'));
+        $row->create($this->item('HILADO 12/1 ALGODON'));
+        $row->create($this->item('HILADO 10/1 ALGODON'));
+        $row->create($this->item('HILADO 30/1 MELANGE'));
+        $row->create($this->item('HILADO 24/1 MELANGE'));
+        $row->create($this->item('HILADO 12/1 MELANGE'));
+        $row->create($this->item('HILADO 10/1 MELANGE'));
 
     }
 
+    private function item($d){
+        $hash = new Hashids(env('APP_HASH'));
+        return [
+            'productcode' => WhProduct::orderBy('productcode','desc')->first()->productcode + 1,
+            'productname' => $d,
+            'family_id' => 1,
+            'line_id' => 1,
+            'um_id' => 1,
+            'token' => $hash->encode(WhProduct::all()->count('id') + 1),
+        ];
+    }
     /**
      * Reverse the migrations.
      *

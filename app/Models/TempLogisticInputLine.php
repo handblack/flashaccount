@@ -14,4 +14,8 @@ class TempLogisticInputLine extends Model
         'quantity',
         'package',
     ];
+
+    public function product(){
+        return $this->hasOne(WhProduct::class,'id','product_id');
+    }
 }

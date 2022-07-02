@@ -56,7 +56,7 @@
                 <ul class="nav">
                     <li>                        
                         <div class="card-tools pull-right">
-                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem">
+                            <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
                                 <i class="fas fa-plus-square fa-fw"></i>
                                 &nbsp;Agregar    
                             </a>
@@ -98,13 +98,14 @@
             </div>
         </div>
         <div class="card-body p-0">
-            <table class="table mb-0">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
                 <thead>
                     <tr>
                         <th width="100">Codigo</th>
                         <th>Producto</th>
-                        <th width="100">Cantidad</th>
-                        <th width="100">UM</th>
+                        <th width="100" class="text-right">Cantidad</th>
+                        <th width="30">UM</th>
+                        <th width="100" class="text-right">PACK</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -114,6 +115,14 @@
                         @include('logistic.input_form_list_item',['item' => $item])
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr class="border-top">
+                        <th coslpan="2">3 - Items</th>
+                        <td class="text-right"></td>
+                        <td></td>
+                        <td class="text-right"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -144,7 +153,7 @@ $(function(){
                     if(data.modeline == 'edit'){
                         $('#tr-' + data.item.id).replaceWith(data.tr_item);   
                     }else{
-                        $('#table-order-items tbody tr').last().after(data.tr_item);   
+                        $('#table-products tbody tr').last().after(data.tr_item);   
                     }
                     toastr.success(data.message);
                     $(this).trigger("reset");
@@ -159,21 +168,12 @@ $(function(){
         });
     });
     // Muestra el elemento de ADDITEMS
-    $('#typeproduct').change(function(){
-        if($(this).val() == 'P'){
-            $('#productcode').show();
-            //$('#product_id').attr('required', true);
-            $('#servicename').hide();
-            $('#servicename2').attr('required', false);
-            $('#um_id').prop( "disabled", true);
-        }else{
-            $('#productcode').hide();
-            //$('#product_id').attr('required', false);
-            $('#servicename').show();
-            $('#servicename2').attr('required', true);
-            $('#um_id').prop( "disabled", false);
-        }        
-    })
+    $('.btn-add-product').click(function(){
+        $('#mode').val('item-add');
+        $('#package').val('');
+        $('#quantity').val('');
+        $('.select2-product').val('').trigger('change');
+    });
     
     // SocioNegocio
     $('.select2-bpartner').select2({
@@ -220,21 +220,16 @@ function edit_item(t){
     let id = $(t).data('id');
     let url = $(t).data('url');
     $.get(url,function(data){
-        $('#modeline').val('edit');
-        $('#itemtoken').val(data.item.token);
-        $("#typeproduct").val(data.item.typeproduct).change();        
-        if(data.item.typeproduct == 'P'){
-            if ($('#product_id').find("option[value='" + data.item.product_id + "']").length) {
-                $('#product_id').val(data.item.product_id).trigger('change');
-            } else { 
-                var newOption = new Option(data.item.productcode + ' - ' + data.item.description, data.item.product_id, true, true);
-                $('#product_id').append(newOption).trigger('change');
-            } 
-        }else{
-            $('#servicename2').val(data.item.description)
-        }
-        $('#qty').val(data.item.qty);
-        $('#priceunit').val(data.item.priceunit);
+        $('#mode').val('item-edit');
+        $('#line_id').val(data.item.id);       
+        $('#package').val(data.item.package);
+        $('#quantity').val(data.item.quantity);
+        if ($('#product_id').find("option[value='" + data.item.product_id + "']").length) {
+            $('#product_id').val(data.item.product_id).trigger('change');
+        } else { 
+            var newOption = new Option(data.product, data.item.product_id, true, true);
+            $('#product_id').append(newOption).trigger('change');
+        } 
     });    
     $('#ModalAddItem').modal('show');
 }
@@ -243,6 +238,7 @@ function close_modal_item(){
     $('#ModalAddItem').modal('hide');
     $('#modeline').val('new');
 }
+
 function delete_item(t){     
     if (confirm('Estas seguro en eliminar?')) {
         let id = $(t).data('id');
@@ -251,10 +247,14 @@ function delete_item(t){
         console.log(url);
         $.post(url,{_method:'delete'})
         .done(function(data){
+            console.log(data);
             if(data.status == 100){
-                $('#tr-'+id).remove();
+                $('#tr-'+data.id).remove();
+                console.log('#tr-'+id);
                 toastr.success('Elemento eliminado');
+                console.log('if');
             }else{
+                console.log('else');
                 toastr.error(data.message);
             }
         });

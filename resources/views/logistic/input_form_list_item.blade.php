@@ -1,5 +1,9 @@
 <tr id="tr-{{ $item->id }}">
-    
+    <td>{{ $item->product->productcode }}</td>
+    <td>{{ $item->product->productname }}</td>
+    <td class="text-right border-left">{{ $item->quantity }}</td>
+    <td class="">{{ $item->product->um->shortname }}</td>
+    <td class="text-right">{{ $item->package }}</td>
     <td class="text-right border-left">
         <a href="#" 
             onclick="edit_item(this);"

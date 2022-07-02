@@ -2,7 +2,8 @@
     <form action="{{ route('linput.store') }}" id="form-add-item" method="POST">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <input type="hidden" name='input_id' value="{{ session('session_logistic_input_id') }}">
-        <input type="hidden" name="mode" value="item">
+        <input type="hidden" name="mode"  value="item" id="mode">
+        <input type="hidden" name="line_id"  value="" id="line_id">
         <div class="modal-content">
             <div class="modal-header bg-light pt-3 pb-3">
                  Agregar Producto
@@ -17,17 +18,17 @@
                 <div class="row mt-2" id="productcode">
                     <div class="col-md-2">
                         <label class="mb-1">Cantidad</label>
-                        <input type="text" name="quantity" class="form-control">
+                        <input type="text" name="quantity" id="quantity"  class="form-control">
                     </div>
                     <div class="col-md-2">
                         <label class="mb-1">Paquetes</label>
-                        <input type="text" name="package" class="form-control">
+                        <input type="text" name="package" id="package" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Agregar</button>
+                <button type="submit" class="btn btn-primary"> Grabar</button>
             </div>
         </div>
     </form>
