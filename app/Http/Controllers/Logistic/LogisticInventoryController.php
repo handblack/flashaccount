@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\TempLogisticInventory;
 use App\Models\TempLogisticInventoryLine;
 use App\Models\WhLInventory;
+use App\Models\WhLInventoryLine;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class LogisticInventoryController extends Controller
 {
@@ -39,7 +42,7 @@ class LogisticInventoryController extends Controller
         if(!$row){
             return redirect()->route('linventory.index');
         }
-        return view('logistic.transfer_form_new',[
+        return view('logistic.inventory_form_new',[
             'row' => $row,
         ]);
     }
@@ -95,7 +98,7 @@ class LogisticInventoryController extends Controller
                         $tline->save();
                         $data['status']  = '100';
                         $data['message'] = 'Producto agregado';
-                        $data['tr_item']  = view('logistic.transfer_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('logistic.inventory_form_list_item',['item' => $tline])->render();
                         return response()->json($data);
                         break;
             case 'item-edit':
@@ -103,7 +106,7 @@ class LogisticInventoryController extends Controller
                         $tline->fill($request->all());
                         $tline->save();
                         $data['status']  = '100';
-                        $data['tr_item']  = view('logistic.transfer_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('logistic.inventory_form_list_item',['item' => $tline])->render();
                         $data['modeline'] = 'edit';
                         $data['item'] = $tline->toArray();
                         $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
@@ -129,7 +132,7 @@ class LogisticInventoryController extends Controller
                             $header->token = $hash->encode($header->id);
                             $header->save();
                             foreach($temp->lines  as $tline){
-                                $line = new WhlinventoryLine();
+                                $line = new WhLInventoryLine();
                                 $line->fill($tline->toArray());
                                 $line->inventory_id = $header->id;
                                 $line->save();

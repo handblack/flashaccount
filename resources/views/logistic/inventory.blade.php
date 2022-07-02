@@ -60,7 +60,7 @@
                         <tr>
                             <td width="100">{{ $item->datetrx }}</td>
                             <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>                            
-                            <td>{{ $item->warehouse->shortname }} <i class="fas fa-random fa-fw"></i>  {{ $item->warehouseto->shortname }}</td>
+                            <td>{{ $item->warehouse->shortname }}</td>
                             <td>{{ $item->glosa }}</td>
                             <td class="text-right">
                                 <a href="{{ route('linventory.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>

@@ -19,6 +19,7 @@ class CreateWhLInventoriesTable extends Migration
             $table->date('dateacct')->nullable();
             $table->foreignId('warehouse_id');
             $table->foreignId('sequence_id');
+            $table->foreignId('reason_id');
             $table->string('serial',5);
             $table->string('documentno',15);
             $table->string('glosa',200)->nullable();

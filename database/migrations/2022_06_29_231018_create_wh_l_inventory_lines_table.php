@@ -21,7 +21,7 @@ class CreateWhLInventoryLinesTable extends Migration
             $table->unsignedBigInteger('inventory_id');
             $table->foreign('inventory_id')
                                     ->references('id')
-                                    ->on('temp_logistic_transfers')
+                                    ->on('wh_l_inventories')
                                     ->cascadeOnDelete();
             $table->timestamps();
         });

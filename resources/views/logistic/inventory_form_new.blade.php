@@ -7,7 +7,7 @@
                 <div class="col-sm-4">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('ltransfer.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('linventory.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -20,7 +20,7 @@
                 <div class="col-sm-8">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Transferencia entre almacenes
+                            Logistica / Inventario de almacenes
                             &nbsp;
                             <i class="fas fa-warehouse fa-fw"></i>
                         </h1>
@@ -46,14 +46,14 @@
                         <span class="nav-link active">
                             <i class="far fa-edit fa-fw"></i>
                             <span class="d-none d-sm-inline-block">
-                                Parte TRANSFERENCIA
+                                Parte INVENTARIO
                             </span>
                         </span>
                     </li>
                 </ul>
             </div>
             <div class="card-tools">
-                <form action="{{ route('ltransfer.store') }}" method="POST">
+                <form action="{{ route('linventory.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="mode" value="create">
                     <ul class="nav">
@@ -75,18 +75,13 @@
         </div>
         <div class="card-body border-bottom">
             <div class="row">
-                <div class="col-3">
+                <div class="col-6">
                     <dl class="mb-0">
-                        <dt>Almacen Origen</dt>
+                        <dt>Almacen</dt>
                         <dd>{{ $row->warehouse->warehousename }}</dd>
                     </dl>
                 </div>
-                <div class="col-3">
-                    <dl class="mb-0">
-                        <dt>Almacen Destino</dt>
-                        <dd>{{ $row->warehouseto->warehousename }}</dd>
-                    </dl>
-                </div>
+                 
                 <div class="col-2">
                     <dl class="mb-0">
                         <dt>Fecha</dt>
@@ -122,7 +117,7 @@
                 <tbody>
                     <tr class="d-none"></tr>  
                     @foreach ($row->lines as $item)
-                        @include('logistic.transfer_form_list_item',['item' => $item])
+                        @include('logistic.inventory_form_list_item',['item' => $item])
                     @endforeach
                 </tbody>
                 <tfoot>
@@ -139,7 +134,7 @@
 
 <!-- MODAL -->
 <div class="modal" id="ModalAddItem"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    @include('logistic.transfer_form_additem')
+    @include('logistic.inventory_form_additem')
 </div>
 @endsection
 
