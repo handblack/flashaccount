@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Logistic;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempLogisticTransfer;
+use App\Models\TempLogisticTransferLine;
 use App\Models\WhLTransfer;
+use App\Models\WhLTransferLine;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PDF;
 
 class LogisticTransferController extends Controller
 {
@@ -58,9 +63,9 @@ class LogisticTransferController extends Controller
                         $data['status'] = '100';
                         $data['message'] = 'Seleccione los documentos a consignar';
                         $fields = [
-                            'bpartner_id',                
                             'datetrx',
                             'warehouse_id',
+                            'warehouse_to_id',
                             'sequence_id',
                             'reason_id',
                         ];
@@ -70,6 +75,11 @@ class LogisticTransferController extends Controller
                                 $data['message'] = "Falta especificar {$field}";
                             }
                         }
+                        // otras validacion ----------------------------------------------------------------
+                        if($request->warehouse_id == $request->warehouse_to_id){
+                            $data['status'] = '102';
+                            $data['message'] = 'El almacen origen y destino no deben el mismo';
+                        } 
                         if(!($data['status'] == '100')){
                             return response()->json($data);
                         }
@@ -89,7 +99,7 @@ class LogisticTransferController extends Controller
                         $tline->save();
                         $data['status']  = '100';
                         $data['message'] = 'Producto agregado';
-                        $data['tr_item']  = view('logistic.output_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('logistic.transfer_form_list_item',['item' => $tline])->render();
                         return response()->json($data);
                         break;
             case 'item-edit':
@@ -97,7 +107,7 @@ class LogisticTransferController extends Controller
                         $tline->fill($request->all());
                         $tline->save();
                         $data['status']  = '100';
-                        $data['tr_item']  = view('logistic.output_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('logistic.transfer_form_list_item',['item' => $tline])->render();
                         $data['modeline'] = 'edit';
                         $data['item'] = $tline->toArray();
                         $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
@@ -123,11 +133,12 @@ class LogisticTransferController extends Controller
                             $header->token = $hash->encode($header->id);
                             $header->save();
                             foreach($temp->lines  as $tline){
-                                $line = new WhltransferLine();
+                                $line = new WhLTransferLine();
                                 $line->fill($tline->toArray());
                                 $line->transfer_id = $header->id;
                                 $line->save();
                             }
+                            $temp->delete();
                         });
                         return redirect()->route('ltransfer.index')->with('message','Documento creado');
                         break;            
@@ -147,8 +158,8 @@ class LogisticTransferController extends Controller
                 return redirect()->route('ltransfer.index');
             }
             $row = Whltransfer::where('token',session('session_logistic_transfer_id_pdf'))->first();  
-            $filename = 'salida_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
-            $pdf = PDF::loadView('logistic.output_pdf', ['row' => $row]);
+            $filename = 'trasnfer_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('logistic.transfer_pdf', ['row' => $row]);
             return $pdf->download($filename);
         }else{
             if(auth()->user()->grant($this->module)->isread == 'N'){
@@ -156,7 +167,7 @@ class LogisticTransferController extends Controller
             }
             session(['session_logistic_transfer_id_pdf' => $id]);
             $row = Whltransfer::where('token',$id)->first();
-            return view('logistic.output_show',['row' => $row]);
+            return view('logistic.transfer_show',['row' => $row]);
         }
     }
 

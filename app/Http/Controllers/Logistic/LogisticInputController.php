@@ -133,6 +133,7 @@ class LogisticInputController extends Controller
                                 $line->input_id = $header->id;
                                 $line->save();
                             }
+                            $temp->delete();
                         });
                         return redirect()->route('linput.index')->with('message','Documento creado');
                         break;            
@@ -152,7 +153,7 @@ class LogisticInputController extends Controller
                 return redirect()->route('linput.index');
             }
             $row = WhLInput::where('token',session('session_logistic_input_pdf_id'))->first();  
-            $filename = 'parte_ingreso_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $filename = 'ingreso_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
             $pdf = PDF::loadView('logistic.input_pdf', ['row' => $row]);
             return $pdf->download($filename);
         }else{

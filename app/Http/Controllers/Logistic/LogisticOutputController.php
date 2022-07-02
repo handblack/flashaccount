@@ -133,6 +133,7 @@ class LogisticOutputController extends Controller
                                 $line->output_id = $header->id;
                                 $line->save();
                             }
+                            $temp->delete();
                         });
                         return redirect()->route('loutput.index')->with('message','Documento creado');
                         break;            

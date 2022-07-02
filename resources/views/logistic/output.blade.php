@@ -130,7 +130,7 @@
                                 <label class="mb-0">Serie</label>
                                 <select name="sequence_id" class="form-control" required>
                                     <option value="" selected disabled>-- SELECCION --</option>
-                                    @foreach (auth()->user()->sequence('LIN') as $item)
+                                    @foreach (auth()->user()->sequence('LOU') as $item)
                                         <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
                                     @endforeach
                                 </select>

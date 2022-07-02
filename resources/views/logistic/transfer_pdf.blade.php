@@ -41,7 +41,7 @@
 </header>
 
 <main>
-Parte de SALIDA
+transferencia
     <table>
         <thead>
             <tr>

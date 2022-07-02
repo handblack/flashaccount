@@ -116,7 +116,7 @@
                 <tbody>
                     <tr class="d-none"></tr>  
                     @foreach ($row->lines as $item)
-                        @include('logistic.input_form_list_item',['item' => $item])
+                        @include('logistic.output_form_list_item',['item' => $item])
                     @endforeach
                 </tbody>
                 <tfoot>

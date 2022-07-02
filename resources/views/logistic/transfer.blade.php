@@ -50,7 +50,6 @@
                     <tr>
                         <th>FECHA</th>
                         <th>DOCUMENTO</th>
-                        <th>SOCIO NEGOCIO</th>
                         <th>ALMACEN</th>
                         <th>GLOSA</th>
                         <th></th>
@@ -60,9 +59,8 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="100">{{ $item->datetrx }}</td>
-                            <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
-                            <td>{{ $item->bpartner->bpartnercode .' - ' . $item->bpartner->bpartnername }}</td>
-                            <td>{{ $item->warehouse->shortname }}</td>
+                            <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>                            
+                            <td>{{ $item->warehouse->shortname }} <i class="fas fa-random fa-fw"></i>  {{ $item->warehouseto->shortname }}</td>
                             <td>{{ $item->glosa }}</td>
                             <td class="text-right">
                                 <a href="{{ route('ltransfer.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
@@ -95,7 +93,14 @@
                         <h5 class="modal-title" id="exampleModalLabel">TRANSFERENCIA</h5>
                         <div class="card-tools float-sm-right">
                             <div class="btn-group">
-
+                                <select name="sequence_id" class="form-control form-control-sm" required>
+                                    <option value="" selected disabled>-- SELECCION --</option>
+                                    @foreach (auth()->user()->sequence('LTR') as $item)
+                                        <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="btn-group">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">
@@ -130,20 +135,16 @@
                                 </select>
                             </div>                          
                         </div>
+                        
                         <div class="row mt-2">
-                                                     
-                            <div class="col-md-4">
-                                <label class="mb-0">Serie</label>
-                                <select name="sequence_id" class="form-control" required>
-                                    <option value="" selected disabled>-- SELECCION --</option>
-                                    @foreach (auth()->user()->sequence('LIN') as $item)
-                                        <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
-                                    @endforeach
+                            <div class="col-md-12">
+                                <label class="mb-0">Motivo</label>
+                                <select name="reason_id" id="" class="form-control" required>
+                                    <option value="1">MOTIVO TRASNFERENCIA</option>
                                 </select>
                             </div>                           
                         </div>
                         <div class="row mt-2">
-                                                    
                             <div class="col-md-12">
                                 <label class="mb-0">Glosa</label>
                                 <input type="text" name="glosa" class="form-control">

@@ -15,9 +15,11 @@ class CreateTempLogisticTransfersTable extends Migration
     {
         Schema::create('temp_logistic_transfers', function (Blueprint $table) {
             $table->id();
+            $table->date('datetrx');
             $table->foreignId('warehouse_id');
             $table->foreignId('warehouse_to_id');
             $table->foreignId('sequence_id');
+            $table->foreignId('reason_id');
             $table->string('glosa',200)->nullable();
             $table->timestamps();
         });
