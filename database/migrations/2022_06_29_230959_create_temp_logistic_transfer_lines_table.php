@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWhLTransferLinesTable extends Migration
+class CreateTempLogisticTransferLinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWhLTransferLinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wh_l_transfer_lines', function (Blueprint $table) {
+        Schema::create('temp_logistic_transfer_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
             $table->float('quantity',12,5)->default(0)->nullable();
@@ -21,7 +21,7 @@ class CreateWhLTransferLinesTable extends Migration
             $table->unsignedBigInteger('transfer_id');
             $table->foreign('transfer_id')
                                     ->references('id')
-                                    ->on('wh_l_transfers')
+                                    ->on('temp_logistic_transfers')
                                     ->cascadeOnDelete();
             $table->timestamps();
         });
@@ -34,6 +34,6 @@ class CreateWhLTransferLinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wh_l_transfer_lines');
+        Schema::dropIfExists('temp_logistic_transfer_lines');
     }
 }

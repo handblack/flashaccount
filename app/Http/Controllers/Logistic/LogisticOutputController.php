@@ -19,7 +19,7 @@ class LogisticOutputController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    private $module = 'logistic.input';
+    private $module = 'logistic.output';
     public function index()
     {
         $result = WhLOutput::orderBy('id','desc')
