@@ -16,7 +16,8 @@ class CreateWhLInputLinesTable extends Migration
         Schema::create('wh_l_input_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
-            $table->float('quantity');
+            $table->float('quantity',12,5)->default(0)->nullable();
+            $table->float('package',12,5)->default(0)->nullable();
             $table->unsignedBigInteger('input_id');
             $table->foreign('input_id')
                                     ->references('id')

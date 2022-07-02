@@ -53,20 +53,24 @@
                 </ul>
             </div>
             <div class="card-tools">
-                <ul class="nav">
-                    <li>                        
-                        <div class="card-tools pull-right">
-                            <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
-                                <i class="fas fa-plus-square fa-fw"></i>
-                                &nbsp;Agregar    
-                            </a>
-                            <button class="btn btn-primary btn-sm">
-                                <i class="fas fa-save fa-fw"></i>
-                                &nbsp;Procesar
-                            </button>
-                        </div>
-                    </li>
-                </ul>
+                <form action="{{ route('linput.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="mode" value="create">
+                    <ul class="nav">
+                        <li>                        
+                            <div class="card-tools pull-right">
+                                <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
+                                    <i class="fas fa-plus-square fa-fw"></i>
+                                    &nbsp;Agregar    
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-save fa-fw"></i>
+                                    &nbsp;Procesar
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
             </div>
         </div>
         <div class="card-body border-bottom">

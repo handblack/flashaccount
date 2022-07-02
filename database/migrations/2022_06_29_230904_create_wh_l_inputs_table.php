@@ -19,8 +19,13 @@ class CreateWhLInputsTable extends Migration
             $table->date('dateacct')->nullable();
             $table->foreignId('bpartner_id');
             $table->foreignId('warehouse_id');
+            $table->foreignId('sequence_id');
             $table->foreignId('reason_id');
-            $table->enum('docstatus',['O','C','A'])->default('O');
+            $table->string('serial',5);
+            $table->string('documentno',15);
+            $table->string('glosa',200)->nullable();
+            $table->enum('docstatus',['O','C','A'])->default('C');
+            $table->string('token',60)->nullable();
             $table->timestamps();
         });
     }

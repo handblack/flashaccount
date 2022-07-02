@@ -39,6 +39,49 @@
     </section>
 
 
+    
+@endsection
+
+@section('container')
+    <div class="card mb-0">
+        <div class="card-body p-0">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>DOCUMENTO</th>
+                        <th>SOCIO NEGOCIO</th>
+                        <th>ALMACEN</th>
+                        <th>GLOSA</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($result as $item)
+                        <tr>
+                            <td width="100">{{ $item->datetrx }}</td>
+                            <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
+                            <td>{{ $item->bpartner->bpartnercode .' - ' . $item->bpartner->bpartnername }}</td>
+                            <td>{{ $item->warehouse->shortname }}</td>
+                            <td>{{ $item->glosa }}</td>
+                            <td class="text-right">
+                                <a href="{{ route('linput.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="10">No hay registros</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 pt-2">
+            {{ $result->links('layouts.paginate') }}
+        </div>
+    </div>
     {{-- MODALES --}}
     <!-- NUEVO -->
     <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
@@ -126,8 +169,6 @@
         </div>
     </div>
 @endsection
-
-
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>

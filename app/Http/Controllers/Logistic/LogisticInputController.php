@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\TempLogisticInput;
 use App\Models\TempLogisticInputLine;
 use App\Models\WhLInput;
+use App\Models\WhLInputLine;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class LogisticInputController extends Controller
 {
@@ -17,9 +19,11 @@ class LogisticInputController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'logistic.input';
     public function index()
     {
-        $result = WhLInput::paginate(env('PAGINATE_LOGISTIC',5));
+        $result = WhLInput::orderBy('id','desc')
+            ->paginate(env('PAGINATE_LOGISTIC',5));
         return view('logistic.input',[
             'result' => $result,
         ]);
@@ -104,11 +108,33 @@ class LogisticInputController extends Controller
                         $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
                         return response()->json($data);
                         break;
-            case 'new': 
+            case 'create':
+                        if(!session()->has('session_logistic_input_id')){
+                            abort(403,'Id temporal ya no existe');
+                        }
+                        $temp = TempLogisticInputLine::where('input_id',session('session_logistic_input_id'))->get();
+                        if($temp->isEmpty()){
+                            return back()->with('error','documento no tiene detalle');
+                        }
                         DB::transaction(function () use($request) {
-                             
+                            $hash = new Hashids(env('APP_HASH'));
+                            $temp = TempLogisticInput::where('id',session('session_logistic_input_id'))->first();
+                            $header = new WhLInput();
+                            $header->fill($temp->toArray());
+                            $header->dateacct   = $temp->datetrx;
+                            $header->serial     = auth()->user()->get_serial($temp->sequence_id);
+                            $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
+                            $header->save();
+                            $header->token = $hash->encode($header->id);
+                            $header->save();
+                            foreach($temp->lines  as $tline){
+                                $line = new WhLInputLine();
+                                $line->fill($tline->toArray());
+                                $line->input_id = $header->id;
+                                $line->save();
+                            }
                         });
-                        return redirect()->route('pinvoice.index');
+                        return redirect()->route('linput.index')->with('message','Documento creado');
                         break;            
         }
     }
@@ -121,7 +147,22 @@ class LogisticInputController extends Controller
      */
     public function show($id)
     {
-        //
+        if($id == 'pdf'){
+            if(!session()->has('session_logistic_input_pdf_id')){
+                return redirect()->route('linput.index');
+            }
+            $row = WhLInput::where('token',session('session_logistic_input_pdf_id'))->first();  
+            $filename = 'parte_ingreso_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('logistic.input_pdf', ['row' => $row]);
+            return $pdf->download($filename);
+        }else{
+            if(auth()->user()->grant($this->module)->isread == 'N'){
+                return back()->with('error','No tienes privilegio para ver');
+            }
+            session(['session_logistic_input_pdf_id' => $id]);
+            $row = WhLInput::where('token',$id)->first();
+            return view('logistic.input_show',['row' => $row]);
+        }
     }
 
     /**
