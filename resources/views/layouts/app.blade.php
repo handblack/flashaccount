@@ -41,7 +41,9 @@
         }
         */
         .table thead {
-            background-color: rgba(0,0,0,.03);
+            /*background-color: rgba(0,0,0,.03);*/
+            background-color:  #343a40c4;
+            color:#dbdee3;
             border-bottom: 2px solid #dee2e6;
         }
 

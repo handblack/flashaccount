@@ -22,6 +22,12 @@ class LogisticInputController extends Controller
     private $module = 'logistic.input';
     public function index()
     {
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
         $result = WhLInput::orderBy('id','desc')
             ->paginate(env('PAGINATE_LOGISTIC',5));
         return view('logistic.input',[

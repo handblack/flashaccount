@@ -13,5 +13,7 @@ class WhCInvoiceLine extends Model
         'product_id',
         'description',
         'um_id',
+        'tax_id',
+        'typeoperation_id',
     ];
 }

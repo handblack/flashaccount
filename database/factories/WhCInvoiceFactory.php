@@ -23,7 +23,7 @@ class WhCInvoiceFactory extends Factory
     {
         $faker = Faker::create();
         //Seria y Nro -------------------------------------------------------------------------------
-        $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+        $dti = WhDocType::whereIn('shortname',['FAC'])->get('id')->toArray();
         $sid = WhSequence::whereIn('doctype_id',$dti)->get()->toArray();
         $sid = $faker->randomElement($sid);
         $sequence = WhSequence::where('id',$sid)->first();
@@ -35,7 +35,9 @@ class WhCInvoiceFactory extends Factory
         // importes -------------------------------------------------------------------------------
         $amount = $faker->randomFloat(2,200,90000);
         return [
+            'period' => date("Ym"), 
             'dateinvoiced' => $faker->dateTime(), 
+            'doctype_id'   => $sequence->doctype->id,
             'bpartner_id'  => $faker->randomElement(WhBpartner::where('bpartnercode','LIKE','C%')->get()->toArray())['id'],
             'currency_id'  => $faker->randomElement(WhCurrency::get()->toArray())['id'],          
             'warehouse_id' => $faker->randomElement(WhWarehouse::get()->toArray())['id'],          

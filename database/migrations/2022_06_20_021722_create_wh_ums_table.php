@@ -17,6 +17,7 @@ class CreateWhUmsTable extends Migration
         Schema::create('wh_ums', function (Blueprint $table) {
             $table->id();
             $table->string('umname',30);
+            $table->string('umcode',30)->nullable();
             $table->string('shortname',15);
             $table->enum('isactive',['Y','N'])->default('Y');
             $table->timestamps();
@@ -25,6 +26,11 @@ class CreateWhUmsTable extends Migration
         $row->create([
             'umname' => 'UNIDAD',
             'shortname' => 'UND',
+            'isactive' => 'Y',
+        ]);
+        $row->create([
+            'umname' => 'KILOS',
+            'shortname' => 'KG',
             'isactive' => 'Y',
         ]);
     }
