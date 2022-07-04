@@ -14,8 +14,19 @@ class CreateTrigger extends Migration
      */
     public function up()
     {
-        #$procedure = " ";    
-        #DB::unprepared($procedure);
+        $sql = "
+CREATE TRIGGER `cinvoice_upate_amount` AFTER INSERT ON `wh_c_invoice_lines` 
+FOR EACH ROW BEGIN
+	UPDATE wh_c_invoices SET 
+		amountbase = ( SELECT SUM(amountbase) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
+		amountexo = ( SELECT SUM(amountexo) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
+		amounttax = ( SELECT SUM(amounttax) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
+		amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
+		amountopen = amountgrand
+	WHERE id = NEW.invoice_id;
+END;
+";    
+        DB::unprepared($sql);
         // ------------------------------------------------------------------------------------------------------------------------------------
     }
 
@@ -26,6 +37,6 @@ class CreateTrigger extends Migration
      */
     public function down()
     {
-        #DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`");
+        DB::unprepared("DROP TRIGGER `cinvoice_upate_amount`;");
     }
 }

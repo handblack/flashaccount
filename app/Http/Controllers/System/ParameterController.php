@@ -21,6 +21,7 @@ class ParameterController extends Controller
         ['id' => '3', 'name' => 'Ventas - Tipo de Operacion'],        
         ['id' => '4', 'name' => 'Bancos - Ingresos - Medios de Pago'],        
         ['id' => '5', 'name' => 'Bancos - Egresos - Medios de Pago'],        
+        ['id' => '7', 'name' => 'Catalogo 09 - Tipo de Nota de Credito Electronica'],        
     ];
 
     public function index(Request $request){

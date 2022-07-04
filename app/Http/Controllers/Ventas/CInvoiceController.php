@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class CInvoiceController extends Controller
 {
@@ -35,7 +36,7 @@ class CInvoiceController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhCInvoice::orderBy('id','desc')
+        $result = WhCInvoice::orderBy('dateinvoiced','desc')
             ->paginate(env('PAGINATE_INVOICE',20));
         $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
         $sequence = WhSequence::whereIn('doctype_id',$dti)->get();
@@ -95,6 +96,14 @@ class CInvoiceController extends Controller
                                 $data['status'] = '101';
                                 $data['message'] = "Falta especificar {$field}";
                             }
+                        }
+                        if($request->typepayment == 'R'){
+                            if($request->dateinvoiced == $request->datedue){
+                                $data['status'] = '101';
+                                $data['message'] = "En credito las fecha de vencimiento debe ser distinta a la de emision";
+                            }
+                        }else{
+                            $request->datedue = $request->dateinvoiced;
                         }
                         if(!($data['status'] == '100')){
                             return response()->json($data);
@@ -194,7 +203,7 @@ class CInvoiceController extends Controller
                 return redirect()->route('cinvoice.index');
             }
             $row = WhCInvoice::where('token',session('session_ventas_invoice_id'))->first();  
-            $filename = 'ingreso_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $filename = 'invoice_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
             $pdf = PDF::loadView('ventas.invoice_pdf', ['row' => $row]);
             return $pdf->download($filename);
         }else{

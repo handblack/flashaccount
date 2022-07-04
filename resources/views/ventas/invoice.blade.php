@@ -44,6 +44,35 @@
 
 @section('container')
     <div class="card mb-0">
+        <div class="card-header pt-2 pb-2">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="text" name="dateinit" value="" class="form-control float-right" id="dateinit">
+                    </div>
+                </div>
+                 
+                
+               
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                        </div>
+                        <input type="text" name="op_q" value="" class="form-control" placeholder="Empresa/RUC/Codigo">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
         <div class="card-body p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
@@ -53,7 +82,7 @@
                         <th>DOCUMENTO</th>
                         <th>SOCIO NEGOCIO</th>
                         <th>ALMACEN</th>
-                        <th>GLOSA</th>
+                        <th class="text-right">IMPORTE</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -65,7 +94,10 @@
                             <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
                             <td>{{ $item->bpartner->bpartnercode .' - ' . $item->bpartner->bpartnername }}</td>
                             <td>{{ $item->warehouse->shortname }}</td>
-                            <td>{{ $item->glosa }}</td>
+                            <td class="text-right">
+                                {{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}
+                                <small>{{ $item->currency->currencyiso }}</small>
+                            </td>
                             <td class="text-right">
                                 <a href="{{ route('cinvoice.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
                             </td>

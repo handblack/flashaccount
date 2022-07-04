@@ -47,7 +47,15 @@ class CreateWhParamsTable extends Migration
         $row->create(['group_id' => 6,'identity' => 'SIN RETENCION']);        
         $row->create(['group_id' => 6,'shortname' => 'D','identity' => 'DETRACCION']);        
         $row->create(['group_id' => 6,'shortname' => 'P','identity' => 'PERCEPCION']);        
-        $row->create(['group_id' => 6,'shortname' => 'R','identity' => 'RETENCION']);        
+        $row->create(['group_id' => 6,'shortname' => 'R','identity' => 'RETENCION']); 
+        $row->create(['group_id' => 7,'value'=>'01','identity' => 'ANULACION DE LA OPERACION']); 
+        $row->create(['group_id' => 7,'value'=>'04','identity' => 'DESCUENTO GLOBAL']); 
+        $row->create(['group_id' => 7,'value'=>'05','identity' => 'DESCUENTO POR ITEM']); 
+        $row->create(['group_id' => 7,'value'=>'06','identity' => 'DEVOLUCION TOTAL']); 
+        $row->create(['group_id' => 7,'value'=>'07','identity' => 'DEVOLUCION POR ITEM']); 
+        $row->create(['group_id' => 7,'value'=>'08','identity' => 'BONIFICACION']); 
+        $row->create(['group_id' => 7,'value'=>'09','identity' => 'DISMINUCION EN EL VALOR']); 
+        
     }
 
     /**

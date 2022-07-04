@@ -169,7 +169,7 @@
                     <a href="{{ route('cinvoice.index') }}"
                         class="nav-link {{ request()->is('ventas/invoice/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Comprobantes CPE</p>
+                        <p>Comprobantes de Venta</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_ventas_credit')? 'd-none': '' }}">
@@ -177,6 +177,13 @@
                         class="nav-link  {{ request()->is('ventas/credit/move*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Nota de Credito</p>
+                    </a>
+                </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_ventas_debit')? 'd-none': '' }}">
+                    <a href="{{ route('cdebit.index') }}"
+                        class="nav-link  {{ request()->is('ventas/debit/move*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Nota de Debito</p>
                     </a>
                 </li>
             </ul>

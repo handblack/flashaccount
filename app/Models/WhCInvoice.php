@@ -41,7 +41,7 @@ class WhCInvoice extends Model
     }
 
     public function lines(){
-        return $this->hasOne(WhCInvoiceLine::class,'invoice_id','id');
+        return $this->hasMany(WhCInvoiceLine::class,'invoice_id','id');
     }
 
 }

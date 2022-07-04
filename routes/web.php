@@ -115,6 +115,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
     //NOTA CREDITO
     Route::resource('/ventas/credit/manager',CCreditController::class, ['names' => 'ccredit']);
+    //NOTA DEBITO
+    Route::resource('/ventas/debit/manager',CCreditController::class, ['names' => 'cdebit']);
     /*
         ---------------------------------------------------------------------------------------------------------------
         Compras - Proveedores
