@@ -16,4 +16,8 @@ class WhCInvoiceLine extends Model
         'tax_id',
         'typeoperation_id',
     ];
+
+    public function product(){
+        return $this->hasOne(WhProduct::class,'id','product_id');
+    }
 }

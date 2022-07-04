@@ -189,12 +189,22 @@ class CInvoiceController extends Controller
      */
     public function show($id)
     {
-        $header = WhCInvoice::where('token',$id)->first();
-        $lines = WhCInvoiceLine::where('invoice_id',$header->id)->get();
-        return view('ventas.invoice_show',[
-            'header' => $header,
-            'lines'  => $lines,    
-        ]);
+        if($id == 'pdf'){
+            if(!session()->has('session_ventas_invoice_id')){
+                return redirect()->route('cinvoice.index');
+            }
+            $row = WhCInvoice::where('token',session('session_ventas_invoice_id'))->first();  
+            $filename = 'ingreso_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('ventas.invoice_pdf', ['row' => $row]);
+            return $pdf->download($filename);
+        }else{
+            if(auth()->user()->grant($this->module)->isread == 'N'){
+                return back()->with('error','No tienes privilegio para ver');
+            }
+            session(['session_ventas_invoice_id' => $id]);
+            $row = WhCInvoice::where('token',$id)->first();
+            return view('ventas.invoice_show',['row' => $row]);
+        }
     }
 
     /**

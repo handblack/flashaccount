@@ -67,7 +67,7 @@
                             <td>{{ $item->warehouse->shortname }}</td>
                             <td>{{ $item->glosa }}</td>
                             <td class="text-right">
-                                <a href="{{ route('linput.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
+                                <a href="{{ route('cinvoice.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
                             </td>
                         </tr>
                     @empty
