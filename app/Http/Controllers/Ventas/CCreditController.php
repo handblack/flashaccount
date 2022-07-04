@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempCCredit;
 use App\Models\WhCCredit;
 use App\Models\WhDocType;
 use App\Models\WhSequence;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CCreditController extends Controller
 {
@@ -72,11 +75,11 @@ class CCreditController extends Controller
                         $data['message'] = 'Seleccione los documentos a consignar';
                         $fields = [
                             'bpartner_id',                
-                            'dateinvoiced',
-                            'datedue',
-                            'typepayment',
-                            'warehouse_id',
-                            'sequence_id',
+                            'ref_dateinvoiced',
+                            'ref_sequence_id',
+                            'ref_doctype_id',
+                            'ref_serial',
+                            'ref_documentno',
                             
                         ];
                         foreach($fields as $field){
@@ -98,7 +101,7 @@ class CCreditController extends Controller
                         }
                         DB::transaction(function () use($request) {
                             // TEMPORAL -- Creando cabecera ------------------------------------------------
-                            $header = new TempCInvoice();
+                            $header = new TempCCredit();
                             $header->fill($request->all());
                             $header->dateacct   = $request->dateinvoiced;
                             $header->period     = Carbon::parse($request->dateinvoiced)->format('Ym');

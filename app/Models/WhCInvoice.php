@@ -40,8 +40,13 @@ class WhCInvoice extends Model
         return $this->hasOne(WhSequence::class,'id','sequence_id');
     }
 
+    public function doctype(){
+        return $this->hasOne(WhDocType::class,'id','doctype_id');
+    }
+
     public function lines(){
         return $this->hasMany(WhCInvoiceLine::class,'invoice_id','id');
     }
+
 
 }

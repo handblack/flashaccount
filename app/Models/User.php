@@ -157,4 +157,8 @@ class User extends Authenticatable
         return WhBankAccount::all();
     }
 
+    public function parameter($group_id){
+        return WhParam::where('group_id',$group_id)->get();
+    }
+
 }
