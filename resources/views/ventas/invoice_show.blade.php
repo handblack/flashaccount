@@ -12,7 +12,7 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
                         </a>
                     </div>
 
@@ -29,7 +29,7 @@
                                 <a class="dropdown-item" href="#">Elminar Comprobante</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#modal-create-credit">Copiar Nota de Credito (devolucion)</a>
+                                    data-target="#modal-create-credit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Credito (devolucion)</a>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                 <input type="hidden" name="mode" value="temp">
                 <input type="hidden" name="invoice_id" value="{{ $row->id }}">
                 <input type="hidden" name="bpartner_id" value="{{ $row->bpartner_id }}">
-                <input type="hidden" name="ref_dateinvoiced" value="{{ $row->dateinvoiced }}">
+                <input type="hidden" name="ref_datetrx" value="{{ $row->dateinvoiced }}">
                 <input type="hidden" name="ref_sequence_id" value="{{ $row->sequence_id }}">
                 <input type="hidden" name="ref_doctype_id" value="{{ $row->doctype_id }}">
                 <input type="hidden" name="ref_serial" value="{{ $row->serial }}">
@@ -142,12 +142,13 @@
             </form>
         </div>
     </div>
+     
 @endsection
 
 @section('script')
 <script>
 $(function(){
-    // PaymentModal
+
     let fai = $('#form-create-credit');
     fai.submit(function (e) {
         e.preventDefault();
@@ -170,3 +171,4 @@ $(function(){
     });
 });
 </script>
+@endsection

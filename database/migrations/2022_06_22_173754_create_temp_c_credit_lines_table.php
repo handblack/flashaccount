@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWhCCreditLinesTable extends Migration
+class CreateTempCCreditLinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWhCCreditLinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wh_c_credit_lines', function (Blueprint $table) {
+        Schema::create('temp_c_credit_lines', function (Blueprint $table) {
             $table->id();
             $table->enum('typeproduct',['S','P']);
             $table->foreignId('typeoperation_id');
@@ -34,7 +34,7 @@ class CreateWhCCreditLinesTable extends Migration
             $table->unsignedBigInteger('credit_id');
             $table->foreign('credit_id')
                                     ->references('id')
-                                    ->on('wh_c_credits')
+                                    ->on('temp_c_credits')
                                     ->cascadeOnDelete();
             $table->timestamps();
         });
@@ -47,6 +47,6 @@ class CreateWhCCreditLinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wh_c_credit_lines');
+        Schema::dropIfExists('temp_c_credit_lines');
     }
 }

@@ -15,17 +15,20 @@ class CreateWhCCreditsTable extends Migration
     {
         Schema::create('wh_c_credits', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('invoice_id');
             $table->foreignId('bpartner_id');
-            $table->foreignId('ref_datetrx');
+            $table->date('ref_datetrx');
             $table->foreignId('ref_sequence_id');
             $table->foreignId('ref_doctype_id');
             $table->string('ref_serial',5);
             $table->string('ref_documentno',10);
-
-            $table->date('datetrx');
+            $table->date('datecredit');
             $table->date('dateacct')->nullable();
             $table->date('datedue')->nullable();
+            $table->string('period',6);
             $table->enum('typepayment',['C','R'])->default('C'); // C=Contado  / R=Credito
+            $table->foreignId('sequence_id');
+            $table->foreignId('doctype_id');
             $table->string('serial',5)->nullable();
             $table->string('documentno',15)->nullable();
             $table->foreignId('currency_id')->nullable();

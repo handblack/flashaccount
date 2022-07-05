@@ -81,7 +81,6 @@
                         <th>FECHA</th>
                         <th>DOCUMENTO</th>
                         <th>SOCIO NEGOCIO</th>
-                        <th>ALMACEN</th>
                         <th class="text-right">IMPORTE</th>
                         <th></th>
                     </tr>
@@ -90,10 +89,10 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="100">{{ $item->period }}</td>
-                            <td width="100">{{ $item->dateinvoiced }}</td>
+                            <td width="100">{{ $item->datecredit }}</td>
                             <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
                             <td>{{ $item->bpartner->bpartnercode .' - ' . $item->bpartner->bpartnername }}</td>
-                            <td>{{ $item->warehouse->shortname }}</td>
+                            
                             <td class="text-right">
                                 {{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}
                                 <small>{{ $item->currency->currencyiso }}</small>

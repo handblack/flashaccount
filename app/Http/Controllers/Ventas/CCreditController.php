@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempCCredit;
+use App\Models\TempCCreditLine;
 use App\Models\WhCCredit;
+use App\Models\WhCCreditLine;
 use App\Models\WhDocType;
+use App\Models\WhParam;
 use App\Models\WhSequence;
+use App\Models\WhTax;
 use Carbon\Carbon;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +32,7 @@ class CCreditController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhCCredit::orderBy('dateinvoiced','desc')
+        $result = WhCCredit::orderBy('datecredit','desc')
             ->paginate(env('PAGINATE_INVOICE',20));
         $dti = WhDocType::whereIn('shortname',['NCR'])->get('id')->toArray();
         $sequence = WhSequence::whereIn('doctype_id',$dti)->get();
@@ -44,14 +49,14 @@ class CCreditController extends Controller
      */
     public function create()
     {
-        if(!session('session_ventas_invoice_id')){
-            return redirect()->route('cinvoice.index');
+        if(!session('session_ventas_credit_id')){
+            return redirect()->route('ccredit.index');
         }        
-        $row = TempCInvoice::where('id',session('session_ventas_invoice_id'))->first();
+        $row = TempCCredit::where('id',session('session_ventas_credit_id'))->first();
         if(!$row){
-            return redirect()->route('cinvoice.index');
+            return redirect()->route('ccredit.index');
         }
-        return view('ventas.invoice_form_new',[
+        return view('ventas.credit_form_new',[
             'row' => $row,
             'taxes' => WhTax::all(),
             'typeoperation' => WhParam::where('group_id',3)->get(),
@@ -75,12 +80,11 @@ class CCreditController extends Controller
                         $data['message'] = 'Seleccione los documentos a consignar';
                         $fields = [
                             'bpartner_id',                
-                            'ref_dateinvoiced',
+                            'ref_datetrx',
                             'ref_sequence_id',
                             'ref_doctype_id',
                             'ref_serial',
                             'ref_documentno',
-                            
                         ];
                         foreach($fields as $field){
                             if(!$request->has($field)){
@@ -102,69 +106,77 @@ class CCreditController extends Controller
                         DB::transaction(function () use($request) {
                             // TEMPORAL -- Creando cabecera ------------------------------------------------
                             $header = new TempCCredit();
-                            $header->fill($request->all());
-                            $header->dateacct   = $request->dateinvoiced;
+                            $header->fill($request->all());                            
+                            $header->dateacct   = $request->datecredit;
                             $header->period     = Carbon::parse($request->dateinvoiced)->format('Ym');
                             $header->save();
                             $header->doctype_id = $header->sequence->doctype->id;
                             $header->serial     = $header->sequence->serial; 
+                            $header->currency_id = $header->invoice->currency_id;
                             $header->save();
-                            session(['session_ventas_invoice_id' => $header->id]);
+                            // Detalle ---------------------------------------------------------------------                            
+                            foreach($header->invoice->lines as $line){
+                                $tline = new TempCCreditLine();
+                                $tline->fill($line->toArray());
+                                $tline->credit_id = $header->id;
+                                $tline->invoiceline_id = $line->id;
+                                $tline->save();
+                            }
+                            session(['session_ventas_credit_id' => $header->id]);
                         });
-                        $data['url'] = route('cinvoice.create');
+                        $data['url'] = route('ccredit.create');
                         return response()->json($data);
                         break;
             case 'item-add':
-                        $tline = new TempCInvoiceLine();
+                        $tline = new TempCCreditLine();
                         $this->item_calc($tline,$request);
                         $data['status']  = '100';
                         $data['message'] = 'Producto agregado';
-                        $data['tr_item']  = view('ventas.invoice_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('ventas.credit_form_list_item',['item' => $tline])->render();
                         return response()->json($data);
                         break;
             case 'item-edit':
-                        $tline = TempCInvoiceLine::where('id',$request->line_id)->first();
+                        $tline = TempCCreditLine::where('id',$request->line_id)->first();
                         $this->item_calc($tline,$request);
                         $data['status']  = '100';
-                        $data['tr_item']  = view('ventas.invoice_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('ventas.credit_form_list_item',['item' => $tline])->render();
                         $data['modeline'] = 'edit';
                         $data['item'] = $tline->toArray();
                         $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
                         return response()->json($data);
                         break;
             case 'create':
-                        if(!session()->has('session_ventas_invoice_id')){
+                        if(!session()->has('session_ventas_credit_id')){
                             abort(403,'Id temporal ya no existe');
                         }
-                        $temp = TempCInvoiceLine::where('invoice_id',session('session_ventas_invoice_id'))->get();
+                        $temp = TempCCreditLine::where('credit_id',session('session_ventas_credit_id'))->get();
                         if($temp->isEmpty()){
                             return back()->with('error','documento no tiene detalle');
                         }
                         DB::transaction(function () use($request) {
                             $hash = new Hashids(env('APP_HASH'));
-                            $temp = TempCInvoice::where('id',session('session_ventas_invoice_id'))->first();
-                            $header = new WhCInvoice();
+                            $temp = TempCCredit::where('id',session('session_ventas_credit_id'))->first();
+                            $header = new WhCCredit();
                             $header->fill($temp->toArray());
                             $header->dateacct   = $temp->datetrx;
+                            $header->period     = Carbon::parse($temp->datetrx)->format('Ym');
                             $header->serial     = auth()->user()->get_serial($temp->sequence_id);
                             $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
                             $header->token      = date("YmdHis");
-                            #$header->amountbase  = $request->quantity * $request->priceunit;        
                             $header->save();
                             $header->token      = $hash->encode($header->id);
-                            #$header->priceunittax = round(($header->tax->ratio / 100) * $header->priceunit,5) + $header->priceunit; 
-                            #$header->amounttax   = round(($header->tax->ratio / 100) * $header->amountbase,2);
-                            #$header->amountgrand = $header->amountbase + $header->amounttax;
                             $header->save();
                             foreach($temp->lines  as $tline){
-                                $line = new WhCInvoiceLine();
+                                $line = new WhCCreditLine();
                                 $line->fill($tline->toArray());
-                                $line->invoice_id = $header->id;
+                                $line->credit_id = $header->id;
                                 $line->save();
                             }
-                            $temp->delete();
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
                         });
-                        return redirect()->route('cinvoice.index')->with('message','Documento creado');
+                        return redirect()->route('ccredit.index')->with('message','Documento creado');
                         break;            
         }
     }

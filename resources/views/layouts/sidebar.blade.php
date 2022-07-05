@@ -174,14 +174,14 @@
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_ventas_credit')? 'd-none': '' }}">
                     <a href="{{ route('ccredit.index') }}"
-                        class="nav-link  {{ request()->is('ventas/credit/move*') ? 'active' : '' }}">
+                        class="nav-link  {{ request()->is('ventas/credit/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Nota de Credito</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_ventas_debit')? 'd-none': '' }}">
                     <a href="{{ route('cdebit.index') }}"
-                        class="nav-link  {{ request()->is('ventas/debit/move*') ? 'active' : '' }}">
+                        class="nav-link  {{ request()->is('ventas/debit/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Nota de Debito</p>
                     </a>
