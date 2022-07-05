@@ -68,7 +68,7 @@
         <div class="row p-3">
             <div class="col-md-6">
                 <label class="mb-0">Contraseña</label>
-                <input type="text" class="form-control" id="password" name="password" placeholder="Identificador del Equipo" value="{{ old('password',$row->password) }}" required>
+                <input type="text" class="form-control" id="password" name="password" placeholder="Identificador del Equipo" value="{{ old('password') }}" required>
             </div>
             <div class="col-md-6">
                 <label class="mb-0">Grupo</label>                
@@ -96,13 +96,4 @@
 @endsection
 
 
-@section('script')
-<script>
-
-@if ($errors->any())
-    @foreach ($errors->all() as $error)
-        toastr.success('{{ $error }}');
-    @endforeach
-@endif
-</script>
-@endsection
+ 

@@ -14,19 +14,21 @@ class CreateTrigger extends Migration
      */
     public function up()
     {
-        $sql = "
-CREATE TRIGGER `cinvoice_upate_amount` AFTER INSERT ON `wh_c_invoice_lines` 
+$sql = "
+CREATE TRIGGER `cinvoicelines_upate_amount` AFTER INSERT ON `wh_c_invoice_lines` 
 FOR EACH ROW BEGIN
-	UPDATE wh_c_invoices SET 
-		amountbase = ( SELECT SUM(amountbase) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
-		amountexo = ( SELECT SUM(amountexo) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
-		amounttax = ( SELECT SUM(amounttax) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
-		amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_invoice_lines WHERE invoice_id = NEW.invoice_id),
-		amountopen = amountgrand
-	WHERE id = NEW.invoice_id;
+    CALL pax_update_amount('invoice',NEW.id);
 END;
 ";    
-        DB::unprepared($sql);
+DB::unprepared($sql);
+// ------------------------------------------------------------------------------------------------------------------------------------
+$sql = "
+CREATE TRIGGER `ccreditlines_update_amount` AFTER INSERT ON `wh_c_credit_lines` 
+FOR EACH ROW BEGIN
+    CALL pax_update_amount('credit',NEW.id);
+END;
+";    
+DB::unprepared($sql);
         // ------------------------------------------------------------------------------------------------------------------------------------
     }
 
@@ -37,6 +39,7 @@ END;
      */
     public function down()
     {
-        DB::unprepared("DROP TRIGGER `cinvoice_upate_amount`;");
+        DB::unprepared("DROP TRIGGER `cinvoicelines_upate_amount`;");
+        DB::unprepared("DROP TRIGGER `ccreditlines_update_amount`;");
     }
 }

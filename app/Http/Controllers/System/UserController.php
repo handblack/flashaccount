@@ -115,7 +115,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'isactive' => 'required',
+            'current_team_id' => 'required',
+        ]);
+        $row = User::where('token',$id)->first();
+        $row->name = $request->name;
+        $row->email = $request->email;
+        $row->isactive = $request->isactive;
+        $row->current_team_id = $request->current_team_id;
+        if($request->password){
+            $row->password = Hash::make($request->password);
+        }
+        $row->save();
+        return redirect()->route('user.index');
     }
 
     /**

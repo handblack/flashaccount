@@ -22,14 +22,15 @@
                                 data-toggle="dropdown">
                                 Opciones&nbsp;&nbsp;
                                 <span class="sr-only">Toggle Dropdown</span>
-
                             </button>
                             <div class="dropdown-menu" role="menu">
                                 <a class="dropdown-item" href="#">Anular Comprobante</a>
                                 <a class="dropdown-item" href="#">Elminar Comprobante</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#modal-create-credit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Credito (devolucion)</a>
+                                    data-target="#modal-create-credit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Credito</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#modal-create-debit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Debito</a>
                             </div>
                         </div>
                     </div>

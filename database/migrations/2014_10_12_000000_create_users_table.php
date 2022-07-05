@@ -37,7 +37,7 @@ class CreateUsersTable extends Migration
         $row->isactive   = 'Y';
         $row->current_team_id = 1;
         $row->save();
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $row = new User();
             $row->name     = "test{$i}.debug";
             $row->email    = "usuario{$i}@miasoftware.net";
