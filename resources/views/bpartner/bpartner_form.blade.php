@@ -58,6 +58,32 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-3">
+                <label class="mb-0">Tipo de Persona</label>
+                <div class="input-group mb-0">
+                    
+                    <select name="sequence_id" class="form-control console" required="" style="width:80px;">
+                        <option value="" selected="" disabled="">----</option>
+                        <option value="" selected="" disabled="">PERSONA NATURAL</option>
+                        <option value="" selected="" disabled="">PERSONA JURIDICA</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="col-md-3">
+                <label class="mb-0">Documento y Nro</label>
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend pr-1">
+                        <select name="sequence_id" class="form-control console" required="" style="width:80px;">
+                            <option value="" selected="" disabled="">----</option>
+                                                                            <option value="3">RUC / REGISTRO UNICO &nbsp;&nbsp;</option>
+                                                                            <option value="4">DNI / DOCUMENTO NACIONAL &nbsp;&nbsp;</option>
+                                                                    </select>
+                    </div>
+                    <input type="text" name="documentno" class="form-control console" placeholder="" aria-describedby="basic-addon1">
+                </div>
+                
+            </div>
+            <div class="col-md-3">
                 <label class="mb-0">Codigo SN</label>
                 <input type="text" name="bpartnercode" class="form-control" value="{{ $row->bpartnercode }}" placeholder="Codigo" maxlength="12">
             </div>
@@ -89,4 +115,9 @@
 </div>
 </form>    
     
+@endsection
+
+@section('script')
+<script>
+</script>
 @endsection
