@@ -40,43 +40,57 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="{{ ($mode == 'edit') ? 'PUT' : '' }}">
     <input type="hidden" name="token" value="{{ $row->token }}">
-    <ul class="nav nav-tabs d-print-none" id="mainTabs" role="tablist">
-        <li class="nav-item active">
-            <a href="#" class="nav-link active" data-toggle="tab" role="tab" aria-controls="ListAlmacen">                
-                @if($mode =='new')
-                    <i class="far fa-edit fa-fw"></i>
-                @else
-                    <i class="fas fa-edit fa-fw"></i>
-                @endif
-                <span class="d-none d-sm-inline-block">Almacen [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong></span>                
-            </a>
-        </li>        
-    </ul>
-    <div class="rounded-bottom border-left border-right border-bottom bg-white">
-        <div class="row p-3">
-            <div class="col-md-12 mb-2">
-                <label class="mb-0">Identificador</label>
-                <input type="text" class="form-control" id="warehousename" name="warehousename" placeholder="Nombre del almacen" value="{{ $row->warehousename }}" required>
-            </div>
-         
-            <div class="col-md-9">
-                <label class="mb-0">Nombre Corto</label>
-                <input type="text" class="form-control" id="shortname" name="shortname" placeholder="Nombre Abreviado" value="{{ $row->shortname }}">
-            </div>
-            <div class="col-md-3">
-                <label class="mb-0">Estado</label>
-                <select name="isactive" id="isactive" class="form-control">
-                    <option value="Y" @if($row->isactive=='Y') selected @endif>ACTIVO</option>
-                    <option value="N" @if($row->isactive=='N') selected @endif>DESACTIVADO</option>
-                </select>
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" >
+                <li class="nav-item">
+                    <span class="nav-link active">
+                        @if($mode =='new')
+                            <i class="far fa-edit fa-fw"></i>
+                        @else
+                            <i class="fas fa-edit fa-fw"></i>
+                        @endif
+                        <span class="d-none d-sm-inline-block">
+                            Almacen [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                        </span>                
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-8">
+                    <label class="mb-0">Identificador</label>
+                    <input type="text" class="form-control" id="warehousename" name="warehousename" placeholder="Nombre del almacen" value="{{ $row->warehousename }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="mb-0">Nombre Corto</label>
+                    <input type="text" class="form-control" id="shortname" name="shortname" placeholder="Nombre Abreviado" value="{{ $row->shortname }}">
+                </div>
             </div>
         </div>
         <div class="card-footer">
+            <div class="btn-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Estado</span>
+                    </div>
+                    <select name="isactive" id="isactive" class="form-control">
+                        <option value="Y" {{ ($row->isactive == 'Y') ? 'selected' : '' }}>ACTIVO</option>
+                        <option value="N" {{ ($row->isactive == 'N') ? 'selected' : '' }}>DESACTIVADO</option>
+                    </select>
+                </div>
+            </div>
             <div class="float-right">
-                <a href="{{ route('warehouse.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>
+                <a href="{{ route('warehouse.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
             </div>
         </div>
     </div>
+
+
+
+ 
 </form>
 @endsection

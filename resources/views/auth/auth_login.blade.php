@@ -1,71 +1,97 @@
 @extends('layouts.home')
 
-
-@section('style')
-<style>    
-
-
-
-</style>    
-@endsection
-
 @section('container')
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-    <a class="navbar-brand" href="" onclick="location.reload();">
-        <img src="{{ asset('images/AdminLTELogo.png') }}" width="30" height="30" class="align-top" alt="FacturaScripts"/>
-        FacturaScripts 2022.06
-    </a>
-    <ul class="nav navbar-nav mr-auto"></ul>
-    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-        <li class="nav-item">
-        </li>
-    </ul>
-</nav>
-<div class="container">
-    <br>
-    <form action="{{ route('auth_login_form') }}" method="POST" class="form-signin">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <input type="email"   id="floatingInputGrid" placeholder="name@example.com" value="{{ old('email') }}" name="email" required>
-        <input type="password"  id="floatingInputGrid" placeholder="name@example.com" value="{{ old('email') }}" name="password" required>
-        <button type="submit" >Go</button>
-    </form>
-</div>
-
-
-
-@endsection
-
-
-
-@section('script')
-<script>
-
-$(function(){
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    <style>
+        html,
+        body {
+            height: 100%;
         }
-    });
-    $('.delete-record').click(function(e){
-        e.preventDefault()
-        if (confirm('Estas seguro en eliminar?')) {
-            let id = $(this).data('id');
-            let url = $(this).data('url');
-            $.post(url,{_method:'delete'})
-            .done(function(data){
-                if(data.status == 100){
-                    $('#tr-'+id).remove();
-                    toastr.success('Elemento eliminado');
-                }else{
-                    toastr.error(data.message);
-                }
-            });
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
         }
-    });
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
 
 
-});
 
+    </head>
 
-</script>
-@endsection
+    <body class="text-center">
+
+        <main class="form-signin">
+            <form action="{{ route('auth_login_form') }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <span style="font-size:5em;"><i class="fas fa-sign-in-alt"></i> </span>
+
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
+                    <label for="floatingPassword">Password</label>               
+                </div>
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Ingresar</button>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </form>
+        </main>
+    @endsection
+
+    @section('script')
+        <script>
+            @if (\Session::has('error'))
+                toastr.error('{{ session('error') }}');
+            @endif
+
+            @if (\Session::has('message'))
+                toastr.success('{{ session('message') }}');
+            @endif
+
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastr.error('{{ $error }}');
+                @endforeach
+            @endif
+        </script>
+    @endsection

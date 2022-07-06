@@ -23,7 +23,7 @@ class WarehouseController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhWarehouse::paginate(env('PAGINATE_WAREHOUSE',2));
+        $result = WhWarehouse::paginate(env('PAGINATE_WAREHOUSE',20));
         return view('system.warehouse',[
             'result' => $result, 
         ]);

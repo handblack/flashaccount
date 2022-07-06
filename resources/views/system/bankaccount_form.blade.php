@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="float-right">
-                <a href="{{ route('bankaccount.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>
+                <a href="{{ route('bankaccount.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
             </div>
         </div>

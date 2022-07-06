@@ -39,14 +39,14 @@
                     <a href="{{ route('currency.index') }}"
                         class="nav-link  {{ request()->is('system/currency*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Configuracion Divisas</p>
+                        <p>Divisas</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_system_warehouse')? 'd-none': '' }}">
                     <a href="{{ route('warehouse.index') }}"
                         class="nav-link  {{ request()->is('system/warehouse*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Configuracion Almacenes</p>
+                        <p>Almacenes</p>
                     </a>
                 </li>
                 
@@ -54,7 +54,7 @@
                     <a href="{{ route('sequence.index') }}"
                         class="nav-link  {{ request()->is('system/sequence*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Configuracion Series</p>
+                        <p>Series / Secuenciador</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_system_bankaccount')? 'd-none': '' }}">

@@ -46,7 +46,7 @@
 @endsection
 
 @section('container')
-    <div class="card">
+    <div class="card mb-1">
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
@@ -77,7 +77,7 @@
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row pt-1 pb-2">
         <div class="col-md-12 mt-0">
             {{ $result->links('layouts.paginate') }}
         </div>
