@@ -2,6 +2,7 @@
 
 use App\Models\WhBankAccount;
 use App\Models\WhParam;
+use Hashids\Hashids;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,35 +26,23 @@ class CreateWhBankAccountsTable extends Migration
             $table->string('token',60);
             $table->timestamps();
         });
+        $hash = new Hashids();
         $row = new WhBankAccount();
         $row->create([
             'bank_id' => WhParam::where('shortname','BCP')->where('group_id',2)->first()->id,
             'accountno' => '191-12345678-0-00',
             'shortname' => 'BCP SOLES',
             'currency_id' => 1,
-            'token' => md5(1),
+            'token' => $hash->encode(WhBankAccount::all()->count('id') + 1),
         ]);
         $row->create([
             'bank_id' => WhParam::where('shortname','BCP')->where('group_id',2)->first()->id,
             'accountno' => '191-12345678-1-00',
             'shortname' => 'BCP DOLARES',
             'currency_id' => 2,
-            'token' => md5(2),
+            'token' => $hash->encode(WhBankAccount::all()->count('id') + 1),
         ]);
-        $row->create([
-            'bank_id' => WhParam::where('shortname','EFEC')->where('group_id',2)->first()->id,
-            'accountno' => 'CAJA_1',
-            'shortname' => 'C1',
-            'currency_id' => 1,
-            'token' => md5(3),
-        ]);
-        $row->create([
-            'bank_id' => WhParam::where('shortname','EFEC')->where('group_id',2)->first()->id,
-            'accountno' => 'CAJA_2',
-            'shortname' => 'C2',
-            'currency_id' => 1,
-            'token' => md5(4),
-        ]);
+  
     }
 
     /**

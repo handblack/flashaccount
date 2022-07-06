@@ -29,7 +29,7 @@ class BPartnerController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhBpartner::paginate(env('PAGINATE_BPARTNER',10));
+        $result = WhBpartner::paginate(env('PAGINATE_BPARTNER',30));
         return view('bpartner.bpartner',[
             'result' => $result, 
         ]);

@@ -78,8 +78,8 @@
         </table>
     </div>
 </div>
-<div class="row pt-0 pb-2">
-    <div class="col-md-12 pt-2">
+<div class="row pt-1 pb-2">
+    <div class="col-md-12">
         {{ $result->links('layouts.paginate') }}
     </div>
 </div>
