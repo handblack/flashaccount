@@ -78,7 +78,7 @@
         </table>
     </div>
 </div>
-<div class="row">
+<div class="row pt-0 pb-2">
     <div class="col-md-12 pt-2">
         {{ $result->links('layouts.paginate') }}
     </div>

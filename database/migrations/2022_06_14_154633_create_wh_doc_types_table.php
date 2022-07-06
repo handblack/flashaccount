@@ -28,7 +28,7 @@ class CreateWhDocTypesTable extends Migration
         $row = new WhDocType();
         // Documento de Identidad
         $row->create([
-            'doctypename' => 'REGISTRO UNICO DEL CONTRIBUYENTE',
+            'doctypename' => 'REGISTRO UNICO DEL CONTRIBUYENTE',            
             'shortname'   => 'RUC',
             'isactive'    => 'Y',
             'group_id'    => 1,

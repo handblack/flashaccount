@@ -7,6 +7,7 @@ use App\Models\TempBpartnerMove;
 use App\Models\TempInvoiceOpen;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
+use App\Models\WhDocType;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,12 +47,19 @@ class BPartnerController extends Controller
         }
         $row = new WhBpartner();
         $row->token = old('token',date("His"));
+        $row->typeperson = old('typeperson');
+        $row->legalperson = old('legalperson');
         $row->bpartnercode = old('bpartnercode');
         $row->bpartnername = old('bpartnername');
+        $row->doctype_id = old('doctype_id');
+        $row->documentno = old('documentno');
+        $row->lastname = old('lastname');
+        $dt = WhDocType::where('group_id',1)->get();
         return view('bpartner.bpartner_form',[
             'mode' => 'new',
             'row'  => $row,
             'url'  => route('bpartner.store'),
+            'doctype' => $dt, 
         ]);
     }
 
@@ -65,14 +73,26 @@ class BPartnerController extends Controller
     {
         if(!auth()->user()->grant($this->module)->iscreate == 'N'){
             return back()->with('error','No tienes privilegio para crear');
-        }
+        }        
         $request->validate([
             'bpartnercode' => 'required|unique:wh_bpartners,bpartnercode',
-            'bpartnername' => 'required',
+            'doctype_id' => 'required',
+            'documentno' => 'required',
+            'typeperson' => 'required',
+            'legalperson' => 'required',         
         ]);
+        if($request->legalperson == 'N'){
+            if(!$request->lastname){
+                return back()->with('error','Falta apellido paterno')->withInput();
+            }
+            if(!$request->prename){
+                return back()->with('error','Falta nombre del socio de negocio')->withInput();
+            }
+        }
         $hash = new Hashids(env('APP_HASH'));
         $row = new WhBpartner();
         $row->fill($request->all());        
+        $row->bpartnername = ($request->legalperson == 'J') ? $request->bpartnername : trim($request->lastname) .' '. trim($request->firstname) .', '. trim($request->prename);
         $row->save();
         $row->token = $hash->encode($row->id);
         $row->save();
@@ -102,10 +122,12 @@ class BPartnerController extends Controller
             return back()->with('error','No tienes privilegio para modificar');
         }
         $row = WhBpartner::where('token',$id)->first();
+        $dt = WhDocType::where('group_id',1)->get();
         return view('bpartner.bpartner_form',[
             'mode' => 'edit',
             'row'  => $row,
             'url'  => route('bpartner.update',$row->token),
+            'doctype' => $dt, 
         ]);
     }
 
@@ -121,12 +143,26 @@ class BPartnerController extends Controller
         if(auth()->user()->grant($this->module)->isupdate == 'N'){
             return back()->with('error','No tienes privilegio para modificar');
         }
+        #$request->validate([
+            #    'bpartnercode' => "required|unique:wh_bpartners,bpartnercode,{$request->bpartnercode}",            
+            #]);
+        $request->except(['bpartnercode','typeperson']);
         $request->validate([
-            'bpartnercode' => "required|unique:wh_bpartners,bpartnercode,{$request->bpartnercode}",
-            'bpartnername' => 'required',
+            'doctype_id' => 'required',
+            'documentno' => 'required',            
+            'legalperson' => 'required',         
         ]);
+        if($request->legalperson == 'N'){
+            if(!$request->lastname){
+                return back()->with('error','Falta apellido paterno')->withInput();
+            }
+            if(!$request->prename){
+                return back()->with('error','Falta nombre del socio de negocio')->withInput();
+            }
+        }
         $row = WhBpartner::where('token',$id)->first();
         $row->fill($request->all());
+        $row->bpartnername = ($request->legalperson == 'J') ? $request->bpartnername : trim($request->lastname) .' '. trim($request->firstname) .', '. trim($request->prename);
         $row->save();
         return redirect()->route('bpartner.index')->with('message','Registro actualizado');
     }

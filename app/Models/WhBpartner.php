@@ -11,6 +11,13 @@ class WhBpartner extends Model
     protected $fillable = [
         'bpartnercode',
         'bpartnername',
+        'doctype_id',
+        'documentno',
+        'typeperson',
+        'legalperson',
+        'lastname',
+        'firstname',
+        'prename',
         'token',
     ];
 }
