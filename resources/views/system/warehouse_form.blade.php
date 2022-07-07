@@ -1,38 +1,23 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-0">
-                <div class="col-sm-6">
-
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('warehouse.index') }}" title="Recargar">
-                            <i class="fas fa-list fa-fw" aria-hidden="true"></i>
-                            <span class="d-none d-lg-inline-block">Todos</span>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
-                        </a>
-                    </div>
-
-                    
-
-                </div>
-                <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Almacenes 
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-
-                        </h1>
-                    </div>
-                </div>
-
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-warehouse fa-fw"></i> Almacenes</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Sistema</li>
+                    <li class="breadcrumb-item">Almacenes</li>
+                </ol>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+    
 @endsection
 
 @section('container')
@@ -42,20 +27,39 @@
     <input type="hidden" name="token" value="{{ $row->token }}">
     <div class="card">
         <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" >
-                <li class="nav-item">
-                    <span class="nav-link active">
-                        @if($mode =='new')
+            <div class="card-title">
+
+                <ul class="nav nav-tabs card-header-tabs" >
+                    <li class="nav-item">
+                        <span class="nav-link active">
+                            @if($mode =='new')
                             <i class="far fa-edit fa-fw"></i>
-                        @else
+                            @else
                             <i class="fas fa-edit fa-fw"></i>
-                        @endif
-                        <span class="d-sm-inline-block">
-                            Almacen [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
-                        </span>                
-                    </span>
-                </li>
-            </ul>
+                            @endif
+                            <span class="d-sm-inline-block">
+                                Almacen [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                            </span>                
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-tools ">
+                    <ul class="nav">
+                        <li>                        
+                            <div class="card-tools pull-right">
+                                
+                                <a class="btn btn-sm btn-secondary" href="#" onclick="history.back()" title="Recargar">
+                                    <i class="fas fa-list fa-fw" aria-hidden="true"></i>
+                                    <span class="d-none d-lg-inline-block">Todos</span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
+                                    <i class="fas fa-redo" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">

@@ -48,7 +48,7 @@
                 @else
                     <i class="fas fa-edit fa-fw"></i>
                 @endif
-                <span class="d-none d-sm-inline-block">Serie [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong></span>                
+                <span class="d-sm-inline-block">Serie [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong></span>                
             </a>
         </li>        
     </ul>
@@ -75,7 +75,7 @@
             </div>
             <div class="col-md-2 mb-2">
                 <label class="mb-0">Tag</label>
-                <input type="text" class="form-control" name="tag" value="{{ $row->tag }}" maxlength="10" required>               
+                <input type="text" class="form-control" name="tag" value="{{ $row->tag }}" maxlength="10">               
             </div>
             <div class="col-md-3 mb-2">
                 <label class="mb-0">Almacen</label>
@@ -90,21 +90,27 @@
             </div>
         </div>
         
-        <div class="card-footer">
-            <div class="btn-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">Estado</span>
+        <div class="card-footer pt-1">
+            <div class="row">
+                <div class="col-md-4  mt-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Estado</span>
+                        </div>
+                        <select name="isactive" id="isactive" class="form-control">
+                            <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
+                            <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
+                        </select>
                     </div>
-                    <select name="isactive" id="isactive" class="form-control">
-                        <option value="Y" @if($row->isactive=='Y') selected @endif>ACTIVO</option>
-                        <option value="N" @if($row->isactive=='N') selected @endif>DESACTIVADO</option>
-                    </select>
-                </div>                
-            </div>
-            <div class="float-right">
-                <a href="{{ route('sequence.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                </div>
+                <div class="col-md-4 mt-2">
+                </div>
+                <div class="col-md-4 mt-2">
+                    <div class="float-right">
+                        <a href="{{ route('sequence.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>                
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

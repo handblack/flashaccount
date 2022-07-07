@@ -1,56 +1,42 @@
 @extends('layouts.app')
 
-
-
 @section('breadcrumb')
-    <section class="content-header">
+    <section class="content-header pb-2">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
-
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('team.index') }}" title="Recargar">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
-                        </a>
-                    </div>
-
-                    <a class="btn btn-sm btn-success" href="{{ route('team.create') }}"
-                        title="Marcar como página de inicio">
-                        <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Añadir</span>
-                    </a>
-                    <div class="btn-group">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" type="text" name="query" value="" autocomplete="off"
-                                placeholder="Buscar">
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-search" aria-hidden="true"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-
+                    <h1><i class="fas fa-users-cog fa-fw"></i> Grupos &amp; Accesos</h1>
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Perfiles
-                            &nbsp;
-                            <i class="fas fa-users-cog fa-fw"></i>
-
-                        </h1>
-                    </div>
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">Sistema</li>
+                        <li class="breadcrumb-item">Grupos &amp; Accesos</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </section>
 @endsection
-
+ 
 
 
 @section('container')
     <div class="card mb-2">
+        <div class="card-header pt-2 pb-2">
+            <div class="btn-group">
+                <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload()" title="Recargar">
+                    <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                    <span class="d-none d-sm-inline-block">Actualizar</span>
+                </a>
+            </div>
+
+            <a class="btn btn-sm btn-success" href="{{ route('warehouse.create') }}"
+                title="Marcar como página de inicio">
+                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                <span class="d-none d-sm-inline-block">Nuevo</span>
+            </a>
+             
+        </div>
         <div class="card-body table-responsive p-0" >
             <table class="table table-hover text-nowrap table-sm table-borderless">
                 <thead>
@@ -68,9 +54,9 @@
                             
                             <td class="text-right">
                                 <a href="{{ route('teamgrant.show', $item->token) }}"> <i class="fas fa-key"></i>
-                                    Acceso</a> |
+                                    <span class="d-none d-md-inline-block">Accesos</span></a>&nbsp;|&nbsp;
                                 <a href="{{ route('team.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
-                                    Modificar</a> |
+                                    <span class="d-none d-md-inline-block">Modificar</span></a> |&nbsp;
                                 <a class="delete-record" data-url="{{ route('team.destroy', $item->token) }}"
                                     data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
                             </td>
@@ -89,33 +75,4 @@
 @endsection
 
 
-@section('script')
-    <script>
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('.delete-record').click(function(e) {
-                e.preventDefault()
-                if (confirm('Estas seguro en eliminar?')) {
-                    let id = $(this).data('id');
-                    let url = $(this).data('url');
-                    $.post(url, {
-                            _method: 'delete'
-                        })
-                        .done(function(data) {
-                            if (data.status == 100) {
-                                $('#tr-' + id).remove();
-                                toastr.success('Elemento eliminado');
-                            } else {
-                                toastr.error(data.message);
-                            }
-                        });
-                }
-            });
-        });
-    </script>
-@endsection
+ 

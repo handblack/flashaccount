@@ -22,7 +22,7 @@
     <div class="card mb-1">
         <div class="card-header pt-2 pb-2">
             <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" href="{{ route('warehouse.index') }}" title="Recargar">
+                <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
                     <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
                     <span class="d-none d-sm-inline-block">Actualizar</span>
                 </a>
