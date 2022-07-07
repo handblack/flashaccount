@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempCOrder;
+use App\Models\TempCOrderLine;
 use App\Models\TempHeader;
 use App\Models\WhCInvoice;
 use App\Models\WhCInvoiceLine;
@@ -143,18 +144,18 @@ class COrderController extends Controller
                         return response()->json($data);
                         break;
             case 'item-add':
-                        $tline = new TempCInvoiceLine();
+                        $tline = new TempCOrderLine();
                         $this->item_calc($tline,$request);
                         $data['status']  = '100';
                         $data['message'] = 'Producto agregado';
-                        $data['tr_item']  = view('ventas.invoice_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('ventas.order_form_list_item',['item' => $tline])->render();
                         return response()->json($data);
                         break;
             case 'item-edit':
-                        $tline = TempCInvoiceLine::where('id',$request->line_id)->first();
+                        $tline = TempCOrderLine::where('id',$request->line_id)->first();
                         $this->item_calc($tline,$request);
                         $data['status']  = '100';
-                        $data['tr_item']  = view('ventas.invoice_form_list_item',['item' => $tline])->render();
+                        $data['tr_item']  = view('ventas.order_form_list_item',['item' => $tline])->render();
                         $data['modeline'] = 'edit';
                         $data['item'] = $tline->toArray();
                         $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
@@ -164,13 +165,13 @@ class COrderController extends Controller
                         if(!session()->has('session_ventas_invoice_id')){
                             abort(403,'Id temporal ya no existe');
                         }
-                        $temp = TempCInvoiceLine::where('invoice_id',session('session_ventas_invoice_id'))->get();
+                        $temp = TempCOrderLine::where('invoice_id',session('session_ventas_order_id'))->get();
                         if($temp->isEmpty()){
                             return back()->with('error','documento no tiene detalle');
                         }
                         DB::transaction(function () use($request) {
                             $hash = new Hashids(env('APP_HASH'));
-                            $temp = TempCInvoice::where('id',session('session_ventas_invoice_id'))->first();
+                            $temp = TempCOrder::where('id',session('session_ventas_order_id'))->first();
                             $header = new WhCInvoice();
                             $header->fill($temp->toArray());
                             $header->dateacct   = $temp->datetrx;

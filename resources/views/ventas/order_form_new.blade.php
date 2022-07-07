@@ -225,6 +225,7 @@
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
 <script>
 $(function(){
     let fai = $('#form-add-item');
@@ -318,6 +319,11 @@ $(function(){
         theme:'bootstrap4'
     });
 
+    
+    $('#quantity,#priceunit,#afecto').on('change keyup', function() {
+        item_calculate();
+    }); 
+
     $('#servicename').hide();
 });
 
@@ -341,7 +347,8 @@ function edit_item(t){
         }else{
             $('#servicename2').val(data.item.description)
         }
-    });    
+    });
+
     $('#ModalAddItem').modal('show');
 }
 
@@ -371,5 +378,31 @@ function edit_form_header(){
     $('#doc-header').hide();
     $('#doc-header-form').show();
 }
+
+function item_calculate(){
+    let fig = 18;
+    let qt = $('#quantity').val();
+    let tp = $('#afecto').val();
+    let pu = $('#priceunit').val();
+    let itst = 0;
+    let itig = 0;
+    let pu_ = 0;
+    if(tp == 'C'){
+        pu_ = pu / ((fig /100) + 1 );
+        //itst = pu_ * qt;
+        console.log('con igv ' + pu_);
+    }else{
+        pu_ = pu;
+    }
+    itst = pu_ * qt;
+    itig = (itst * fig) /100 ;
+    console.log(qt);
+    console.log(pu);
+    console.log(tp);
+    $('.it-subtotal').val($.number(itst,{{ env('DECIMAL_AMOUNT',2) }},'.', ','));
+    $('.it-igv').val($.number(itig,{{ env('DECIMAL_AMOUNT',2) }},'.', ','));
+    $('.it-total').val($.number(itst + itig,{{ env('DECIMAL_AMOUNT',2) }},'.', ','));
+}
+
 </script>
 @endsection

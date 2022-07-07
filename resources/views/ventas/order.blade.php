@@ -26,31 +26,31 @@
 @section('container')
     <div class="card">
         <form action="">
-        <div class="card-header pt-2 pb-2">
-            <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
-                    <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Actualizar</span>
+            <div class="card-header pt-2 pb-2">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
+                        <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                        <span class="d-none d-sm-inline-block">Actualizar</span>
+                    </a>
+                </div>
+
+                <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
+                    title="Marcar como página de inicio">
+                    <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                    <span class="d-none d-sm-inline-block">Nueva Orden</span>
                 </a>
-            </div>
 
-            <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
-                title="Marcar como página de inicio">
-                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                <span class="d-none d-sm-inline-block">Nueva Orden</span>
-            </a>
-
-                    <div class="btn-group">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta">
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-search" aria-hidden="true"></i>
-                                    <span class="d-none d-sm-inline-block">Buscar</span>
-                                </button>
-                            </span>
-                        </div>
+                <div class="btn-group" width="50">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-search" aria-hidden="true"></i>
+                                <span class="d-none d-sm-inline-block">Buscar</span>
+                            </button>
+                        </span>
                     </div>
+                </div>
                 
                 <a href="#" class="btn btn-secondary btn-sm">
                     <i class="fas fa-filter fa-fw"></i>
