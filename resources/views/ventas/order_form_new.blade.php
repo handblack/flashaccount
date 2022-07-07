@@ -1,185 +1,212 @@
 @extends('layouts.app')
 
-@section('header')
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-@endsection
-
 @section('breadcrumb')
-    <section class="content-header pb-2">
+    <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
-                        <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
+                        <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
                             <i class="fas fa-redo" aria-hidden="true"></i>
                         </a>
                     </div>
+                   
                 </div>
-
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="float-sm-right">
-                                <h1 class="h4 mb-0 d-none d-md-inline-block">
-                                    Orden de Venta
-                                    &nbsp;
-                                    <i class="fas fa-edit fa-fw"></i>
-                                </h1>
-                                
-                            </div>
-                        </div>
+                <div class="col-sm-8">
+                    <div class="float-sm-right">
+                        <h1 class="h4 mb-0 d-none d-md-inline-block">
+                            Ventas / Comprobante de Venta
+                            &nbsp;
+                            <i class="fas fa-warehouse fa-fw"></i>
+                        </h1>
                     </div>
-                    
-
-
                 </div>
-
             </div>
         </div>
     </section>
 @endsection
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
+
+
 @section('container')
     <div class="card">
-        <form action="{{ route('corder.store') }}" method="POST">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-6"> </div>
-                    <div class="col-md-6"> 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="float-sm-right">
-                                    <div class="btn-group">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text" id="basic-addon1"><i class="fas fa-hashtag fa-fw"></i></span>
-                                            </div>
-                                        
-                                            <select name="sequence_id" id="" class="form-control">
-                                                @foreach ($sequence as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->serial }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="btn-group">                            
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text" id="basic-addon1"><i class="fas fa-warehouse fa-fw"></i></span>
-                                            </div>
-                                            <select name="warehouse_id" class="form-control" required>
-                                                @foreach ($warehouse as $item )
-                                                    <option value="{{ $item->id }}">{{ $item->shortname }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="btn-group">                            
-                                        <input type="date" class="form-control">
-                                    </div>
+        <div class="card-header">
+            <div class="card-title">
+                <ul class="nav nav-tabs card-header-tabs ">
+                    <li class="nav-item">
+                        <span class="nav-link active">
+                            <i class="far fa-edit fa-fw"></i>
+                            <span class="d-none d-sm-inline-block">
+                                Comprobante de Venta
+                            </span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-tools">
+                <form action="{{ route('cinvoice.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="mode" value="create">
+                    <ul class="nav">
+                        <li>                        
+                            <div class="card-tools pull-right">
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
+                                        <i class="fas fa-plus-square fa-fw"></i>
+                                        &nbsp;Cabecera    
+                                    </a>    
                                 </div>
-                            </div>
-                        
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body bg-light">
-                <div class="row">
-
-                    <div class="col-md-10 col-sm-12">
-                        <label class="mb-0">Socio de Negocio</label>
-                        <select name="bpartner_id" class="form-control select2-bpartner" required>
-                        </select>
-                    
-                    </div>                    
-                    <div class="col-md-2 col-sm-6">
-                        <label class="mb-0">Moneda</label>
-                        <select name="currency_id" class="form-control" required>
-                            @foreach ($currency as $item)
-                                <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                </div>
-            </div>
-            <div class="card-body pt-1 pb-1 bg-light border-top">
-                <div class="row">
-                    <div class="col-md-6">
-                        
-                    </div>
-                    <div class="col-md-6">
-                        <div class="float-sm-right mt-1">
-
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalAddItem" data-backdrop="static" data-keyboard="false">
+                                <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
                                     <i class="fas fa-plus-square fa-fw"></i>
-                                    Agregar Item
-                                </a>    
-                            </div>
-                            <div class="btn-group">
+                                    &nbsp;Agregar    
+                                </a>
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fas fa-save fa-fw"></i>
-                                    Procesar
-                                </button>                                
-                            </div>    
-                        </div>
-                    </div>
+                                    &nbsp;Procesar
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <div class="card-body " id="doc-header">
+            <div class="row">
+                <div class="col-6">
+                    <dl class="mb-0">
+                        <dt>Cliente</dt>
+                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                    </dl>
+                </div>
+                <div class="col-2">
+                    <dl class="mb-0">
+                        <dt>Fecha</dt>
+                        <dd>{{ $row->datetrx }}</dd>
+                    </dl>
+                </div>
+                <div class="col-2">
+                    <dl class="mb-0">
+                        <dt>Almacen</dt>
+                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                    </dl>
+                </div>
+                <div class="col-2">
+                    <dl class="mb-0">
+                        <dt>Serie</dt>
+                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                    </dl>
                 </div>
             </div>
-        </form>
-        <div class="card-body table-responsive p-0 border-top">
-            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-order-items">
-                <thead>
-                    <tr class="border-bottom bg-secondary">
-                        <th width="80">Codigo</th>
-                        <th class="border-left">Producto/Servicio</th>
-                        <th width="80" class="text-right border-left">Cantidad</th>
-                        <th width="80" class="text-right border-left">UM</th>
-                        <th class="border-left">Precio</th>
-                        <th class="border-left">SubTotal</th>
-                        <th class="border-left">IGV</th>
-                        <th class="border-left">TOTAL</th>
+        </div>
+        <div class="card-body border-bottom" id="doc-header-form" style="display: none;">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="mb-0">Cliente</label>
+                    <select name="bpartner_id" id="" class="form-control select2-bpartner">
+                        <option value="{{ $row->bpartner_id }}">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="mb-0">Moneda</label>
+                    <select name="currency_id" id="" class="form-control">
+                        @foreach (auth()->user()->currency() as $item)
+                            <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="mb-0">Almacen</label>
+                    <select name="warehouse_id" id="" class="form-control">
+                        @foreach (auth()->user()->warehouse() as $item)
+                            <option value="{{ $item->id }}">{{ $item->warehousename }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-2">
+                    
+                <div class="col-md-2">
+                    <label class="mb-0">Emision</label>
+                    <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="mb-0">Vence</label>
+                    <input type="date" name="datedue" value="{{ date("Y-m-d") }}" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="mb-0">Contable</label>
+                    <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="mb-0">Serie</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <select name="sequence_id" class="form-control">
+                                <option>F001</option>
+                            </select>
+                        </div>
+                        <input type="text" class="form-control" placeholder="<NUEVO>" aria-describedby="basic-addon1">
+                    </div>
+                    
+                </div> 
+            </div>
+            <div class="row mt-2">
+                <div class="co-md-12">
+
+                    <button class="btn btn-secondary btn-sm">Cancelar</button>
+                    <button class="btn btn-primary btn-sm">Grabar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
+                <thead style="font-size:0.8rem;">
+                    <tr>
+                        <th width="70" class="console">CODIGO</th>
+                        <th class="border-left console">PRODUCTO/SERVICIO</th>
+                        <th width="80" class="text-right border-left console">CANTIDAD</th>
+                        <th width="80" class="border-left console">UM</th>
+                        <th class="text-right border-left console">PRECIO</th>
+                        <th class="text-right border-left console">SUB-TOTAL</th>
+                        <th class="text-right border-left console">IGV</th>
+                        <th class="text-right border-left console">TOTAL</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="d-none"></tr>     
-                    @forelse ($lines as $item)
-                        @include('ventas.order_form_list_item',[
-                            'item'=>$item,
-                        ])                        
-                    @empty
-                        <!-- No hay ITEMS -->
-                    @endforelse
-                </tbody>                
+                    <tr class="d-none"></tr>  
+                    @foreach ($row->lines as $item)
+                        @include('ventas.invoice_form_list_item',['item' => $item])
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr class="border-top">
+                        <th coslpan="2">3 - Items</th>
+                        <td class="text-right"></td>
+                        <td></td>
+                        <td class="text-right"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
-        <div class="card-body border-top bg-light" id="order-items-totales">
-            @include('ventas.order_form_list_total',['lines'=>$lines])
-        </div>
     </div>
-    {{-- MODALES --}}
-    {{-- init / FormModalAddItems --}}
-    <div class="modal" id="ModalAddItem"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        @include('ventas.order_form_additem',[
-            'item' => $item,
-            'taxes' => $taxes,
-            'typeoperation' => $typeoperation
-        ])
-    </div>
-    {{-- fin / FormModalAddItems --}}
+
+<!-- MODAL -->
+<div class="modal" id="ModalAddItem"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    @include('ventas.invoice_form_additem')
+</div>
 @endsection
+
+
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
@@ -199,11 +226,8 @@ $(function(){
                     if(data.modeline == 'edit'){
                         $('#tr-' + data.item.id).replaceWith(data.tr_item);   
                     }else{
-                        $('#table-order-items tbody tr').last().after(data.tr_item);   
+                        $('#table-products tbody tr').last().after(data.tr_item);   
                     }
-                    //$('#table-order-items tbody').last(data.tr_item);   
-                    //$('#table-order-items tbody tr').last(data.tr_item);   
-                    //$('#table-order-items tbody tr:last').after('<tr><td>aaa</td></tr>');
                     toastr.success(data.message);
                     $(this).trigger("reset");
                 }else{
@@ -216,6 +240,14 @@ $(function(){
 
         });
     });
+    // Muestra el elemento de ADDITEMS
+    $('.btn-add-product').click(function(){
+        $('#mode').val('item-add');
+        $('#package').val('');
+        $('#quantity').val('');
+        $('.select2-product').val('').trigger('change');
+    });
+
     // Muestra el elemento de ADDITEMS
     $('#typeproduct').change(function(){
         if($(this).val() == 'P'){
@@ -243,7 +275,7 @@ $(function(){
             data: function (params) {
                 return {
                     q: params.term, // search term
-                    t: 'C',
+                    t:'C',
                     page: params.page
                 };
             },
@@ -278,9 +310,12 @@ function edit_item(t){
     let id = $(t).data('id');
     let url = $(t).data('url');
     $.get(url,function(data){
-        $('#modeline').val('edit');
-        $('#itemtoken').val(data.item.token);
-        $("#typeproduct").val(data.item.typeproduct).change();        
+        $('#mode').val('item-edit');
+        $('#line_id').val(data.item.id);       
+        $("#typeproduct").val(data.item.typeproduct).change();
+        $('#package').val(data.item.package);
+        $('#quantity').val(data.item.quantity);
+        $('#priceunit').val(data.item.priceunit);
         if(data.item.typeproduct == 'P'){
             if ($('#product_id').find("option[value='" + data.item.product_id + "']").length) {
                 $('#product_id').val(data.item.product_id).trigger('change');
@@ -291,8 +326,6 @@ function edit_item(t){
         }else{
             $('#servicename2').val(data.item.description)
         }
-        $('#qty').val(data.item.qty);
-        $('#priceunit').val(data.item.priceunit);
     });    
     $('#ModalAddItem').modal('show');
 }
@@ -301,16 +334,15 @@ function close_modal_item(){
     $('#ModalAddItem').modal('hide');
     $('#modeline').val('new');
 }
+
 function delete_item(t){     
     if (confirm('Estas seguro en eliminar?')) {
         let id = $(t).data('id');
         let url = $(t).data('url');
-        console.log(id);
-        console.log(url);
         $.post(url,{_method:'delete'})
         .done(function(data){
             if(data.status == 100){
-                $('#tr-'+id).remove();
+                $('#tr-'+data.id).remove();
                 toastr.success('Elemento eliminado');
             }else{
                 toastr.error(data.message);
@@ -318,6 +350,11 @@ function delete_item(t){
         });
     }
     
+}
+
+function edit_form_header(){
+    $('#doc-header').hide();
+    $('#doc-header-form').show();
 }
 </script>
 @endsection

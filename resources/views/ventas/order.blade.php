@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
+
 @section('breadcrumb')
 <section class="content-header pb-2">
     <div class="container-fluid">
@@ -125,16 +130,16 @@
     <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <form action="{{ route('corder.store') }}" method="POST" id="form-logistic-input">
+            <form action="{{ route('corder.store') }}" method="POST" id="form-sales-order">
                 @csrf
                 <input type="hidden" name="mode" value="temp">
                 <div class="modal-content">
                     <div class="modal-header pt-2 pb-2">
                         <h5 class="modal-title" id="exampleModalLabel">Nuevo Orden de Venta</h5>
                     </div>
-                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                    <div class="modal-body pt-0" style="background-color:#dcdcdc74;">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-8 mt-2">
                                 <label class="mb-0">Cliente</label>
                                 <select name="bpartner_id" class="form-control select2-bpartner" required></select>
                             </div>                           
@@ -166,22 +171,22 @@
                             </div>                           
                                
 
-                            <div class="col-8 col-md-3 mt-2">
+                            <div class="col-8 col-md-4 mt-2">
                                 <label class="mb-0">Moneda</label>
                                 <select name="currency_id" class="form-control console" required>
                                     <option value="" selected disabled>---</option>
                                     @foreach (auth()->user()->currency() as $item)
-                                        <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->currencyiso }} - {{ $item->currencyname }}</option>
                                     @endforeach
                                 </select>
                             </div>                           
-                            <div class="col-4 col-md-2 mt-2">
+                            <div class="col-4 col-md-3 mt-2">
                                 <label class="mb-0">Tipo Cambio</label>
                                 <input type="text" name="rate" class="form-control text-right console" value="1.000" maxlength="5">
                             </div>                           
                         </div>
                         <div class="row">
-                            <div class="col-md-3 mt-2">
+                            <div class="col-md-4 mt-2">
                                 <label class="mb-0">Tipo de Pago</label>
                                 <select name="typepayment" class="form-control console" required>
                                     <option value="" selected disabled>----</option>
@@ -189,11 +194,11 @@
                                     <option value="R">CREDITO</option>
                                 </select>
                             </div>  
-                            <div class="col-md-3 col-6 mt-2">
+                            <div class="col-md-4 col-6 mt-2">
                                 <label class="mb-0">Emision</label>
                                 <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control" required>
                             </div>  
-                            <div class="col-md-3 col-6 mt-2">
+                            <div class="col-md-4 col-6 mt-2">
                                 <label class="mb-0">Vencimiento</label>
                                 <input type="date" name="datedue" value="{{ date("Y-m-d") }}" class="form-control">
                             </div>  
@@ -235,3 +240,53 @@
         </div>
     </div>
 @endsection
+
+
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script>
+$(function(){
+    // PaymentModal
+    let fai = $('#form-sales-order');
+    fai.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:fai.attr('method'),
+            url: fai.attr('action'),
+            data: fai.serialize(),
+            success: function(data){
+                if(data.status == '100'){    
+                    window.location.href = data.url;              
+                }else{
+                    toastr.error(data.message);
+                }
+            },
+            error: function(data){
+                console.log('error genero');
+            },
+
+        });
+    });
+    // SocioNegocio ----------------------------------------------------------------
+    $('.select2-bpartner').select2({
+        ajax: {
+            url: '{{ route('api.bpartner') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2,
+        theme:'bootstrap4'
+    });
+});
+</script>
+@endsection
+

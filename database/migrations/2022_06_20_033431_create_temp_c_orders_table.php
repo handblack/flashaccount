@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTempCInvoicesTable extends Migration
+class CreateTempCOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTempCInvoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('temp_c_invoices', function (Blueprint $table) {
+        Schema::create('temp_c_orders', function (Blueprint $table) {
             $table->id();
             $table->date('dateinvoiced');
             $table->date('dateacct')->nullable();
@@ -46,6 +46,6 @@ class CreateTempCInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp_c_invoices');
+        Schema::dropIfExists('temp_c_orders');
     }
 }
