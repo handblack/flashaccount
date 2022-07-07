@@ -43,7 +43,7 @@
                         @else
                             <i class="fas fa-edit fa-fw"></i>
                         @endif
-                        <span class="d-none d-sm-inline-block">
+                        <span class="d-sm-inline-block">
                             Cuenta de Banco [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
                         </span>                
                     </span>
@@ -54,7 +54,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 mt-2">
                     <label class="mb-0">Entidad Bancaria</label>
                     <select name="bank_id" id="" class="form-control">
                         @if ($mode == 'new')
@@ -65,11 +65,11 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-2">
                     <label class="mb-0">Nro de Cuenta</label>
                     <input type="text" class="form-control" id="accountno" name="accountno" placeholder="Nro de Cuenta/Identificador" value="{{ $row->accountno }}" required>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-2">
                     <label class="mb-0">Moneda</label>
                     <select name="currency_id" id="isactive" class="form-control">
                         @if ($mode == 'new')
@@ -85,21 +85,27 @@
              
         </div>
 
-        <div class="card-footer">
-            <div class="btn-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Estado</span>
+       
+
+        <div class="card-footer pt-1">
+            <div class="row">
+                <div class="col-md-6  mt-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Estado</span>
+                        </div>
+                        <select name="isactive" id="isactive" class="form-control">
+                            <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
+                            <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
+                        </select>
                     </div>
-                    <select name="isactive" id="isactive" class="form-control">
-                        <option value="Y" {{ ($row->isactive == 'Y') ? 'selected' : '' }}>ACTIVO</option>
-                        <option value="N" {{ ($row->isactive == 'N') ? 'selected' : '' }}>DESACTIVADO</option>
-                    </select>
                 </div>
-            </div>
-            <div class="float-right">
-                <a href="{{ route('bankaccount.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                <div class="col-md-6 mt-2">
+                    <div class="float-right">
+                        <a href="{{ route('bankaccount.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>                
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+                    </div>
+                </div>
             </div>
         </div>
 

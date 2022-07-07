@@ -46,8 +46,8 @@
                     @else
                         <i class="fas fa-edit fa-fw"></i>
                     @endif
-                    <span class="d-none d-sm-inline-block">
-                        Informacion del Socio de Negocio [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                    <span class="d-sm-inline-block">
+                        Socio de Negocio [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
                     </span>                
                 </span>
                  
@@ -69,10 +69,10 @@
                     </select>
                 </div>                
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 pt-2">
                 <label class="mb-0">Tipo de Persona</label>
                 <div class="input-group mb-0">                    
-                    <select name="legalperson" class="form-control console" required="" style="width:80px;">
+                    <select name="legalperson" id="legalperson" class="form-control console" required="" style="width:80px;">
                         @if($mode=='new')
                         <option value="" selected="" disabled="">----</option>
                         @endif
@@ -81,7 +81,7 @@
                     </select>
                 </div>                
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 pt-2">
                 <label class="mb-0">Tipo y Nro de Documento @if($mode=='new') <small class="badge badge-secondary"><i class="far fa-clock"></i> <span  class="font-weight-normal" id="contador">0</span></small> @endif </label>
                 <div class="input-group mb-0">
                     <div class="input-group-prepend pr-1">
@@ -98,51 +98,55 @@
                 </div>
                 
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 pt-2">
                 <label class="mb-0">Codigo SN</label>
                 @if($mode=='new')
                     <input type="text" name="bpartnercode" id="bpartnercode" class="form-control" value="{{ $row->bpartnercode }}" placeholder="Codigo" maxlength="12" minlength="12" {{ ($mode == 'edit') ? 'disabled' : '' }}>
                 @else
-                    <span class="form-control">{{ $row->bpartnercode }}</span>
+                    <span class="form-control" style="background-color: #e9ecef;opacity: 1;">{{ $row->bpartnercode }}</span>
                 @endif
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-md-12">
+        <div class="row" id="jur">
+            <div class="col-md-12 pt-2">
                 <label class="mb-0">Razon Social / Denominacion</label>
                 <input type="text" name="bpartnername" class="form-control" value="{{ $row->bpartnername }}" placeholder="Descripcion" maxlength="150">
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-md-4">
+        <div class="row" id="nat">
+            <div class="col-md-4 pt-2">
                 <label class="mb-0">Apellido Parterno</label>
                 <input type="text" name="lastname" class="form-control" value="{{ $row->lastname }}" placeholder="" maxlength="60">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 pt-2">
                 <label class="mb-0">Apellido Materno</label>
                 <input type="text" name="firstname" class="form-control" value="{{ $row->firstname }}" placeholder="" maxlength="60">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 pt-2">
                 <label class="mb-0">Pre-Nombres</label>
                 <input type="text" name="prename" class="form-control" value="{{ $row->prename }}" placeholder="" maxlength="60">
             </div>
         </div>
     </div>
-    <div class="card-footer">
-        <div class="btn-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Estado</span>
+    <div class="card-footer pt-1">
+        <div class="row">
+            <div class="col-md-6  mt-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Estado</span>
+                    </div>
+                    <select name="isactive" id="isactive" class="form-control">
+                        <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
+                        <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
+                    </select>
                 </div>
-                <select name="isactive" id="isactive" class="form-control">
-                    <option value="Y" @if ($row->isactive == 'Y') selected @endif>ACTIVO</option>
-                    <option value="N" @if ($row->isactive == 'N') selected @endif>DESACTIVADO</option>
-                </select>
             </div>
-        </div>
-        <div class="float-right">
-            <a href="{{ route('bpartner.index') }}" class="btn btn-default"> <i class="fas fa-times"></i> Cancelar</a>                
-            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+            <div class="col-md-6 mt-2">
+                <div class="float-right">
+                    <a href="{{ route('bpartner.index') }}" class="btn btn-secondary"> <i class="fas fa-times"></i> Cancelar</a>                
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> {{ ($mode == 'new') ? 'Crear' : 'Modificar' }}</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -161,6 +165,17 @@ $(function(){
         $('#bpartnercode').val($('#typeperson').val() + code.substr(code.length - 11));        
         @endif
     });
+    $('#legalperson').on('change',function(){
+        let lp = $('#legalperson').val()
+        if(lp == 'J'){
+            $('#jur').show();
+            $('#nat').hide();
+        }else{
+            $('#jur').hide();
+            $('#nat').show();
+        }
+    });
+    $('#legalperson').trigger("change");
     
 });
 </script>

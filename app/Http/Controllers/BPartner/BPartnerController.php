@@ -91,8 +91,11 @@ class BPartnerController extends Controller
         }
         $hash = new Hashids(env('APP_HASH'));
         $row = new WhBpartner();
-        $row->fill($request->all());        
-        $row->bpartnername = ($request->legalperson == 'J') ? $request->bpartnername : trim($request->lastname) .' '. trim($request->firstname) .', '. trim($request->prename);
+        $row->fill($request->all());
+        $row->lastname = strtoupper($row->lastname);
+        $row->firstname = strtoupper($row->firstname);
+        $row->prename = strtoupper($row->prename);
+        $row->bpartnername = ($request->legalperson == 'J') ? strtoupper($row->bpartnername) : trim($row->lastname) .' '. trim($row->firstname) .', '. trim($request->prename);
         $row->save();
         $row->token = $hash->encode($row->id);
         $row->save();
@@ -162,7 +165,10 @@ class BPartnerController extends Controller
         }
         $row = WhBpartner::where('token',$id)->first();
         $row->fill($request->all());
-        $row->bpartnername = ($request->legalperson == 'J') ? $request->bpartnername : trim($request->lastname) .' '. trim($request->firstname) .', '. trim($request->prename);
+        $row->lastname = strtoupper($row->lastname);
+        $row->firstname = strtoupper($row->firstname);
+        $row->prename = strtoupper($row->prename);
+        $row->bpartnername = ($request->legalperson == 'J') ? strtoupper($row->bpartnername) : trim($row->lastname) .' '. trim($row->firstname) .', '. trim($request->prename);
         $row->save();
         return redirect()->route('bpartner.index')->with('message','Registro actualizado');
     }

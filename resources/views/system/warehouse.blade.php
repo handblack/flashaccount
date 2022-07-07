@@ -59,11 +59,11 @@
                 <tbody>
                     @forelse ($result as $item)
                         <tr id="tr-{{ $item->id }}">
-                            <td>{{ $item->warehousename }}</td>
+                            <td class="{{ ($item->isactive == 'N') ? 'tachado' : '' }}">{{ $item->warehousename }}</td>
                             <td>{{ $item->shortname }}</td>
                             <td class="text-right">
                                 <a href="{{ route('warehouse.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
-                                    Modificar</a> |
+                                    <span class="d-none d-md-inline-block">Modificar</span></a> |
                                 <a class="delete-record" data-url="{{ route('warehouse.destroy', $item->token) }}"
                                     data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
                             </td>

@@ -30,7 +30,8 @@
         }
         .tachado {
             text-decoration:line-through;
-            color: red;
+            color: rgba(255, 0, 0, 0.372);
+            font-style: italic;
         }
         .console{
             font-family: 'Inconsolata', monospace;
