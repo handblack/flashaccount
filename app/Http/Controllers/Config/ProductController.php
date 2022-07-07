@@ -26,7 +26,7 @@ class ProductController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhProduct::paginate(env('PAGINATE_PRODUCT',10));
+        $result = WhProduct::paginate(env('PAGINATE_PRODUCT',20));
         return view('config.product',[
             'result' => $result, 
         ]);

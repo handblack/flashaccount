@@ -23,6 +23,7 @@ class CreateWhProductsTable extends Migration
             $table->foreignId('family_id');
             $table->foreignId('line_id');
             $table->foreignId('um_id');
+            $table->enum('isactive',['Y','N'])->default('Y');
             $table->string('token',60);
             $table->timestamps();
         });

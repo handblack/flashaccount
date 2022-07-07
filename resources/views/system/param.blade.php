@@ -38,10 +38,13 @@
                             <a href="{{ route('parameter.index') }}" class="btn btn-default"><i class="fas fa-sync"></i> Actualizar</a>
                         </div>
                     </div>
+                    <div class="btn-group">
+                    </div>
                 </form>
             </div>
             <div class="card-tools">
-                     <div class="input-group input-group-sm" >
+
+                    <div class="input-group input-group-sm" >
                         <div class="input-group-append">
                             <a href="{{ route('parameter.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo </a>
                         </div>
@@ -57,10 +60,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Identidad</th>
-                        <th>Nombre Corto</th>
-                        <th style="border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;">Valor</th>
-                        <th>Requerido</th>
-                        <th>Estado</th>
+                        <th class="d-none">Nombre Corto</th>
+                        <th class="d-none" style="border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;">Valor</th>
+                        <th class="d-none">Requerido</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -74,8 +76,9 @@
                                 <td>{{ $item->identity }}</td>
                                 <td>{{ $item->shortname }}</td>
                                 <td style="border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;background-color: #f4f6f98c;">{{ $item->value }}</td>
-                                <td width="80">{{ $item->isrequired }}</td>
-                                <td width="80">{{ $item->isactive }}</td>
+                        <th class="d-none">Estado</th>
+                                <td width="80" class="d-none">{{ $item->isrequired }}</td>
+                          
                                 <td width="140" class="text-right">
                                     <a href="{{ route('parameter.edit',[md5($item->id)]) }}" class=""><i class="far fa-edit"></i> </a> |
                                     <a class="delete-user" href="javascript:vid()" id="{{ $item->id }}"><i class="far fa-trash-alt"></i> </a>

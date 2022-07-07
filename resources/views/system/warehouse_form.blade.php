@@ -16,8 +16,6 @@
         </div>
     </div>
 </section>
-
-    
 @endsection
 
 @section('container')

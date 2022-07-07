@@ -1,38 +1,21 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-0">
-                <div class="col-sm-6">
-
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('sequence.index') }}" title="Recargar">
-                            <i class="fas fa-list fa-fw" aria-hidden="true"></i>
-                            <span class="d-none d-lg-inline-block">Todos</span>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
-                        </a>
-                    </div>
-
-                    
-
-                </div>
-                <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Secuenciadores (Series)
-                            &nbsp;
-                            <i class="fas fa-hashtag fa-fw"></i>
-
-                        </h1>
-                    </div>
-                </div>
-
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-hashtag fa-fw"></i> Secuenciador Serie</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Sistema</li>
+                    <li class="breadcrumb-item">Serie & Secuenciador</li>
+                </ol>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @section('container')
@@ -40,20 +23,43 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="{{ ($mode == 'edit') ? 'PUT' : '' }}">
     <input type="hidden" name="token" value="{{ $row->token }}">
-    <ul class="nav nav-tabs d-print-none" id="mainTabs" role="tablist">
-        <li class="nav-item active">
-            <a href="#" class="nav-link active" data-toggle="tab" role="tab" aria-controls="ListAlmacen">                
-                @if($mode =='new')
-                    <i class="far fa-edit fa-fw"></i>
-                @else
-                    <i class="fas fa-edit fa-fw"></i>
-                @endif
-                <span class="d-sm-inline-block">Serie [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong></span>                
-            </a>
-        </li>        
-    </ul>
-    <div class="rounded-bottom border-left border-right border-bottom bg-white">
-        <div class="row p-3">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+
+                <ul class="nav nav-tabs card-header-tabs" >
+                    <li class="nav-item">
+                        <span class="nav-link active">
+                            @if($mode =='new')
+                            <i class="far fa-edit fa-fw"></i>
+                            @else
+                            <i class="fas fa-edit fa-fw"></i>
+                            @endif
+                            <span class="d-sm-inline-block">
+                                Serie [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                            </span>                
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-tools ">
+                    <ul class="nav">
+                        <li>                        
+                            <div class="card-tools pull-right">
+                                
+                                <a class="btn btn-sm btn-secondary" href="#" onclick="history.back()" title="Recargar">
+                                    <i class="fas fa-list fa-fw" aria-hidden="true"></i>
+                                    <span class="d-none d-lg-inline-block">Todos</span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
+                                    <i class="fas fa-redo" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+        <div class="card-body">
             <div class="col-md-3 mb-2">
                 <label class="mb-0">Tipo de Documento</label>
                 <select name="doctype_id" id="" class="form-control" required>
@@ -89,7 +95,6 @@
                 </select>
             </div>
         </div>
-        
         <div class="card-footer pt-1">
             <div class="row">
                 <div class="col-md-4  mt-2">
@@ -114,5 +119,9 @@
             </div>
         </div>
     </div>
+
+
+ 
+     
 </form>
 @endsection

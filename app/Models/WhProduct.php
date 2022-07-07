@@ -15,6 +15,7 @@ class WhProduct extends Model
         'family_id',
         'line_id',
         'um_id',
+        'isactive',
         'token',
     ];
 
