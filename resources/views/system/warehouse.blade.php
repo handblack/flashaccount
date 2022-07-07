@@ -60,7 +60,7 @@
                     @forelse ($result as $item)
                         <tr id="tr-{{ $item->id }}">
                             <td class="{{ $item->isactive == 'N' ? 'tachado' : '' }}">{{ $item->warehousename }}</td>
-                            <td>{{ $item->shortname }}</td>
+                            <td class="{{ $item->isactive == 'N' ? 'tachado' : '' }}">{{ $item->shortname }}</td>
                             <td class="text-right">
                                 <a href="{{ route('warehouse.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
                                     <span class="d-none d-md-inline-block">Modificar</span></a> |
