@@ -149,6 +149,12 @@ class User extends Authenticatable
     }
 
     public function sequence($doctype){
+        /*
+            OVE -> Orden de Venta
+            FAC -> Facturas
+            BVE -> Boleta de Venta
+            PIN -> Parte de Ingreso
+        */
         $dt = WhDocType::where('shortname',$doctype)->first();
         return WhSequence::where('doctype_id',$dt->id)->get();
     }

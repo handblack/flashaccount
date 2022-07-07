@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempCOrder;
 use App\Models\TempHeader;
 use App\Models\WhCInvoice;
 use App\Models\WhCInvoiceLine;
@@ -49,6 +50,22 @@ class COrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+        if(!session('session_ventas_order_id')){
+            return redirect()->route('corder.index');
+        }        
+        $row = TempCOrder::where('id',session('session_ventas_order_id'))->first();
+        if(!$row){
+            return redirect()->route('corder.index');
+        }
+        return view('ventas.order_form_new',[
+            'row' => $row,
+            'taxes' => WhTax::all(),
+            'typeoperation' => WhParam::where('group_id',3)->get(),
+        ]);
+    }
+
+    public function create_()
     {   
         $row = new WhCOrder();
         $lines = TempLine::where('session','corder-'.session()->getId())->get();

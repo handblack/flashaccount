@@ -1,62 +1,68 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-0">
-                <div class="col-sm-6">
-
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
-                        </a>
-                    </div>
-
-                    <a class="btn btn-sm btn-success" href="{{ route('corder.create') }}"
-                        title="Marcar como página de inicio">
-                        <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                        <span class="d-none d-sm-inline-block">Nueva OV</span>
-                    </a>
-                    <div class="btn-group">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" type="text" name="query" value="" autocomplete="off"
-                                placeholder="Buscar">
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">
-                                    <i class="fas fa-search" aria-hidden="true"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Orden de Venta
-                            &nbsp;
-                            <i class="fas fa-edit fa-fw"></i>
-
-                        </h1>
-                    </div>
-                </div>
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Ordenes de Ventas</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Ventas</li>
+                    <li class="breadcrumb-item">Ordenes de Ventas</li>
+                </ol>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @section('container')
     <div class="card">
-        <div class="card-body  p-0">
+        <form action="">
+        <div class="card-header pt-2 pb-2">
+            <div class="btn-group">
+                <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
+                    <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                    <span class="d-none d-sm-inline-block">Actualizar</span>
+                </a>
+            </div>
+
+            <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
+                title="Marcar como página de inicio">
+                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                <span class="d-none d-sm-inline-block">Nueva Orden</span>
+            </a>
+
+                    <div class="btn-group">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta">
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <span class="d-none d-sm-inline-block">Buscar</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                
+                <a href="#" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-filter fa-fw"></i>
+                    <span class="d-none d-sm-inline-block">Filtrar</span>
+                </a>
+            </div>
+        </form>
+        <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
                     <tr>
                         <th>Fecha</th>
                         <th>Numero</th>
-                        <th>CodigoSN</th>
-                        <th>Socio de Negocio</th>
+                        <th class="d-none d-sm-inline-block">CodigoSN</th>
+                        <th class="d-none d-sm-inline-block">Socio de Negocio</th>
                         <th class="text-right pr-2">Importe</th>
-                        <th>Almacen</th>
+                        <th class="d-none d-sm-inline-block">Almacen</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -70,12 +76,12 @@
                                 </a>
                                 {{ $item->docstatus }}
                             </td>
-                            <td width="115">{{ $item->bpartner->bpartnercode }}</td>
-                            <td width="110">{{ $item->bpartner->bpartnername }}</td>
+                            <td  class="d-none d-sm-inline-block" width="115">{{ $item->bpartner->bpartnercode }}</td>
+                            <td  class="d-none d-sm-inline-block" width="110">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right pr-2 border-left border-right">
                                 {{ number_format($item->amount, 2) }} {{ $item->currency->currencyiso }}
                             </td>
-                            <td>{{ $item->warehouse->shortname }}</td>
+                            <td class="d-none d-sm-inline-block">{{ $item->warehouse->shortname }}</td>
 
                             <td class="text-right">
                                 @if($grant->isdelete == 'Y')
@@ -115,6 +121,95 @@
     </div>
 
     {{-- MODALES --}}
+    <!-- NUEVO -->
+    <div class="modal fade" id="ModalCreate" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="{{ route('corder.store') }}" method="POST" id="form-logistic-input">
+                @csrf
+                <input type="hidden" name="mode" value="temp">
+                <div class="modal-content">
+                    <div class="modal-header pt-2 pb-2">
+                        <h5 class="modal-title" id="exampleModalLabel">Nuevo Orden de Venta</h5>
+                    </div>
+                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="mb-0">Cliente</label>
+                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                            <div class="col-md-4 mt-2">
+                                <label class="mb-0">Almacen</label>
+                                <select name="warehouse_id" class="form-control console" required>
+                                    <option value="" selected disabled>-- SELECCION --</option>
+                                    @foreach (auth()->user()->warehouse() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->warehousename }}</option>
+                                    @endforeach
+                                </select>
+                            </div>                           
+                        </div>
+                        <div class="row">                                                    
+                            <div class="col-md-4 mt-2">
+                                <label class="mb-0">Serie</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend pr-1">
+                                        <select name="sequence_id" class="form-control console" required style="width:80px;">
+                                            <option value="" selected disabled>----</option>
+                                            @foreach (auth()->user()->sequence('OVE') as $item)
+                                                <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <input type="text" class="form-control console" placeholder="<automatico>" aria-describedby="basic-addon1">
+                                </div>
+                                
+                            </div>                           
+                               
+
+                            <div class="col-8 col-md-3 mt-2">
+                                <label class="mb-0">Moneda</label>
+                                <select name="currency_id" class="form-control console" required>
+                                    <option value="" selected disabled>---</option>
+                                    @foreach (auth()->user()->currency() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                                    @endforeach
+                                </select>
+                            </div>                           
+                            <div class="col-4 col-md-2 mt-2">
+                                <label class="mb-0">Tipo Cambio</label>
+                                <input type="text" name="rate" class="form-control text-right console" value="1.000" maxlength="5">
+                            </div>                           
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mt-2">
+                                <label class="mb-0">Tipo de Pago</label>
+                                <select name="typepayment" class="form-control console" required>
+                                    <option value="" selected disabled>----</option>
+                                    <option value="C">CONTADO</option>
+                                    <option value="R">CREDITO</option>
+                                </select>
+                            </div>  
+                            <div class="col-md-3 col-6 mt-2">
+                                <label class="mb-0">Emision</label>
+                                <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            </div>  
+                            <div class="col-md-3 col-6 mt-2">
+                                <label class="mb-0">Vencimiento</label>
+                                <input type="date" name="datedue" value="{{ date("Y-m-d") }}" class="form-control">
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="modal-footer p-1">
+                        <div class="float-right">
+                            <button type="reset" class="btn btn-default"><i class="fas fa-window-close fa-fw"></i> Limpiar</button>                                 
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     
     <!-- ANULAR -->
