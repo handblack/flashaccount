@@ -1,13 +1,24 @@
 
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('cinvoice.store') }}" id="form-add-item" method="POST">
+        <form action="{{ route('corderline.store') }}" id="form-add-item" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            <input type="hidden" name='invoice_id' value="{{ session('session_ventas_invoice_id') }}">
-            <input type="hidden" name="mode"  value="item" id="mode">
-            <input type="hidden" name="line_id"  value="" id="line_id">
+            <input type="hidden" name='session' value="corder-{{ session()->getId() }}">
+            <input type="hidden" name="modeline" id="modeline" value="">
+            <input type="hidden" name="itemtoken" id="itemtoken" value="">
             <div class="modal-content">
                 <div class="modal-header bg-light pt-3 pb-3">
-                    
+                    <div class="btn-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-boxes fa-fw"></i></span>
+                            </div>
+                            <select name="typeproduct" id="typeproduct" class="form-control">
+                                <option value="P" {{ ($item->typeproduct == 'P') ? 'selected' : '' }}>Producto</option>
+                                <option value="S" {{ ($item->typeproduct == 'S') ? 'selected' : '' }}>Servicio</option>
+                            </select>
+                        </div>
+                        
+                    </div>
                     <div class="btn-group ml-2">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -38,34 +49,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4 mt-2">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="fas fa-boxes fa-fw"></i>
-                                        <span class="d-none d-sm-inline-block">&nbsp;Tipo</span>
-                                    </span>
-                                </div>
-                                <select name="typeproduct" id="typeproduct" class="form-control">
-                                    <option value="P">Producto</option>
-                                    <option value="S">Servicio</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>  
                     <div class="row" id="productcode">
-                        <div class="col-md-12 mt-2">                                
+                        <div class="col-md-12">                                
                             <select name="product_id" id="product_id" class="form-control select2-product" ></select>
                         </div>
                     </div>
                     <div class="row" id="servicename" style="display: none;">
-                        <div class="col-md-12 mt-2">
+                        <div class="col-md-12">
                             <textarea name="servicename" id="servicename2" cols="30" rows="2" class="form-control" ></textarea>
                         </div>
                     </div>
-                    <div class="row ">
-                        <div class="col-md-4 mt-2">
+                    <div class="row mt-2">
+                        <div class="col-md-4 col-sm-6">
                             <label class="mb-0">Cantidad</label>
                             <div class="input-group">
                                 <input type="text" id="qty" name="quantity" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
@@ -78,46 +73,36 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-9 col-md-4 mt-2">
-                            <label class="mb-0">Precio Unitario</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <select name="afecto" id="afecto" class="form-control" >
-                                        <option value="C">CON IGV</option>
-                                        <option value="S">SIN IGV</option>
-                                    </select>
-                                </div>
-                                <input type="number" id="qty" name="quantity" class="form-control text-right ml-1" placeholder="Precio" aria-label="Cantidad" aria-describedby="basic-addon2" required>
-                            </div>
+                        <div class="col-md-4 col-sm-6">
+                            <label class="mb-0">PU (Sin IGV)</label>
+                            <input type="text" id="priceunit" name="priceunit" class="form-control text-right" placeholder="Precio SIN IGV" aria-label="Precio Unitario" aria-describedby="basic-addon2">
+                             
                         </div>
-
-                        <div class="col-3 col-md-4 mt-2">
-                            <label class="mb-0">Pack</label>
-                            <input type="number" id="package" name="package" class="form-control text-right " placeholder="" aria-label="Cantidad" aria-describedby="basic-addon2">
+                        <div class="col-md-4 col-sm-6">
+                            <label class="mb-0">PU (Con IGV)</label>
+                            <input type="text" id="priceunittax" name="priceunittax" class="form-control text-right" placeholder="Precio CON IGV" aria-label="Precio Unitario" aria-describedby="basic-addon2">
+                             
                         </div>
-                        
                     </div>
                     <div class="row">
                             
-                        <div class="col-4 col-md-4 mt-2">
+                        <div class="col-md-4">
                             <label class="mb-0">Sub-Total</label>
-                            <input type="text" class="form-control text-right" disabled>
+                            <input type="text" class="form-control" disabled>
                         </div>
-                        <div class="col-4 col-md-4 mt-2">
+                        <div class="col-md-4">
                             <label class="mb-0">IGV</label>
-                            <input type="text" class="form-control text-right" disabled>
+                            <input type="text" class="form-control" disabled>
                         </div>
-                        <div class="col-4 col-md-4 mt-2">
+                        <div class="col-md-4">
                             <label class="mb-0">TOTAL</label>
-                            <input type="text" class="form-control text-right" value="0.00" disabled>
+                            <input type="text" class="form-control" disabled>
                         </div>
-                    </div>
-                                
+                    </div>                
                 </div>
-                <div class="modal-footer p-1">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save fa-fw"></i> Grabar</button>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </form>

@@ -1,10 +1,25 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Ordenes de Ventas</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Ventas</li>
+                    <li class="breadcrumb-item">Ordenes de Ventas</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
-                <div class="col-sm-4">
+                <div class="col-4 col-md-4">
 
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
@@ -13,11 +28,12 @@
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
                             <i class="fas fa-redo" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">&nbsp;Actualizar</span>
                         </a>
                     </div>
                    
                 </div>
-                <div class="col-sm-8">
+                <div class="col-8 col-md-8">
                     <div class="float-sm-right">
                         <h1 class="h4 mb-0 d-none d-md-inline-block">
                             Ventas / Comprobante de Venta
@@ -161,18 +177,17 @@
             </div>
             <div class="row mt-2">
                 <div class="co-md-12">
-
                     <button class="btn btn-secondary btn-sm">Cancelar</button>
                     <button class="btn btn-primary btn-sm">Grabar</button>
                 </div>
             </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
                 <thead style="font-size:0.8rem;">
                     <tr>
-                        <th width="70" class="console">CODIGO</th>
                         <th class="border-left console">PRODUCTO/SERVICIO</th>
+                        <th width="70" class="d-none console">CODIGO</th>
                         <th width="80" class="text-right border-left console">CANTIDAD</th>
                         <th width="80" class="border-left console">UM</th>
                         <th class="text-right border-left console">PRECIO</th>
@@ -202,7 +217,7 @@
 
 <!-- MODAL -->
 <div class="modal" id="ModalAddItem"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    @include('ventas.invoice_form_additem')
+    @include('ventas.order_form_additem')
 </div>
 @endsection
 
