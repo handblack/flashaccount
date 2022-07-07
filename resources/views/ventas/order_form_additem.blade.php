@@ -1,6 +1,6 @@
 
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('cinvoice.store') }}" id="form-add-item" method="POST">
+        <form action="{{ route('corder.store') }}" id="form-add-item" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <input type="hidden" name='order_id' value="{{ session('session_ventas_order_id') }}">
             <input type="hidden" name="mode"  value="item" id="mode">
