@@ -11,6 +11,7 @@ class TempCInvoice extends Model
     protected $fillable = [
         'dateinvoiced',
         'datedue',
+        'period',
         'typepayment',
         'bpartner_id',
         'sequence_id',

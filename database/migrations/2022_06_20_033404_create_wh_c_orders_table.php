@@ -19,7 +19,7 @@ class CreateWhCOrdersTable extends Migration
             $table->date('dateacct')->nullable();
             $table->date('datedue')->nullable();
             $table->string('period',6);
-            $table->foreignId('order_id')->nullable();
+            //$table->foreignId('order_id')->nullable();
             $table->foreignId('bpartner_id');
             $table->foreignId('sequence_id');
             $table->foreignId('doctype_id')->nullable();

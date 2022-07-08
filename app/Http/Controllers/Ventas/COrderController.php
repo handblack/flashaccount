@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
+use App\Models\TempCInvoice;
+use App\Models\TempCInvoiceLine;
 use App\Models\TempCOrder;
 use App\Models\TempCOrderLine;
 use App\Models\TempHeader;
@@ -240,26 +242,7 @@ class COrderController extends Controller
         }
     }
 
-    public function show_($id)
-    {
-        if(auth()->user()->grant($this->module)->isread == 'N'){
-            return back()->with('error','No tienes privilegio para crear');
-        }
-        $head = WhCOrder::where('token',$id)->first();
-        if(!$head){
-            abort(403,'token no valido');
-        }
-        $lines = WhCOrderLine::where('order_id',$head->id)->get();
-        $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
-        $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
-        session(['session_select_order_id' => $head->id]);
-        return view('ventas.order_show',[
-            'header' => $head,
-            'lines'  => $lines,
-            'sequence_invoice' => $sequence_invoice
-        ]);
-    }
-
+   
     /**
      * Show the form for editing the specified resource.
      *
@@ -341,42 +324,28 @@ class COrderController extends Controller
         if(!$source){
             abort(403,'No hay registro');
         }    
-        //Cabecera #########################################################          
-        $target = new TempHeader();
-        $target->fill($source->toArray());
-        $target->order_id    = $request->order_id;
-        $target->sequence_id = $request->sequence_id;
-        $target->amountgrand = $source->amount;
-        $target->datetrx     = $source->dateorder;
-        $target->save();
-        $target->session     = $hash->encode($target->id);
-        $target->save();
-        //Detalle ##########################################################
-        foreach($source->orderline as $line){
-            $templ = new TempLine();
-            $templ->fill($line->toArray());
-            $templ->orderline_id = $line->id;
-            $templ->temp_id = $target->id;
-            $templ->save();                
-        }        
-        return redirect()->route('cinvoice.edit',$target->session);
-        /*
-        $head = WhCOrder::where('token',$request->token)->first();
-        if($head){
-            $i = new WhCInvoice();
-            $i->fill($head->toArray());
-            $i->dateinvoiced = date("Y-m-d");
-            $i->order_id = $head->id;
-            $i->save();
-            $lin = WhCOrderLine::where('order_id',$head->id);
-            foreach($lin as $it){
-                $il = new WhCInvoiceLine();
-                $il->fill($it->toArray());
-                $il->invoice_id = $i->id;
-                $il->save();
-            }
-        }
-        */
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new TempCInvoice();
+            $target->fill($source->toArray());
+            $target->order_id    = $request->order_id;
+            $target->sequence_id = $request->sequence_id;
+            $target->dateinvoiced     = $source->dateorder;
+            $target->save();
+            $target->doctype_id     = $target->sequence->doctype_id;
+            $target->save();
+            //Detalle ##########################################################
+            foreach($source->lines as $line){
+                $templ = new TempCInvoiceLine();
+                $templ->fill($line->toArray());
+                $templ->orderline_id = $line->id;
+                $templ->invoice_id = $target->id;
+                $templ->save();                
+            }        
+            session(['session_ventas_invoice_id' => $target->id]);
+        });
+        return redirect()->route('cinvoice.create');
+        
     }
 
     public function report_pdf(){

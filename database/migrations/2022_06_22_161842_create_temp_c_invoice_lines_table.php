@@ -15,6 +15,7 @@ class CreateTempCInvoiceLinesTable extends Migration
     {
         Schema::create('temp_c_invoice_lines', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('orderline_id')->nullable();
             $table->enum('typeproduct',['S','P']);
             $table->foreignId('typeoperation_id');
             $table->foreignId('product_id')->nullable();

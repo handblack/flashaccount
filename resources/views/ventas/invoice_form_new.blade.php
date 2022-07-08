@@ -1,34 +1,65 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-0">
-                <div class="col-sm-4">
-
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
-                            <i class="fas fa-list fa-fw" aria-hidden="true"></i>
-                            <span class="d-none d-lg-inline-block">Todos</span>
-                        </a>
-                        <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                   
-                </div>
-                <div class="col-sm-8">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Ventas / Comprobante de Venta
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-                        </h1>
-                    </div>
-                </div>
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Comprobantes de Ventas</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Ventas</li>
+                    <li class="breadcrumb-item">Comprobantes de Ventas</li>
+                </ol>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
+                        <i class="fas fa-list fa-fw" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline-block">Todos</span>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline-block">&nbsp;Actualizar</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <!--
+                <div class="btn-group">
+                    <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
+                        <i class="fas fa-plus-square fa-fw"></i>
+                        <span class="d-none d-lg-inline-block">Agregar</span>   
+                    </a>    
+                </div>
+                -->
+                <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
+                    <i class="fas fa-plus-square fa-fw"></i>
+                    <span class="d-none d-lg-inline-block">Agregar</span>    
+                </a>
+                <div class="btn-group">
+
+                    <form action="{{ route('corder.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="mode" value="create">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-save fa-fw"></i>
+                            &nbsp;Procesar
+                        </button>
+                    </form>
+                </div>
+            </div>
+       </div>
+    </div>
+</section>
 @endsection
 
 @section('header')
@@ -45,68 +76,35 @@
                     <li class="nav-item">
                         <span class="nav-link active">
                             <i class="far fa-edit fa-fw"></i>
-                            <span class="d-none d-sm-inline-block">
-                                Comprobante de Venta
-                            </span>
+                            <strong>
+                                {{ ucwords(strtolower($row->sequence->doctype->doctypename)) }}
+                            </strong>
                         </span>
                     </li>
                 </ul>
             </div>
-            <div class="card-tools">
-                <form action="{{ route('cinvoice.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="mode" value="create">
-                    <ul class="nav">
-                        <li>                        
-                            <div class="card-tools pull-right">
-                                <div class="btn-group">
-                                    <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
-                                        <i class="fas fa-plus-square fa-fw"></i>
-                                        &nbsp;Cabecera    
-                                    </a>    
-                                </div>
-                                <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
-                                    <i class="fas fa-plus-square fa-fw"></i>
-                                    &nbsp;Agregar    
-                                </a>
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-save fa-fw"></i>
-                                    &nbsp;Procesar
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
-                </form>
-            </div>
         </div>
-        <div class="card-body " id="doc-header">
+        <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
-                <div class="col-6">
-                    <dl class="mb-0">
-                        <dt>Cliente</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
-                    </dl>
+                <div class="col-12 col-md-6">
+                    {{ $row->bpartner->bpartnername }}
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-md-3">
                     <dl class="mb-0">
                         <dt>Fecha</dt>
                         <dd>{{ $row->datetrx }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-md-3">
                     <dl class="mb-0">
-                        <dt>Almacen</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                        <dt>Fecha</dt>
+                        <dd>{{ $row->datetrx }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
-                    <dl class="mb-0">
-                        <dt>Serie</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
-                    </dl>
-                </div>
+                
             </div>
         </div>
+         
         <div class="card-body border-bottom" id="doc-header-form" style="display: none;">
             <div class="row">
                 <div class="col-md-6">
@@ -167,17 +165,17 @@
                 </div>
             </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
                 <thead style="font-size:0.8rem;">
                     <tr>
-                        <th width="70" class="console">CODIGO</th>
                         <th class="border-left console">PRODUCTO/SERVICIO</th>
+                        <th width="70" class="console d-none d-sm-table-cell">CODIGO</th>
                         <th width="80" class="text-right border-left console">CANTIDAD</th>
                         <th width="80" class="border-left console">UM</th>
                         <th class="text-right border-left console">PRECIO</th>
-                        <th class="text-right border-left console">SUB-TOTAL</th>
-                        <th class="text-right border-left console">IGV</th>
+                        <th class="text-right border-left console d-none d-sm-table-cell">SUB-TOTAL</th>
+                        <th class="text-right border-left console d-none d-sm-table-cell">IGV</th>
                         <th class="text-right border-left console">TOTAL</th>
                         <th></th>
                     </tr>
@@ -190,10 +188,15 @@
                 </tbody>
                 <tfoot>
                     <tr class="border-top">
-                        <th coslpan="2">3 - Items</th>
-                        <td class="text-right"></td>
-                        <td></td>
-                        <td class="text-right"></td>
+                        <th>{{ count($row->lines) }} - Item(s)</th>
+                        <th class="d-none d-sm-table-cell">&nbsp;</td>
+                        <th class="text-right">{{ $row->lines->sum('quantity') }}</th>
+                        <th></th>
+                        <th></th>
+                        <th class="text-right d-none d-sm-table-cell">{{ number_format($row->lines->sum('amountbase'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th class="text-right d-none d-sm-table-cell">{{ number_format($row->lines->sum('amounttax'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th class="text-right">{{ number_format($row->lines->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th></th>
                     </tr>
                 </tfoot>
             </table>

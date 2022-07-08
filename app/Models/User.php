@@ -145,7 +145,7 @@ class User extends Authenticatable
     }
 
     public function warehouse(){
-        return WhWarehouse::all();
+        return WhWarehouse::where('isactive','Y')->get();
     }
 
     public function sequence($doctype){

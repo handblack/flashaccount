@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-body bg-light pt-1">
                     <div class="row">
-                        <div class="col-md-6 col-6 mt-2">
+                        <div class="col-md-12 col-12 mt-2">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">
@@ -43,7 +43,7 @@
                         <div class="col-md-4 mt-2">
                             <label class="mb-0">Cantidad</label>
                             <div class="input-group">
-                                <input type="number" id="quantity" name="quantity" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
+                                <input type="number" id="quantity" name="quantity" class="form-control text-right" step="0.00001" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <select name="um_id" id="um_id" class="form-control" style="border-top-left-radius:0px;border-bottom-left-radius:0px;" disabled>
                                         @foreach (auth()->user()->um() as $item)
@@ -63,7 +63,7 @@
                                         <option value="S">SIN IGV</option>
                                     </select>
                                 </div>
-                                <input type="number" id="priceunit" name="priceunit" class="form-control text-right ml-1" placeholder="Precio" aria-label="Cantidad" aria-describedby="basic-addon2" required>
+                                <input type="number" id="priceunit" name="priceunit" class="form-control text-right ml-1" step="0.01" placeholder="Precio" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                             </div>
                         </div>
 
@@ -74,7 +74,6 @@
                         
                     </div>
                     <div class="row">
-                            
                         <div class="col-4 col-md-4 mt-2">
                             <label class="mb-0">Sub-Total</label>
                             <input type="text" class="form-control text-right it-subtotal" disabled>

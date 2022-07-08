@@ -30,7 +30,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar documento</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('corder_rpt_pdf') }}"><i class="fas fa-download fa-fw"></i> Descargar PDF</a>
+                                <a class="dropdown-item" href="{{ route('corder.show','pdf') }}"><i class="fas fa-download fa-fw"></i> Descargar PDF</a>
                                 <!-- 
                                 <a class="dropdown-item" href="#"><i class="fas fa-print fa-fw"></i> Imprimir</a> 
                                 <a class="dropdown-item" href="#"><i class="fas fa-envelope fa-fw"></i> Enviar por Email</a>

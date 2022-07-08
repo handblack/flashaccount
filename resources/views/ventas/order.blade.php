@@ -64,10 +64,10 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Numero</th>
-                        <th class="d-none d-sm-inline-block">CodigoSN</th>
-                        <th class="d-none d-sm-inline-block">Socio de Negocio</th>
+                        <th class="d-none d-sm-table-cell">CodigoSN</th>
+                        <th class="d-none d-sm-table-cell">Socio de Negocio</th>
                         <th class="text-right pr-2">Importe</th>
-                        <th class="d-none d-sm-inline-block">Almacen</th>
+                        <th class="d-none d-sm-table-cell">Almacen</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -81,18 +81,18 @@
                                 </a>
                                 {{ $item->docstatus }}
                             </td>
-                            <td  class="d-none d-sm-inline-block" width="115">{{ $item->bpartner->bpartnercode }}</td>
-                            <td  class="d-none d-sm-inline-block" width="110">{{ $item->bpartner->bpartnername }}</td>
+                            <td class="d-none d-sm-table-cell" width="115">{{ $item->bpartner->bpartnercode }}</td>
+                            <td class="d-none d-sm-table-cell" width="110">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right pr-2 border-left border-right">
                                 {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
                             </td>
-                            <td class="d-none d-sm-inline-block">{{ $item->warehouse->shortname }}</td>
+                            <td class="d-none d-sm-table-cell">{{ $item->warehouse->shortname }}</td>
 
                             <td class="text-right">
                                 @if($grant->isdelete == 'Y')
                                     <a href="{{ route('corder.edit', [$item->token]) }}"> 
                                         <i class="fas fa-edit"></i>
-                                        Modificar
+                                        <span class="d-none d-sm-inline-block">Modificar</span>
                                     </a>
                                 @else
                                     <i class="fas fa-trash-alt fa-fw"></i>
@@ -167,7 +167,6 @@
                                     </div>
                                     <input type="text" class="form-control console" placeholder="<automatico>" aria-describedby="basic-addon1">
                                 </div>
-                                
                             </div>                           
                                
 
@@ -206,7 +205,6 @@
                     </div>
                     <div class="modal-footer p-1">
                         <div class="float-right">
-                            <button type="reset" class="btn btn-default"><i class="fas fa-window-close fa-fw"></i> Limpiar</button>                                 
                             <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
                         </div>
