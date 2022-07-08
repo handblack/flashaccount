@@ -16,11 +16,11 @@
         </div>
     </div>
 </section>
+
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-0">
-                <div class="col-4 col-md-4">
-
+            <div class="d-flex justify-content-between">
+                <div>
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
@@ -31,18 +31,20 @@
                             <span class="d-none d-lg-inline-block">&nbsp;Actualizar</span>
                         </a>
                     </div>
-                   
                 </div>
-                <div class="col-8 col-md-8">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Ventas / Comprobante de Venta
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-                        </h1>
+                <div>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
+                            <i class="fas fa-plus-square fa-fw"></i>
+                            <span class="d-none d-lg-inline-block">Agregar</span>   
+                        </a>    
                     </div>
+                    <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
+                        <i class="fas fa-plus-square fa-fw"></i>
+                        <span class="d-lg-inline-block">Agregar</span>    
+                    </a>
                 </div>
-            </div>
+           </div>
         </div>
     </section>
 @endsection
@@ -61,8 +63,8 @@
                     <li class="nav-item">
                         <span class="nav-link active">
                             <i class="far fa-edit fa-fw"></i>
-                            <span class="d-none d-sm-inline-block">
-                                Comprobante de Venta
+                            <span class="d-sm-inline-block">
+                                Comprobante
                             </span>
                         </span>
                     </li>
@@ -78,13 +80,10 @@
                                 <div class="btn-group">
                                     <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
                                         <i class="fas fa-plus-square fa-fw"></i>
-                                        &nbsp;Cabecera    
+                                        <span class="d-none d-lg-inline-block">Agregar</span>   
                                     </a>    
                                 </div>
-                                <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
-                                    <i class="fas fa-plus-square fa-fw"></i>
-                                    &nbsp;Agregar    
-                                </a>
+                                
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fas fa-save fa-fw"></i>
                                     &nbsp;Procesar
@@ -95,32 +94,24 @@
                 </form>
             </div>
         </div>
-        <div class="card-body " id="doc-header">
+        <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
-                <div class="col-6">
-                    <dl class="mb-0">
-                        <dt>Cliente</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
-                    </dl>
+                <div class="col-12 col-md-6">
+                    {{ $row->bpartner->bpartnername }}
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-md-3">
                     <dl class="mb-0">
                         <dt>Fecha</dt>
                         <dd>{{ $row->datetrx }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-md-3">
                     <dl class="mb-0">
-                        <dt>Almacen</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                        <dt>Fecha</dt>
+                        <dd>{{ $row->datetrx }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
-                    <dl class="mb-0">
-                        <dt>Serie</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
-                    </dl>
-                </div>
+                
             </div>
         </div>
         <div class="card-body border-bottom" id="doc-header-form" style="display: none;">

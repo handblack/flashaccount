@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-body bg-light pt-1">
                     <div class="row">
-                        <div class="col-md-4 mt-2">
+                        <div class="col-md-6 col-6 mt-2">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">
