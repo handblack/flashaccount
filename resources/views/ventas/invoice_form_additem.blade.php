@@ -44,7 +44,7 @@
                         <div class="col-md-4 mt-2">
                             <label class="mb-0">Cantidad</label>
                             <div class="input-group">
-                                <input type="text" id="qty" name="quantity" class="form-control text-right" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
+                                <input type="number" id="quantity" name="quantity" class="form-control text-right" step="0.00001" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <select name="um_id" id="um_id" class="form-control" style="border-top-left-radius:0px;border-bottom-left-radius:0px;" disabled>
                                         @foreach (auth()->user()->um() as $item)

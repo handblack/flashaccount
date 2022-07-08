@@ -47,7 +47,7 @@
                 </a>
                 <div class="btn-group">
 
-                    <form action="{{ route('corder.store') }}" method="POST">
+                    <form action="{{ route('cinvoice.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="mode" value="create">
                         <button type="submit" class="btn btn-primary btn-sm">

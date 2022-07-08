@@ -10,7 +10,7 @@ class WhCInvoiceLine extends Model
     use HasFactory;
     protected $fillable = [
         'invoice_id',
-        'order_id',
+        'orderline_id',
         'typeproduct',
         'typeoperation_id',
         'product_id',

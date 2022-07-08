@@ -19,6 +19,9 @@ class WhCInvoice extends Model
         'bpartner_id',
         'currency_id',
         'warehouse_id',     
+        'amountbase',
+        'amounttax',
+        'amountexo',
         'amountgrand',
         'amountopen',
         'docstatus'

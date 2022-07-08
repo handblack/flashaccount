@@ -37,7 +37,7 @@
                 <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
                     title="Marcar como página de inicio">
                     <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Nueva Orden</span>
+                    <span class="d-none d-sm-inline-block">Nuevo Comprobante</span>
                 </a>
 
                 <div class="btn-group" width="50">

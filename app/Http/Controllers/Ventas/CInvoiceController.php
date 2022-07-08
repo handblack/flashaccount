@@ -160,6 +160,7 @@ class CInvoiceController extends Controller
                             $header->token      = date("YmdHis");
                             #$header->amountbase  = $request->quantity * $request->priceunit;        
                             $header->save();
+                            //dd($header);
                             $header->token      = $hash->encode($header->id);
                             #$header->priceunittax = round(($header->tax->ratio / 100) * $header->priceunit,5) + $header->priceunit; 
                             #$header->amounttax   = round(($header->tax->ratio / 100) * $header->amountbase,2);
@@ -169,9 +170,13 @@ class CInvoiceController extends Controller
                                 $line = new WhCInvoiceLine();
                                 $line->fill($tline->toArray());
                                 $line->invoice_id = $header->id;
+                                //dd($line);
                                 $line->save();
                             }
-                            $temp->delete();
+                         
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
                         });
                         return redirect()->route('cinvoice.index')->with('message','Documento creado');
                         break;            
