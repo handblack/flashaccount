@@ -46,21 +46,29 @@ BEGIN
 	Actualiza los totales en los documentos (header)
 */
     IF p_module = 'invoice' THEN
-    UPDATE wh_c_invoices SET 
-        amountbase = ( SELECT SUM(amountbase) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-        amountexo = ( SELECT SUM(amountexo) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-        amounttax = ( SELECT SUM(amounttax) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-        amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-        amountopen = amountgrand
-    WHERE id = p_id;
+        UPDATE wh_c_invoices SET 
+            amountbase = ( SELECT SUM(amountbase) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
+            amountexo = ( SELECT SUM(amountexo) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
+            amounttax = ( SELECT SUM(amounttax) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
+            amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
+            amountopen = amountgrand
+        WHERE id = p_id;
+    ELSEIF p_module = 'order' THEN
+        UPDATE wh_c_orders SET 
+            amountbase = ( SELECT SUM(amountbase) FROM wh_c_order_lines WHERE order_id = p_id),
+            amountexo = ( SELECT SUM(amountexo) FROM wh_c_order_lines WHERE order_id = p_id),
+            amounttax = ( SELECT SUM(amounttax) FROM wh_c_order_lines WHERE order_id = p_id),
+            amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_order_lines WHERE order_id = p_id),
+            amountopen = amountgrand
+        WHERE id = p_id;
     ELSEIF p_module = 'credit' THEN
-    UPDATE wh_c_credits SET 
-        amountbase = ( SELECT SUM(amountbase) FROM wh_c_credit_lines WHERE credit_id = p_id),
-        amountexo = ( SELECT SUM(amountexo) FROM wh_c_credit_lines WHERE credit_id = p_id),
-        amounttax = ( SELECT SUM(amounttax) FROM wh_c_credit_lines WHERE credit_id = p_id),
-        amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_credit_lines WHERE credit_id = p_id),
-        amountopen = amountgrand
-    WHERE id = p_id;
+        UPDATE wh_c_credits SET 
+            amountbase = ( SELECT SUM(amountbase) FROM wh_c_credit_lines WHERE credit_id = p_id),
+            amountexo = ( SELECT SUM(amountexo) FROM wh_c_credit_lines WHERE credit_id = p_id),
+            amounttax = ( SELECT SUM(amounttax) FROM wh_c_credit_lines WHERE credit_id = p_id),
+            amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_credit_lines WHERE credit_id = p_id),
+            amountopen = amountgrand
+        WHERE id = p_id;    
     END IF;
 END;              
 ";

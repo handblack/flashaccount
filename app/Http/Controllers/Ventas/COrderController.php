@@ -187,6 +187,7 @@ class COrderController extends Controller
                                 $line = new WhCOrderLine();
                                 $line->fill($tline->toArray());
                                 $line->order_id = $header->id;
+                                //dd($tline);
                                 $line->save();
                             }
                             $temp->delete();

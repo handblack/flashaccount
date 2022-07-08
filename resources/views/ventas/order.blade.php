@@ -84,7 +84,7 @@
                             <td  class="d-none d-sm-inline-block" width="115">{{ $item->bpartner->bpartnercode }}</td>
                             <td  class="d-none d-sm-inline-block" width="110">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right pr-2 border-left border-right">
-                                {{ number_format($item->amount, 2) }} {{ $item->currency->currencyiso }}
+                                {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
                             </td>
                             <td class="d-none d-sm-inline-block">{{ $item->warehouse->shortname }}</td>
 
