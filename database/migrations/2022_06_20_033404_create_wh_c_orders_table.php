@@ -16,14 +16,24 @@ class CreateWhCOrdersTable extends Migration
         Schema::create('wh_c_orders', function (Blueprint $table) {
             $table->id();
             $table->date('dateorder');
+            $table->date('dateacct')->nullable();
+            $table->date('datedue')->nullable();
+            $table->string('period',6);
+            $table->foreignId('order_id')->nullable();
             $table->foreignId('bpartner_id');
             $table->foreignId('sequence_id');
-            $table->string('serial',4);
-            $table->string('documentno',15);
-            $table->foreignId('currency_id');
+            $table->foreignId('doctype_id')->nullable();
+            $table->enum('typepayment',['C','R'])->default('C'); // C=Contado  / R=Credito
+            $table->string('serial',5)->nullable();
+            $table->string('documentno',15)->nullable();
+            $table->foreignId('currency_id')->nullable();
             $table->foreignId('warehouse_id')->nullable();
-            $table->string('token',60);
-            $table->float('amount',12,2)->default(0);
+            $table->string('token',60)->nullable();
+            $table->float('amountbase',12,5)->default(0);
+            $table->float('amountexo',12,5)->default(0);
+            $table->float('amounttax',12,5)->default(0);
+            $table->float('amountgrand',12,5)->default(0);
+            $table->float('amountopen',12,5)->default(0);
             $table->enum('docstatus',['O','C','A'])->default('O');
             $table->timestamps();
         });

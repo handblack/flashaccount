@@ -83,18 +83,18 @@
             </div>
 
             <div class="col-sm-4 invoice-col">
-                {{ $header->bpartner->bpartnername }}
-                <br>{{ $header->bpartner->bpartnercode }}
+                {{ $row->bpartner->bpartnername }}
+                <br>{{ $row->bpartner->bpartnercode }}
             </div>
 
             <div class="col-sm-4 invoice-col">
                 <dl class="row">
                     <dt class="col-sm-5">Orden de Venta</dt>
-                    <dd class="col-sm-7">{{ $header->serial }}-{{ $header->documentno }}</dd>
+                    <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
                     <dt class="col-sm-5">Fecha</dt>
-                    <dd class="col-sm-7">{{ $header->dateorder }}</dd>
+                    <dd class="col-sm-7">{{ $row->dateorder }}</dd>
                     <dt class="col-sm-5">Almacen</dt>
-                    <dd class="col-sm-7">{{ $header->warehouse->warehousename }}</dd>
+                    <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
                 </dl>
             </div>
 
@@ -115,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lines as $item)
+                        @foreach ($row->lines as $item)
                             <tr>
                                 <td>{{ ($item->product_id) ? $item->product->productcode : '' }}</td>
                                 <td>{{ $item->description }}</td>
@@ -145,7 +145,7 @@
                         <tbody>
                             <tr>
                                 <th>Total:</th>
-                                <td class="text-right">{{ $header->currency->prefix }} {{ number_format($header->amountgrand,2) }}</td>
+                                <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -166,8 +166,8 @@ aria-hidden="true">
     <div class="modal-content">
         <form action="{{ route('corder_copy_to_invoice') }}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            <input type="hidden" name="order_id" value="{{ $header->id }}">
-            <input type="hidden" name="token" value="{{ $header->token }}">
+            <input type="hidden" name="order_id" value="{{ $row->id }}">
+            <input type="hidden" name="token" value="{{ $row->token }}">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Emitir Comprobante</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -9,10 +9,13 @@ class WhCOrder extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'dateorder',
+        'datedue',
+        'typepayment',
         'bpartner_id',
-        'currency_id',
         'sequence_id',
-        'warehouse_id'
+        'currency_id',
+        'warehouse_id',
     ];
 
     public function bpartner(){
@@ -26,7 +29,7 @@ class WhCOrder extends Model
     public function warehouse(){
         return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
     }
-    public function orderline(){
+    public function lines(){
         return $this->hasMany(WhCOrderLine::class,'order_id','id');
     }
 

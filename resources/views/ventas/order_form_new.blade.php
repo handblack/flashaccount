@@ -22,7 +22,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('cinvoice.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('corder.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -41,8 +41,19 @@
                     </div>
                     <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
                         <i class="fas fa-plus-square fa-fw"></i>
-                        <span class="d-lg-inline-block">Agregar</span>    
+                        <span class="d-none d-lg-inline-block">Agregar</span>    
                     </a>
+                    <div class="btn-group">
+
+                        <form action="{{ route('corder.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="mode" value="create">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-save fa-fw"></i>
+                                &nbsp;Procesar
+                            </button>
+                        </form>
+                    </div>
                 </div>
            </div>
         </div>
@@ -57,43 +68,6 @@
 
 @section('container')
     <div class="card">
-        <div class="card-header">
-            <div class="card-title">
-                <ul class="nav nav-tabs card-header-tabs ">
-                    <li class="nav-item">
-                        <span class="nav-link active">
-                            <i class="far fa-edit fa-fw"></i>
-                            <span class="d-sm-inline-block">
-                                Comprobante
-                            </span>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-tools">
-                <form action="{{ route('cinvoice.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="mode" value="create">
-                    <ul class="nav">
-                        <li>                        
-                            <div class="card-tools pull-right">
-                                <div class="btn-group">
-                                    <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
-                                        <i class="fas fa-plus-square fa-fw"></i>
-                                        <span class="d-none d-lg-inline-block">Agregar</span>   
-                                    </a>    
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-save fa-fw"></i>
-                                    &nbsp;Procesar
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
-                </form>
-            </div>
-        </div>
         <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
                 <div class="col-12 col-md-6">
@@ -174,7 +148,7 @@
             </div>
         </div>
         <div class="card-body table-responsive p-0">
-            <table border="1" class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
+            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
                 <thead style="font-size:0.8rem;">
                     <tr>
                         <th class="border-left console">PRODUCTO/SERVICIO</th>

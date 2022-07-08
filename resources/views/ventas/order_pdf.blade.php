@@ -14,7 +14,7 @@
     </tr>
 </table>
 <table width="100%">
-    @foreach ($row->orderline as $item)
+    @foreach ($row->lines as $item)
         <tr>
             <td>{{ ($item->typeproduct == 'P') ? $item->product->productcode : '' }}</td>
             <td>{{ $item->description }}</td>

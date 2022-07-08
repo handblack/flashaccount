@@ -196,7 +196,7 @@
                             </div>  
                             <div class="col-md-4 col-6 mt-2">
                                 <label class="mb-0">Emision</label>
-                                <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control" required>
+                                <input type="date" name="dateorder" value="{{ date("Y-m-d") }}" class="form-control" required>
                             </div>  
                             <div class="col-md-4 col-6 mt-2">
                                 <label class="mb-0">Vencimiento</label>

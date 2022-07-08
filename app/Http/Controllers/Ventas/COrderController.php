@@ -104,7 +104,7 @@ class COrderController extends Controller
                         $data['message'] = 'Seleccione los documentos a consignar';
                         $fields = [
                             'bpartner_id',                
-                            'dateinvoiced',
+                            'dateorder',
                             'datedue',
                             'typepayment',
                             'warehouse_id',
@@ -162,38 +162,36 @@ class COrderController extends Controller
                         return response()->json($data);
                         break;
             case 'create':
-                        if(!session()->has('session_ventas_invoice_id')){
+                        if(!session()->has('session_ventas_order_id')){
                             abort(403,'Id temporal ya no existe');
                         }
-                        $temp = TempCOrderLine::where('invoice_id',session('session_ventas_order_id'))->get();
+                        $temp = TempCOrderLine::where('order_id',session('session_ventas_order_id'))->get();
                         if($temp->isEmpty()){
                             return back()->with('error','documento no tiene detalle');
                         }
                         DB::transaction(function () use($request) {
                             $hash = new Hashids(env('APP_HASH'));
                             $temp = TempCOrder::where('id',session('session_ventas_order_id'))->first();
-                            $header = new WhCInvoice();
+                            $header = new WhCOrder();
                             $header->fill($temp->toArray());
                             $header->dateacct   = $temp->datetrx;
+                            $header->dateacct   = $request->dateorder;
+                            $header->period     = Carbon::parse($request->dateorder)->format('Ym');
                             $header->serial     = auth()->user()->get_serial($temp->sequence_id);
                             $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
                             $header->token      = date("YmdHis");
-                            #$header->amountbase  = $request->quantity * $request->priceunit;        
                             $header->save();
                             $header->token      = $hash->encode($header->id);
-                            #$header->priceunittax = round(($header->tax->ratio / 100) * $header->priceunit,5) + $header->priceunit; 
-                            #$header->amounttax   = round(($header->tax->ratio / 100) * $header->amountbase,2);
-                            #$header->amountgrand = $header->amountbase + $header->amounttax;
                             $header->save();
                             foreach($temp->lines  as $tline){
-                                $line = new WhCInvoiceLine();
+                                $line = new WhCOrderLine();
                                 $line->fill($tline->toArray());
-                                $line->invoice_id = $header->id;
+                                $line->order_id = $header->id;
                                 $line->save();
                             }
                             $temp->delete();
                         });
-                        return redirect()->route('cinvoice.index')->with('message','Documento creado');
+                        return redirect()->route('corder.index')->with('message','Documento creado');
                         break;            
         }
     }
@@ -209,45 +207,7 @@ class COrderController extends Controller
         $tline->amountgrand = $tline->amountbase + $tline->amounttax;
         $tline->save();
     }
-    public function store_(Request $request)
-    {
-        $request->validate([
-            'bpartner_id' => 'required',
-            'currency_id' => 'required',
-            'sequence_id' => 'required',
-        
-        ]);
-        $lines = TempLine::where('session','corder-'.session()->getId())->get();
-        $hash = new Hashids(env('APP_HASH'));
-        $row = new WhCOrder();
-        $row->fill($request->all());
-        $row->dateorder  = date("Y-m-d");
-        $row->serial     = auth()->user()->get_serial($row->sequence_id);
-        $row->documentno = auth()->user()->set_lastnumber($row->sequence_id);
-        $row->amount = $lines->sum('amountgrand');
-        $row->token = date("YmdHIs");
-        $row->save();        
-        $row->token = $hash->encode($row->id); 
-        $row->save();        
-        
-        //Guardamos las lineas
-        
-        foreach($lines as $line){
-            $lin = new WhCOrderLine();
-            $lin->fill($line->toArray());
-            $lin->order_id = $row->id; 
-            $lin->token    = $line->token; 
-            $lin->save();
-            $lin->token    = $hash->encode($lin->id);
-            $lin->save();
-        }
-        //Limpiamos el cotenedor
-        TempLine::where('session','corder-'.session()->getId())
-            ->delete();
-        //return redirect()->route('corder.index');
-        return redirect()->route('corder.show',$row->token);
-    }
-
+    
     /**
      * Display the specified resource.
      *
@@ -255,6 +215,31 @@ class COrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        if($id == 'pdf'){
+            if(!session()->has('session_ventas_order_id')){
+                return redirect()->route('corder.index');
+            }
+            $row = WhCOrder::where('token',session('session_ventas_order_id'))->first();  
+            $filename = 'order_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('ventas.order_pdf', ['row' => $row]);
+            return $pdf->download($filename);
+        }else{
+            if(auth()->user()->grant($this->module)->isread == 'N'){
+                return back()->with('error','No tienes privilegio para ver');
+            }
+            session(['session_ventas_order_id' => $id]);
+            $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+            $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            $row = WhCOrder::where('token',$id)->first();
+            return view('ventas.order_show',[
+                'row' => $row,
+                'sequence_invoice' => $sequence_invoice
+            ]);
+        }
+    }
+
+    public function show_($id)
     {
         if(auth()->user()->grant($this->module)->isread == 'N'){
             return back()->with('error','No tienes privilegio para crear');

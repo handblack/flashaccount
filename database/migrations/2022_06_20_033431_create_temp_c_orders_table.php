@@ -15,7 +15,7 @@ class CreateTempCOrdersTable extends Migration
     {
         Schema::create('temp_c_orders', function (Blueprint $table) {
             $table->id();
-            $table->date('dateinvoiced');
+            $table->date('dateorder');
             $table->date('dateacct')->nullable();
             $table->date('datedue')->nullable();
             $table->string('period',6);

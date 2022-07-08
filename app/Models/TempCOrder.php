@@ -9,7 +9,7 @@ class TempCOrder extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'dateinvoiced',
+        'dateorder',
         'datedue',
         'typepayment',
         'bpartner_id',
