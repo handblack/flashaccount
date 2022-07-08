@@ -183,16 +183,16 @@
             </div>
         </div>
         <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
+            <table border="1" class="table table-hover text-nowrap table-sm table-borderless mb-0" id="table-products">
                 <thead style="font-size:0.8rem;">
                     <tr>
                         <th class="border-left console">PRODUCTO/SERVICIO</th>
-                        <th width="70" class="d-none console">CODIGO</th>
+                        <th width="70" class="d-none d-sm-table-cell console">CODIGO</th>
                         <th width="80" class="text-right border-left console">CANTIDAD</th>
-                        <th width="80" class="border-left console">UM</th>
+                        <th width="80" class="  console">UM</th>
                         <th class="text-right border-left console">PRECIO</th>
-                        <th class="text-right border-left console">SUB-TOTAL</th>
-                        <th class="text-right border-left console">IGV</th>
+                        <th class="text-right border-left console d-none d-sm-table-cell">SUB-TOTAL</th>
+                        <th class="text-right border-left console d-none d-sm-table-cell">IGV</th>
                         <th class="text-right border-left console">TOTAL</th>
                         <th></th>
                     </tr>
@@ -200,15 +200,20 @@
                 <tbody>
                     <tr class="d-none"></tr>  
                     @foreach ($row->lines as $item)
-                        @include('ventas.invoice_form_list_item',['item' => $item])
+                        @include('ventas.order_form_list_item',['item' => $item])
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr class="border-top">
-                        <th coslpan="2">3 - Items</th>
-                        <td class="text-right"></td>
-                        <td></td>
-                        <td class="text-right"></td>
+                        <th>{{ count($row->lines) }} - Item(s)</th>
+                        <th class="d-none d-sm-table-cell">&nbsp;</td>
+                        <th class="text-right">{{ $row->lines->sum('quantity') }}</th>
+                        <th></th>
+                        <th></th>
+                        <th class="text-right d-none d-sm-table-cell">{{ number_format($row->lines->sum('amountbase'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th class="text-right d-none d-sm-table-cell">{{ number_format($row->lines->sum('amounttax'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th class="text-right">{{ number_format($row->lines->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}</th>
+                        <th></th>
                     </tr>
                 </tfoot>
             </table>

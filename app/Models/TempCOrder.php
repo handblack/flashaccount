@@ -27,6 +27,6 @@ class TempCOrder extends Model
     }
 
     public function lines(){
-        return $this->hasMany(TempCInvoiceLine::class,'invoice_id','id');
+        return $this->hasMany(TempCOrderLine::class,'order_id','id');
     }
 }
