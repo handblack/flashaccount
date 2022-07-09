@@ -20,7 +20,7 @@ FOR EACH ROW BEGIN
     CALL pax_update_amount('invoice',NEW.id);
 END;
 ";    
-DB::unprepared($sql);
+#DB::unprepared($sql);
 // ------------------------------------------------------------------------------------------------------------------------------------
 $sql = "
 CREATE TRIGGER `ccreditlines_update_amount` AFTER INSERT ON `wh_c_credit_lines` 
@@ -28,7 +28,7 @@ FOR EACH ROW BEGIN
     CALL pax_update_amount('credit',NEW.id);
 END;
 ";    
-DB::unprepared($sql);
+#DB::unprepared($sql);
 // ------------------------------------------------------------------------------------------------------------------------------------
 $sql = "
 CREATE TRIGGER `corderlines_update_amount` AFTER INSERT ON `wh_c_order_lines` 
@@ -36,7 +36,7 @@ FOR EACH ROW BEGIN
     CALL pax_update_amount('order',NEW.id);
 END;
 ";    
-DB::unprepared($sql);
+#DB::unprepared($sql);
 // ------------------------------------------------------------------------------------------------------------------------------------
     }
 
@@ -47,8 +47,8 @@ DB::unprepared($sql);
      */
     public function down()
     {
-        DB::unprepared("DROP TRIGGER `cinvoicelines_upate_amount`;");
-        DB::unprepared("DROP TRIGGER `ccreditlines_update_amount`;");
-        DB::unprepared("DROP TRIGGER `corderlines_update_amount`;");
+        #DB::unprepared("DROP TRIGGER `cinvoicelines_upate_amount`;");
+        #DB::unprepared("DROP TRIGGER `ccreditlines_update_amount`;");
+        #DB::unprepared("DROP TRIGGER `corderlines_update_amount`;");
     }
 }

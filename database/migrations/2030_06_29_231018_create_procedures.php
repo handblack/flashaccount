@@ -63,21 +63,24 @@ BEGIN
             a.amounttax = IFNULL(b.tigv,0),
             a.amountgrand = IFNULL(b.total,0)
         WHERE a.id = p_id;
-        /*UPDATE wh_c_invoices SET 
-            amountbase = ( SELECT SUM(IFNULL(amountbase,0)) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-            amountexo = ( SELECT SUM(IFNULL(amountexo,0)) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-            amounttax = ( SELECT SUM(IFNULL(amounttax,0)) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-            amountgrand = ( SELECT SUM(IFNULL(amountgrand,0)) FROM wh_c_invoice_lines WHERE invoice_id = p_id),
-            amountopen = amountgrand
-        WHERE id = p_id;*/
     ELSEIF p_module = 'order' THEN
-        UPDATE wh_c_orders SET 
-            amountbase = ( SELECT SUM(amountbase) FROM wh_c_order_lines WHERE order_id = p_id),
-            amountexo = ( SELECT SUM(amountexo) FROM wh_c_order_lines WHERE order_id = p_id),
-            amounttax = ( SELECT SUM(amounttax) FROM wh_c_order_lines WHERE order_id = p_id),
-            amountgrand = ( SELECT SUM(amountgrand) FROM wh_c_order_lines WHERE order_id = p_id),
-            amountopen = amountgrand
-        WHERE id = p_id;
+        UPDATE wh_c_orders a
+        INNER JOIN (
+            SELECT order_id,
+                SUM(amountbase) AS tbase,
+                SUM(amountexo) AS texo,
+                SUM(amounttax) AS tigv,
+                SUM(amountgrand) AS total
+            FROM wh_c_order_lines 
+            WHERE order_id = p_id 
+            GROUP BY order_id
+        ) b ON b.order_id = a.id
+        SET 
+            a.amountbase = IFNULL(b.tbase,0),
+            a.amountexo = IFNULL(b.texo,0),
+            a.amounttax = IFNULL(b.tigv,0),
+            a.amountgrand = IFNULL(b.total,0)
+        WHERE a.id = p_id;
     ELSEIF p_module = 'credit' THEN
         UPDATE wh_c_credits SET 
             amountbase = ( SELECT SUM(amountbase) FROM wh_c_credit_lines WHERE credit_id = p_id),
