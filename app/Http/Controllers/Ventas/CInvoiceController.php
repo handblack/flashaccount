@@ -36,7 +36,8 @@ class CInvoiceController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhCInvoice::orderBy('dateinvoiced','desc')
+        $result = WhCInvoice::orderBy('dateinvoiced','DESC')
+            ->orderBy('documentno','DESC')
             ->paginate(env('PAGINATE_INVOICE',20));
         $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
         $sequence = WhSequence::whereIn('doctype_id',$dti)->get();
@@ -158,22 +159,16 @@ class CInvoiceController extends Controller
                             $header->serial     = auth()->user()->get_serial($temp->sequence_id);
                             $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
                             $header->token      = date("YmdHis");
-                            #$header->amountbase  = $request->quantity * $request->priceunit;        
                             $header->save();
-                            //dd($header);
                             $header->token      = $hash->encode($header->id);
-                            #$header->priceunittax = round(($header->tax->ratio / 100) * $header->priceunit,5) + $header->priceunit; 
-                            #$header->amounttax   = round(($header->tax->ratio / 100) * $header->amountbase,2);
-                            #$header->amountgrand = $header->amountbase + $header->amounttax;
                             $header->save();
                             foreach($temp->lines  as $tline){
                                 $line = new WhCInvoiceLine();
                                 $line->fill($tline->toArray());
                                 $line->invoice_id = $header->id;
-                                //dd($line);
                                 $line->save();
                             }
-                         
+                            DB::select('CALL pax_update_amount(?,?)',['invoice',$header->id]);
                             if(env('APP_ENV','local') == 'production'){
                                 $temp->delete();
                             }

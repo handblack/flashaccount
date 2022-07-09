@@ -25,10 +25,10 @@ class CreateWhCInvoiceLinesTable extends Migration
             $table->float('quantity',12,5)->default(0);
             $table->float('priceunit',12,5)->default(0);
             $table->float('priceunittax',12,5)->default(0);
-            $table->float('amountbase',12,5)->default(0);
-            $table->float('amountexo',12,5)->default(0);
-            $table->float('amounttax',12,5)->default(0);
-            $table->float('amountgrand',12,5)->default(0);
+            $table->float('amountbase',12,5)->nullable();
+            $table->float('amountexo',12,5)->nullable();
+            $table->float('amounttax',12,5)->nullable();
+            $table->float('amountgrand',12,5)->nullable();
             $table->string('token',60)->nullable();
 
             $table->unsignedBigInteger('invoice_id');

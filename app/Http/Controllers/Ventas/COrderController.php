@@ -42,7 +42,8 @@ class COrderController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhCOrder::paginate(env('PAGINATE_CORDER',10));
+        $result = WhCOrder::orderBy('documentno','DESC')
+            ->paginate(env('PAGINATE_CORDER',10));
         return view('ventas.order',[
             'result' => $result,
             'grant'  => $grant,
@@ -192,7 +193,10 @@ class COrderController extends Controller
                                 //dd($tline);
                                 $line->save();
                             }
-                            $temp->delete();
+                            DB::select('CALL pax_update_amount(?,?)',['order',$header->id]);
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
                         });
                         return redirect()->route('corder.index')->with('message','Documento creado');
                         break;            
