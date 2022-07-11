@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempBankAllocate;
+use App\Models\TempBankAllocateLine;
+use App\Models\TempBankAllocatePayment;
 use App\Models\WhBAllocate;
 use App\Models\WhBankAccount;
+use App\Models\WhBIncome;
+use App\Models\WhCInvoice;
 use App\Models\WhCurrency;
 use App\Models\WhParam;
 use Hashids\Hashids;
@@ -71,16 +75,15 @@ class BankAllocateController extends Controller
             return response()->json($data);
         }
         DB::transaction(function () use($request) {
-            $hash = new Hashids(env('APP_HASH'));
             $header = new TempBankAllocate();
             $header->fill($request->all());
             $header->token = session()->getId();
             $header->save();
-            $header->token = $hash->encode($header->id);
+            $header->token = md5($header->id);
             $header->save();
-            session(['allocate_session' => $header->token]);
+            session(['session_allocate_id' => $header->id]);
         });
-        $data['url'] = route('ballocate.edit',session('allocate_session'));
+        $data['url'] = route('ballocate.edit',session('session_allocate_id'));
         return response()->json($data);
     }
 
@@ -103,10 +106,14 @@ class BankAllocateController extends Controller
      */
     public function edit($id)
     {
-        $row = TempBankAllocate::where('token',$id)->first();
+        $row = TempBankAllocate::where('id',$id)->first();
+        $anticipos = WhBIncome::where('amountopen','<>',0)->get();
+        $invoices = WhCInvoice::all();
         return view('bank.allocate_form',[
-            'row'  => $row,
-            'mode' => 'step1',
+            'row'       => $row,
+            'mode'      => 'step1',
+            'anticipos' => $anticipos,
+            'invoices'  => $invoices,
             'url'  => route('ballocate.update',$row->token),
         ]);
     }
@@ -120,7 +127,47 @@ class BankAllocateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        switch($request->mode){
+            case 'step1':
+                            $htem = TempBankAllocate::where('id',session('session_allocate_id'))->first();
+                            // Agregando PAYMENT -------------------------------------------
+                            if($request->chk_payment){
+                                $paym = new TempBankAllocatePayment();
+                                foreach($request->chk_payment as $k => $v){
+                                    $paym->create([
+                                        'allocate_id' => $htem->id,
+                                        'income_id'   => $v,
+                                        'amount'      => $request->apply_payment[$k],
+                                    ]);
+                                }
+                            }
+                            // Agregando INVOICE -------------------------------------------
+                            if($request->chk_invoice){
+                                $line = new TempBankAllocateLine();
+                                foreach($request->chk_invoice as $k => $v){
+                                    $line->create([
+                                        'allocate_id' => $htem->id,
+                                        'cinvoice_id'   => $v,
+                                        'amount'      => $request->apply_invoice[$k],
+                                    ]);
+                                    
+                                }
+                            }
+                            $payment = TempBankAllocatePayment::where('allocate_id',$htem->id)->get();
+                            $lines = TempBankAllocateLine::where('allocate_id',$htem->id)->get();
+                            if($payment->sum('amount') <> $lines->sum('amount')){
+                                return back()->with('error','El debe y haber deben ser mismo importe');
+                            }
+
+                            return view('bank.allocate_preview',[
+                                'row'     => $htem,
+                                'payment' => $payment,
+                                'lines'   => $lines,
+                            ]);
+                            break;
+            case 'create':
+                            break;
+        }
     }
 
     /**

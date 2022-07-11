@@ -70,6 +70,7 @@
                         <th class="d-none d-sm-table-cell">Socio de Negocio</th>
                         <th class="d-none d-sm-inline-block">Almacen</th>
                         <th class="text-right">Importe</th>
+                        <th class="text-right">Abierto</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -85,6 +86,9 @@
                             <td class="text-right">
                                 {{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}
                                 <small>{{ $item->currency->currencyiso }}</small>
+                            </td>
+                            <td class="text-right">
+                                {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
                             </td>
                             <td class="text-right">
                                 <a href="{{ route('cinvoice.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>

@@ -129,8 +129,6 @@
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
                             </tr>
                         @endforeach
-                        
-                       
                     </tbody>
                 </table>
             </div>

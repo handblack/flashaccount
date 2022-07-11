@@ -24,4 +24,12 @@ class WhBIncome extends Model
         return $this->hasOne(WhCurrency::class,'id','currency_id');
     }
 
+    public function bankaccount(){
+        return $this->hasOne(WhBankAccount::class,'id','bankaccount_id');
+    }
+
+    public function payment(){
+        return $this->hasOne(WhBIncomePayment::class,'id','payment');
+    }
+
 }

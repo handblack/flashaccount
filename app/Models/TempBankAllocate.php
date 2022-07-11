@@ -14,4 +14,9 @@ class TempBankAllocate extends Model
         'amount',
         'rate',
     ];
+
+    public function bpartner(){
+        return $this->hasOne(WhBpartner::class,'id','bpartner_id');
+    }
+    
 }

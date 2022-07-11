@@ -186,7 +186,10 @@ class BankIncomeController extends Controller
                 // verificamos si hay anticipo --------------------------------------------------
                 $header->amountanticipation = $header->amount - $amt;
                 $header->amountopen = $header->amount - $amt;
+                $hash = new Hashids(env('APP_HASH','miasoftware'));
+                $header->token = 'bi_' . $hash->encode($header->id);
                 $header->save();
+               
             });
             return redirect()->route('bincome.index');
         }elseif($request->mode == 'step1'){

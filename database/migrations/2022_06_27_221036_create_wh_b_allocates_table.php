@@ -15,6 +15,10 @@ class CreateWhBAllocatesTable extends Migration
     {
         Schema::create('wh_b_allocates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('bpartner_id');
+            $table->date('datetrx');
+            $table->date('dateacct');
+            $table->string('period',6);
             $table->timestamps();
         });
     }

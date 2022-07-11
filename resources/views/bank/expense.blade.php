@@ -6,6 +6,22 @@
 @endsection
 
 @section('breadcrumb')
+    <section class="content-header pb-2">
+        <div class="container-fluid">
+            <div class="row mb-0">
+                <div class="col-sm-6">
+                    <h1><i class="fas fa-edit fa-fw"></i> Asignación</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">Caja y Bancos</li>
+                        <li class="breadcrumb-item">Asignación</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">

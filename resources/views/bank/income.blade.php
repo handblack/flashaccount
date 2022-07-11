@@ -6,6 +6,21 @@
 @endsection
 
 @section('breadcrumb')
+    <section class="content-header pb-2">
+        <div class="container-fluid">
+            <div class="row mb-0">
+                <div class="col-sm-6">
+                    <h1><i class="fas fa-edit fa-fw"></i> Ingresos</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">Caja y Bancos</li>
+                        <li class="breadcrumb-item">Ingresos</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
@@ -87,7 +102,7 @@
             </form>
         </div>
         
-        <div class="card-body p-0">
+        <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless">    
                 <thead>
                     <tr>
@@ -128,7 +143,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Registrar INGRESO a Caja / Bancos</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Registrar INGRESO</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -140,10 +155,9 @@
                                 <select name="bpartner_id" class="form-control select2-bpartner" required></select>
                             </div>
                         </div>
-                        <p class="lead mt-3">Para todo ingreso a CAJA/BANCO se debe de identificar al Socio de Negocio, asi tambien podra especificar como ANTICIPO a su cuenta</p>
 
-                        <div class="row mt-2">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 mt-2">
                                 <label class="mb-0">Banco / Caja [INGRESO]</label>
                                 <select class="form-control" name="bankaccount_id" required>
                                     <option value="" disabled selected>-- SELECCIONA --</option>
@@ -152,19 +166,19 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-7 col-md-3 mt-2">
                                 <label class="mb-0">Fecha TRX</label>
                                 <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-5 col-md-3 mt-2">
                                 <label class="mb-0">Tipo de Cambio</label>
                                 <input type="text" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
                             </div>
                         </div>
                         
                             
-                        <div class="row mt-2">
-                            <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-6 col-md-4 mt-2">
                                 <label class="mb-0">Medio de Pago</label>
                                 <select class="form-control" name="paymentmethod_id" style="border-top-right-radius:0px;border-bottom-right-radius:0px;" required>
                                     <option value="" selected disabled>-- SELECCIONAR --</option>
@@ -173,14 +187,14 @@
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label class="mb-0">Nro OPE / Doc Referencia / Oficina</label>
+                            <div class="col-6 col-md-4 mt-2">
+                                <label class="mb-0">Nro OPE / Referencia</label>
                                 <input type="text" class="form-control" name="documentno" required>
                             </div>
 
  
                             
-                            <div class="col-md-4">
+                            <div class="col-md-4 mt-2">
                                 <label class="mb-0">Importe</label>
                                 <div class="input-group">
                                     <input type="text" id="amount" name="amount" class="form-control text-right text-monospace" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2" required="">
@@ -203,11 +217,11 @@
                         </div>
                         
                     </div>
-                    <div class="modal-footer bg-light">
-                        <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear INGRESO</button>
-                
+                    <div class="modal-footer p-1">
+                        <div class="float-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
+                        </div>
                     </div>
                 </div>
             </form>

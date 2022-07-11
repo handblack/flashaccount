@@ -1,7 +1,23 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Comprobante de Venta</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Ventas</li>
+                    <li class="breadcrumb-item">Comprobante de Venta</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-4">
@@ -55,24 +71,61 @@
 @endsection
 
 @section('container')
-    <div class="card">
-        {{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}
-        <table class="table table-sm">
-            <tbody>
-                @foreach ($row->lines as $item)
-                    <tr>
-                        <td>{{ $item->typeproduct == 'P' ? $item->product->productcode : '' }}</td>
-                        <td>{{ $item->description }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ $item->um->shortname }}</td>
-                        <td>{{ $item->package }}</td>
-                        <td>{{ number_format($item->amountgrand, env('DECIMAL_AMOUNT', 2)) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="invoice p-3 mb-3">
+        <div class="row invoice-info">
+            <div class="col-md-8 invoice-col">
+                {{ $row->bpartner->bpartnername }}
+                <br>{{ $row->bpartner->bpartnercode }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table table-striped table-sm table-borderless mb-0">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class="d-none d-sm-inline-block">Codigo</th>
+                            <th class="text-right">Cantidad</th>
+                            <th class="d-none d-sm-inline-block">UM</th>
+                            <th class="text-right">Precio</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($row->lines as $item)
+                            <tr>
+                                <td>{{ $item->description }}</td>
+                                <td class="d-none d-sm-inline-block">{{ ($item->product_id) ? $item->product->productcode : '' }}</td>
+                                <td class="text-right">{{ $item->quantity }}</td>
+                                <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
+                                <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
+                                <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row border-top">
+            <div class="col-6 col-md-8"></div>
+            <div class="col-6 col-md-4">
+                <div class="table-responsive">
+                    <table class="table-sm" width="100%">
+                        <tbody>
+                            <tr>
+                                <th>Total:</th>
+                                <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
 
+
+    
 
     <!-- Modal -->
     <div class="modal fade" id="modal-create-credit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

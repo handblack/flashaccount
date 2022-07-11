@@ -14,30 +14,85 @@ class CreateProcedures extends Migration
      */
     public function up()
     {
-        $procedure = "      
-        DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`;        
-        CREATE PROCEDURE `pax_rpt_invoice_open_customers`(
-            IN p_session VARCHAR(60),
-            IN p_datetrx DATE,
-            IN p_bpartner_id BIGINT
-        )
-        BEGIN
-            INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amount,amountopen) SELECT 
-                                                            p_session
-                                                            ,i.dateinvoiced
-                                                            ,i.id
-                                                            ,i.bpartner_id
-                                                            ,i.amountgrand
-                                                            ,i.amountopen
-                                                        FROM
-                                                            `wh_c_invoices` i
-                                                        WHERE
-                                                            i.dateinvoiced <= p_datetrx
-                                                            AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
-        END;              
-        ";
-        
-        DB::unprepared($procedure);
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`;        
+CREATE PROCEDURE `pax_rpt_invoice_open_customers`(
+    IN p_session VARCHAR(60),
+    IN p_datetrx DATE,
+    IN p_bpartner_id BIGINT
+)
+BEGIN
+    INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amount,amountopen) SELECT 
+                                                    p_session
+                                                    ,i.dateinvoiced
+                                                    ,i.id
+                                                    ,i.bpartner_id
+                                                    ,i.amountgrand
+                                                    ,i.amountopen
+                                                FROM
+                                                    `wh_c_invoices` i
+                                                WHERE
+                                                    i.dateinvoiced <= p_datetrx
+                                                    AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_saldos`;        
+CREATE PROCEDURE `pax_cinvoice_actualiza_saldos`(p_id BIGINT)
+BEGIN
+    UPDATE wh_c_invoices a
+    INNER JOIN (
+        SELECT invoice_id,
+            SUM(amountbase) AS tbase,
+            SUM(amountexo) AS texo,
+            SUM(amounttax) AS tigv,
+            SUM(amountgrand) AS total
+        FROM wh_c_invoice_lines 
+        WHERE invoice_id = p_id 
+        GROUP BY invoice_id
+    ) b ON b.invoice_id = a.id
+    SET 
+        a.amountbase = IFNULL(b.tbase,0),
+        a.amountexo = IFNULL(b.texo,0),
+        a.amounttax = IFNULL(b.tigv,0),
+        a.amountgrand = IFNULL(b.total,0),
+        a.amountopen = IFNULL(b.total,0)
+    WHERE a.id = p_id;
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_totales`;        
+CREATE PROCEDURE `pax_cinvoice_actualiza_totales`(p_id BIGINT)
+BEGIN
+/*
+    Aqui se debe de modificar para que busque saldos de pagos
+*/
+    UPDATE wh_c_invoices a
+    INNER JOIN (
+        SELECT invoice_id,
+            SUM(amountbase) AS tbase,
+            SUM(amountexo) AS texo,
+            SUM(amounttax) AS tigv,
+            SUM(amountgrand) AS total
+        FROM wh_c_invoice_lines 
+        WHERE invoice_id = p_id 
+        GROUP BY invoice_id
+    ) b ON b.invoice_id = a.id
+    SET 
+        a.amountbase = IFNULL(b.tbase,0),
+        a.amountexo = IFNULL(b.texo,0),
+        a.amounttax = IFNULL(b.tigv,0),
+        a.amountgrand = IFNULL(b.total,0),
+        a.amountopen = IFNULL(b.total,0)
+    WHERE a.id = p_id;
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
 $sql = "      
 DROP PROCEDURE IF EXISTS `pax_update_amount`;        
 CREATE PROCEDURE `pax_update_amount`(p_module VARCHAR(30),p_id BIGINT)
@@ -61,7 +116,8 @@ BEGIN
             a.amountbase = IFNULL(b.tbase,0),
             a.amountexo = IFNULL(b.texo,0),
             a.amounttax = IFNULL(b.tigv,0),
-            a.amountgrand = IFNULL(b.total,0)
+            a.amountgrand = IFNULL(b.total,0),
+            a.amountopen = IFNULL(b.total,0)
         WHERE a.id = p_id;
     ELSEIF p_module = 'order' THEN
         UPDATE wh_c_orders a
@@ -116,7 +172,7 @@ DB::unprepared($sql);
                                                 AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
         END;
         ";
-        DB::unprepared($procedure);
+        DB::unprepared($sql);
         // ------------------------------------------------------------------------------------------------------------------------------------
         $sql = "
         DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`;
@@ -130,7 +186,7 @@ DB::unprepared($sql);
             SELECT 0;
         END;
         ";
-        DB::unprepared($procedure);
+        DB::unprepared($sql);
 // ------------------------------------------------------------------------------------------------------------------------------------        
  
  
@@ -143,6 +199,8 @@ DB::unprepared($sql);
      */
     public function down()
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_saldos`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_totales`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_supplier`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`");

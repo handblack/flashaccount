@@ -9,11 +9,10 @@ class TempBankAllocateLine extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'income_id',
-        'expense_id',
         'cinvoice_id', 
         'pinvoice_id',
-        'allocate_id'
+        'allocate_id',
+        'amount',
     ];
 
     public function income(){
