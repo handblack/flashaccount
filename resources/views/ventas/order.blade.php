@@ -75,7 +75,7 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="110">{{ $item->dateorder }}</td>
-                            <td>
+                            <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}">
                                 <a href="{{ route('corder.show',$item->token) }}">
                                     {{ $item->serial }}-{{ $item->documentno }} 
                                 </a>
@@ -89,7 +89,7 @@
                             <td class="d-none d-sm-table-cell">{{ $item->warehouse->shortname }}</td>
 
                             <td class="text-right">
-                                @if($grant->isdelete == 'Y')
+                                @if($grant->isedit == 'Y')
                                     <a href="{{ route('corder.edit', [$item->token]) }}"> 
                                         <i class="fas fa-edit"></i>
                                         <span class="d-none d-sm-inline-block">Modificar</span>

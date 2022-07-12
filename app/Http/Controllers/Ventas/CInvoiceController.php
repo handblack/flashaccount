@@ -161,6 +161,7 @@ class CInvoiceController extends Controller
                             $header->token      = date("YmdHis");
                             $header->save();
                             $header->token      = $hash->encode($header->id);
+                            $header->docstatus = 'C';
                             $header->save();
                             foreach($temp->lines  as $tline){
                                 $line = new WhCInvoiceLine();
@@ -168,7 +169,7 @@ class CInvoiceController extends Controller
                                 $line->invoice_id = $header->id;
                                 $line->save();
                             }
-                            DB::select('CALL pax_update_amount(?,?)',['invoice',$header->id]);
+                            DB::select('CALL pax_cinvoice_actualiza_totales(?)',[$header->id]);
                             if(env('APP_ENV','local') == 'production'){
                                 $temp->delete();
                             }

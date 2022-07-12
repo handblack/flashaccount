@@ -34,6 +34,11 @@
             color: rgba(255, 0, 0, 0.372);
             font-style: italic;
         }
+        .tachado2 {
+            text-decoration:line-through;
+            color: rgba(44, 44, 44, 0.372);
+            font-style: italic;
+        }
         .console{
             font-family: 'Inconsolata', monospace;
         }
