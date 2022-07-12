@@ -160,14 +160,18 @@ class CInvoiceController extends Controller
                             $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
                             $header->token      = date("YmdHis");
                             $header->save();
-                            $header->token      = $hash->encode($header->id);
-                            $header->docstatus = 'C';
+                            $header->token      = $hash->encode($header->id);                            
                             $header->save();
                             foreach($temp->lines  as $tline){
                                 $line = new WhCInvoiceLine();
                                 $line->fill($tline->toArray());
                                 $line->invoice_id = $header->id;
                                 $line->save();
+                            }
+                            $ord = WhCOrder::where('id',$header->order_id)->first();
+                            if($ord){
+                                $ord->docstatus = 'C';
+                                $ord->save();
                             }
                             DB::select('CALL pax_cinvoice_actualiza_totales(?)',[$header->id]);
                             if(env('APP_ENV','local') == 'production'){

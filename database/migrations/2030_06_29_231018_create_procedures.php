@@ -136,6 +136,7 @@ BEGIN
         a.amountgrand = IFNULL(b.total,0),
         a.amountopen = IFNULL(b.total,0)
     WHERE a.id = p_id;
+    
 END;              
 ";
 DB::unprepared($sql);
