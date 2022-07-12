@@ -150,6 +150,13 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                @foreach ($row->invoice as $inv)
+                    <br><span class="console">{{ $inv->serial }}-{{ $inv->documentno }} {{ $inv->currency->currencyiso }} {{ $inv->amountgrand }}</span>
+                @endforeach
+            </div>
+        </div>
 
 
          

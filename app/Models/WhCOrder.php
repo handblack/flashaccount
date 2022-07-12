@@ -18,6 +18,10 @@ class WhCOrder extends Model
         'warehouse_id',
     ];
 
+    public function invoice(){
+        return $this->hasMany(WhCInvoice::class,'order_id','id');
+    }
+
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
