@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BPartner;
 use App\Http\Controllers\Controller;
 use App\Models\TempBpartnerMove;
 use App\Models\TempInvoiceOpen;
+use App\Models\VRptBpartnerMove;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
 use App\Models\WhDocType;
@@ -230,13 +231,21 @@ class BPartnerController extends Controller
             $finit = date('Y-m-d', strtotime($_date . ' - 20 days'));
             $fend  = date("Y-m-d");
         }
-        $result = null;
+        
         return view('bpartner.rpt_move',[
             'op_dateinit' => $finit,
             'op_dateend' => $fend,
+            //'result' => $result,
         ]);
     }
     public function rpt_move_form(Request $request){
+        $result = VRptBpartnerMove::paginate(40);
+        return view('bpartner.rpt_move_result',[
+            'result' => $result,
+        ]);
+    }
+
+    public function rpt_move_form2(Request $request){
         $request->validate([
             'dateinit' => 'required',
             'bpartner_id' => 'required',

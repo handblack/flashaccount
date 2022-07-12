@@ -6,6 +6,21 @@
 @endsection
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-print fa-fw"></i> Cuentas por Cobrar</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Socio de Negocio</li>
+                    <li class="breadcrumb-item">Cuentas por Cobrar</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-0">
@@ -28,7 +43,7 @@
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fas fa-play fa-fw"></i>
-                                    Ejecutar
+                                    <span class="d-none d-md-inline-block"> Ejecutar</span>
                                 </button>                            
                             </div>
                         </div>

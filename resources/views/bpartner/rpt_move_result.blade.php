@@ -1,13 +1,28 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-print fa-fw"></i> Reporte de Movimientos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Socio de Negocio</li>
+                    <li class="breadcrumb-item">Reporte de Movimientos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
 
                 <div class="btn-group">
-                    <a class="btn btn-sm btn-secondary" href="{{ route('bpartner_rpt_receivable') }}">
+                    <a class="btn btn-sm btn-secondary" href="{{ route('bpartner_rpt_move') }}">
                         <i class="fas fa-arrow-circle-left fa-fw"></i>
                         Atras
                     </a>
@@ -50,7 +65,6 @@
                 <tr>
                     <th width="100">Fecha</th>
                     <th width="100">Codigo</th>
-                    <th>Socio de Negocio</th>
                     <th>Documento</th>                    
                     <th class="text-right">Importe</th>
                     <th class="text-right">Abierto</th>
@@ -60,18 +74,9 @@
                 @forelse ($result as $item)
                     <tr>
                         <td>{{ $item->datetrx }}</td>
-                        <td>{{ $item->bpartner->bpartnercode }}</td>
-                        <td>{{ $item->bpartner->bpartnername }}</td>
-                        <td>
-                            {{ $item->cinvoice->sequence->doctype->doctypecode }}-{{ $item->cinvoice->serial }}-{{ $item->cinvoice->documentno }} 
-                        </td>
-                        <td class="text-right">
-                            {{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}
-                            <small>{{ $item->cinvoice->currency->currencyiso }}</small>
-                        </td>
-                        <td class="text-right">
-                            {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
-                        </td>
+                        <td></td>
+                        <td class="text-right">{{ number_format($item->cargo,env('DECIMAL_AMOUNT',2)) }}</td>
+                        <td class="text-right">{{ number_format($item->abono,env('DECIMAL_AMOUNT',2)) }}</td>
                     </tr>
                 @empty
                     <tr>

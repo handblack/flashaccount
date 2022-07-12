@@ -14,9 +14,29 @@ class CreateViews extends Migration
      */
     public function up()
     {
-        #$procedure = " ";    
-        #DB::unprepared($procedure);
-        // ------------------------------------------------------------------------------------------------------------------------------------
+$sql = "
+DROP VIEW IF EXISTS v_rpt_bpartner_move;
+CREATE VIEW `v_rpt_bpartner_move` AS (
+SELECT
+	a.dateinvoiced AS datetrx,
+  'cinvoice' AS typemove,
+  a.id AS record_id,
+  a.amountgrand AS cargo,
+  0 AS abono
+FROM `wh_c_invoices` a
+
+UNION ALL
+
+SELECT
+a.datetrx,
+'income' AS typemove,
+a.id AS record_id,
+0 AS cargo,
+a.amount AS abono
+FROM `wh_b_incomes` a
+);";
+DB::unprepared($sql);
+// ------------------------------------------------------------------------------------------------------------------------------------
     }
 
     /**
@@ -26,6 +46,6 @@ class CreateViews extends Migration
      */
     public function down()
     {
-        #DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`");
+        DB::unprepared("DROP VIEW IF EXISTS v_rpt_bpartner_move;");
     }
 }
