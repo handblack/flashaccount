@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\TempBpartnerMove;
 use App\Models\TempInvoiceOpen;
 use App\Models\VRptBpartnerMove;
+use App\Models\WhBExpense;
+use App\Models\WhBIncome;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
 use App\Models\WhDocType;
@@ -339,9 +341,11 @@ class BPartnerController extends Controller
             $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
                 ->paginate(env('PAGINATE_RECEIVABLE',20));
         }
-        //$result->paginate(env('PAGINATE_RECEIVABLE',5));        
+        //$result->paginate(env('PAGINATE_RECEIVABLE',5));
+        $income = WhBIncome::all();
         return view('bpartner.rpt_receivable_result',[
             'result' => $result,
+            'income' => $income,
         ]);
     }
     

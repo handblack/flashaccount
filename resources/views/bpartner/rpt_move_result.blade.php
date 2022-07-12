@@ -59,6 +59,9 @@
 @section('container')
     
 <div class="card mb-3">
+    <div class="card-header">
+        <div class="card-title">COMPROBANTES</div>
+    </div>
     <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
             <thead>
