@@ -7,11 +7,14 @@ use App\Models\TempBankAllocate;
 use App\Models\TempBankAllocateLine;
 use App\Models\TempBankAllocatePayment;
 use App\Models\WhBAllocate;
+use App\Models\WhBAllocateLine;
+use App\Models\WhBAllocatePayment;
 use App\Models\WhBankAccount;
 use App\Models\WhBIncome;
 use App\Models\WhCInvoice;
 use App\Models\WhCurrency;
 use App\Models\WhParam;
+use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,11 +80,14 @@ class BankAllocateController extends Controller
         DB::transaction(function () use($request) {
             $header = new TempBankAllocate();
             $header->fill($request->all());
+            $header->dateacct = $request->datetrx;
+            $header->period = Carbon::parse($request->datetrx)->format('Ym');
             $header->token = session()->getId();
             $header->save();
             $header->token = md5($header->id);
             $header->save();
             session(['session_allocate_id' => $header->id]);
+            session(['session_allocate_bpartner_id' => $header->bpartner_id]);
         });
         $data['url'] = route('ballocate.edit',session('session_allocate_id'));
         return response()->json($data);
@@ -108,7 +114,11 @@ class BankAllocateController extends Controller
     {
         $row = TempBankAllocate::where('id',$id)->first();
         $anticipos = WhBIncome::where('amountopen','<>',0)->get();
-        $invoices = WhCInvoice::all();
+        $filter = [
+            ['bpartner_id',session('session_allocate_bpartner_id')],
+            ['amountopen','<>',0],
+        ];
+        $invoices = WhCInvoice::where($filter)->get();
         return view('bank.allocate_form',[
             'row'       => $row,
             'mode'      => 'step1',
@@ -154,18 +164,63 @@ class BankAllocateController extends Controller
                                 }
                             }
                             $payment = TempBankAllocatePayment::where('allocate_id',$htem->id)->get();
-                            $lines = TempBankAllocateLine::where('allocate_id',$htem->id)->get();
-                            if($payment->sum('amount') <> $lines->sum('amount')){
-                                return back()->with('error','El debe y haber deben ser mismo importe');
+                            $lines   = TempBankAllocateLine::where('allocate_id',$htem->id)->get();
+                            $tot_pay = $payment->sum('amount');
+                            $tot_lin = $lines->sum('amount');
+                            if($tot_pay == 0){
+                                return back()->with('error','Paymento debe ser distinto a 0');
+                            }
+                            if($tot_lin == 0){
+                                return back()->with('error','Debe seleccioar un invoice');
+                            }
+                            if($tot_pay <> $tot_lin){
+                                return back()->with('error','El debe y haber deben ser mismo importe'."$tot_pay $tot_lin");
                             }
 
                             return view('bank.allocate_preview',[
                                 'row'     => $htem,
                                 'payment' => $payment,
                                 'lines'   => $lines,
+                                'url'     => route('ballocate.update',$htem->id),
+                                'mode'    => 'create',
                             ]);
                             break;
-            case 'create':
+            case 'create':  // como todo ya esta validado, solo confirmamos con la creacion de los registros de movimiento
+                            echo '1';
+                            DB::transaction(function () use($request) {
+                                $hash = new Hashids(env('APP_HASH','miasoftware'));
+                                $htem = TempBankAllocate::where('id',session('session_allocate_id'))->first();
+                                $targ = new WhBAllocate();
+                                $targ->fill($htem->toArray());
+                                $targ->save();
+                                $targ->token = $hash->encode($targ->id);
+                                $targ->save();
+                                // Guardamos los payment
+                                foreach($htem->payment as $tpay){
+                                    $paym = new WhBAllocatePayment();
+                                    $paym->fill($tpay->toArray());
+                                    $paym->allocate_id = $targ->id;
+                                    $paym->save();
+                                    if($tpay->income_id){
+                                        DB::select('CALL pax_bank_income_actualiza_saldos(?)',[$tpay->income_id]);
+                                    }
+                                    if($tpay->expense_id){
+                                        DB::select('CALL pax_bank_expense_actualiza_saldos(?)',[$tpay->expense_id]);
+                                    }
+                                    
+                                }
+                                foreach($htem->lines as $tlin){
+                                    $line = new WhBAllocateLine();
+                                    $line->fill($tlin->toArray());
+                                    $line->allocate_id = $targ->id;
+                                    $line->save();
+                                    echo '3.1';
+                                    //dd($tlin);
+                                    //Actualizamos SALDOS
+                                    DB::select('CALL pax_cinvoice_actualiza_saldos(?)',[$tlin->cinvoice_id]);
+                                }
+                            });
+                            return redirect()->route('ballocate.index');
                             break;
         }
     }

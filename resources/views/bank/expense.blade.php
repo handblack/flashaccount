@@ -10,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-edit fa-fw"></i> Asignación</h1>
+                    <h1><i class="fas fa-edit fa-fw"></i> Egreso</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">Caja y Bancos</li>
-                        <li class="breadcrumb-item">Asignación</li>
+                        <li class="breadcrumb-item">Egreso</li>
                     </ol>
                 </div>
             </div>

@@ -174,6 +174,7 @@ class BankIncomeController extends Controller
                     // actualizamos -------------------------------------------------------------   
                     $amt = $amt + $line->amount;
                     if($line->invoice_id){
+                        /*
                         WhCInvoice::where('id',$line->invoice_id)
                         ->update([
                             'amountopen' => $line->invoice->amountgrand - WhBIncomeLine::select('amount')
@@ -181,6 +182,8 @@ class BankIncomeController extends Controller
                                                                                         ->get()
                                                                                         ->sum('amount') 
                         ]);
+                        */
+                        DB::select('CALL pax_cinvoice_actualiza_saldos(?)',[$line->invoice_id]);                                    
                     }                  
                 }
                 // verificamos si hay anticipo --------------------------------------------------
@@ -189,6 +192,7 @@ class BankIncomeController extends Controller
                 $hash = new Hashids(env('APP_HASH','miasoftware'));
                 $header->token = 'bi_' . $hash->encode($header->id);
                 $header->save();
+                
                
             });
             return redirect()->route('bincome.index');

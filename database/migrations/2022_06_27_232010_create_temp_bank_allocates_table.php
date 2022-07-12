@@ -15,8 +15,11 @@ class CreateTempBankAllocatesTable extends Migration
     {
         Schema::create('temp_bank_allocates', function (Blueprint $table) {
             $table->id();
+            $table->date('datetrx');
+            $table->date('dateacct')->nullable();
+            $table->string('period',6)->nullable();
             $table->foreignId('bpartner_id'); 
-            $table->foreignId('bankaccount_id');             
+            $table->foreignId('bankaccount_id');
             $table->float('rate'); 
             $table->string('token',60);
             $table->timestamps();

@@ -15,10 +15,13 @@ class CreateWhBAllocatesTable extends Migration
     {
         Schema::create('wh_b_allocates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bpartner_id');
             $table->date('datetrx');
-            $table->date('dateacct');
-            $table->string('period',6);
+            $table->date('dateacct')->nullable();
+            $table->string('period',6)->nullable();
+            $table->foreignId('bpartner_id'); 
+            $table->foreignId('bankaccount_id');
+            $table->float('rate'); 
+            $table->string('token',60)->nullable();
             $table->timestamps();
         });
     }

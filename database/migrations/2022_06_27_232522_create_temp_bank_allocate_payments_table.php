@@ -15,11 +15,11 @@ class CreateTempBankAllocatePaymentsTable extends Migration
     {
         Schema::create('temp_bank_allocate_payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('allocate_id');
             $table->foreignId('income_id')->nullable();
             $table->foreignId('expense_id')->nullable();
             $table->float('amount',12,5)->default(0);
             $table->foreignId('currency_id')->nullable();
+            $table->foreignId('allocate_id');
             $table->foreign('allocate_id')
                                     ->references('id')
                                     ->on('temp_bank_allocates')

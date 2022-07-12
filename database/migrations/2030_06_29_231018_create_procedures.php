@@ -42,6 +42,19 @@ $sql = "
 DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_saldos`;        
 CREATE PROCEDURE `pax_cinvoice_actualiza_saldos`(p_id BIGINT)
 BEGIN
+    DECLARE l_total_payment DOUBLE(12,5);
+    DECLARE l_total_income DOUBLE(12,5);
+    SET l_total_income = ( 
+                                SELECT SUM(amount)
+                                FROM `wh_b_income_lines`
+                                WHERE invoice_id = p_id
+                            );
+    SET l_total_payment = (
+                                SELECT SUM(amount)
+                                FROM `wh_b_allocate_lines`
+                                WHERE cinvoice_id = p_id
+                            );
+    /* Actualizando SALDO */
     UPDATE wh_c_invoices a
     INNER JOIN (
         SELECT invoice_id,
@@ -58,8 +71,42 @@ BEGIN
         a.amountexo = IFNULL(b.texo,0),
         a.amounttax = IFNULL(b.tigv,0),
         a.amountgrand = IFNULL(b.total,0),
-        a.amountopen = IFNULL(b.total,0)
+        a.amountopen = IFNULL(b.total,0) - (IFNULL(l_total_payment,0) + IFNULL(l_total_income,0))
     WHERE a.id = p_id;
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_bank_income_actualiza_saldos`;        
+CREATE PROCEDURE `pax_bank_income_actualiza_saldos`(p_id BIGINT)
+BEGIN
+    DECLARE total_income DOUBLE(12,5); 
+    DECLARE total_allocate DOUBLE(12,5);
+    SET total_income = (
+                            SELECT SUM(amount)
+                            FROM `wh_b_income_lines`
+                            WHERE income_id = p_id
+                            GROUP BY income_id
+                        );
+    SET total_allocate = (
+                            SELECT SUM(amount) AS total
+                            FROM `wh_b_allocate_payments` 
+                            WHERE income_id = p_id 
+                            GROUP BY income_id
+                        );
+    UPDATE `wh_b_incomes` a
+    SET a.amountopen = a.amount - (total_income + total_allocate)
+    WHERE a.id = p_id;
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_bank_expense_actualiza_saldos`;        
+CREATE PROCEDURE `pax_bank_expense_actualiza_saldos`(p_id BIGINT)
+BEGIN
+    SELECT 0;
 END;              
 ";
 DB::unprepared($sql);
@@ -199,6 +246,8 @@ DB::unprepared($sql);
      */
     public function down()
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_bank_expense_actualiza_saldos`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_bank_income_actualiza_saldos`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_saldos`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_totales`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`");
