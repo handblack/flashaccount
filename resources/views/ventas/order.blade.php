@@ -74,7 +74,7 @@
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
-                            <td width="110">{{ $item->dateorder }}</td>
+                            <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}" width="110">{{ $item->dateorder }}</td>
                             <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}">
                                 <a href="{{ route('corder.show',$item->token) }}">
                                     {{ $item->serial }}-{{ $item->documentno }} 

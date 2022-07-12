@@ -96,7 +96,7 @@ BEGIN
                             GROUP BY income_id
                         );
     UPDATE `wh_b_incomes` a
-    SET a.amountopen = a.amount - (total_income + total_allocate)
+    SET a.amountopen = IFNULL(a.amount,0) - (IFNULL(total_income,0) + IFNULL(total_allocate,0))
     WHERE a.id = p_id;
 END;              
 ";
