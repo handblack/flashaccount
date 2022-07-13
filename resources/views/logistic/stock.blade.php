@@ -1,6 +1,21 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-print fa-fw"></i> Stock de Productos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Logistica</li>
+                    <li class="breadcrumb-item">Stock de Productos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">

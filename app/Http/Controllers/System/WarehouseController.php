@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WhWarehouse;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseController extends Controller
 {
@@ -146,7 +147,18 @@ class WarehouseController extends Controller
         }else{
             $data['status'] = 101;
             $data['message'] = 'El registro no existe o fue eliminado';
-        }
+        } 
         return response()->json($data);
     }
+
+    public function search(Request $request){
+        $result = WhWarehouse::where('warehousename','LIKE',"%{$request->q}%")
+            ->limit(20)
+            ->orderBy('warehousename','asc')
+            ->get(['id',DB::raw("CONCAT(warehousename,'') as text")]);
+        return response()->json([
+            'results' => $result->toArray(),
+        ]);
+    }
+    
 }

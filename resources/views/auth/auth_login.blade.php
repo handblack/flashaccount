@@ -52,7 +52,7 @@
         <main class="form-signin">
             <form action="{{ route('auth_login_form') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <span style="font-size:5em;"><i class="fas fa-sign-in-alt"></i> </span>
+                <img src="{{ asset('images/favicon/apple-icon-114x114.png') }}" alt="">
 
                 <div class="form-floating">
                     <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>

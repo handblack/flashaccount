@@ -74,6 +74,15 @@ class CreateWhBpartnersTable extends Migration
             'documentno'  => '20331898008',
             'token' => $hash->encode(WhBpartner::all()->count('id') + 1),
         ]);
+        $row->create([
+            'bpartnercode' => 'P20100047056',
+            'bpartnername' => 'TOPY TOP S A',
+            'typperson' => 'P',
+            'legalperson' => 'J',
+            'doctype_id'  => WhDocType::where($filter)->first()->id,
+            'documentno'  => '20100047056',
+            'token' => $hash->encode(WhBpartner::all()->count('id') + 1),
+        ]);
         
         
     }

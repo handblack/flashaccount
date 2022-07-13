@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Config\ProductController;
+use App\Http\Controllers\System\WarehouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 #});
 Route::post('/api/v1/product',[ProductController::class, 'search'])->name('api.product');
 Route::post('/api/v1/bpartner',[BPartnerController::class, 'search'])->name('api.bpartner');
+Route::post('/api/v1/warehouse',[WarehouseController::class, 'search'])->name('api.warehouse');

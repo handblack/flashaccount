@@ -133,8 +133,15 @@
                                 </select>
                             </div>                           
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-md-12">
+                        <div class="row ">
+                            <div class="col-md-4 mt-2">
+                                <label class="mb-0">Tipo</label>
+                                <select name="movetype" id="" class="form-control">
+                                    <option value="I">INGRESO STOCK</option>
+                                    <option value="O">SALIDA STOCK</option>
+                                </select>
+                            </div>                           
+                            <div class="col-md-8 mt-2">
                                 <label class="mb-0">Glosa</label>
                                 <input type="text" name="glosa" class="form-control">
                             </div>                           

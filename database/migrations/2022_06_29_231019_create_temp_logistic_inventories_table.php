@@ -19,6 +19,7 @@ class CreateTempLogisticInventoriesTable extends Migration
             $table->foreignId('warehouse_id');
             $table->foreignId('sequence_id');
             $table->foreignId('reason_id');
+            $table->enum('movetype',['I','O']);
             $table->string('glosa',200)->nullable();
             $table->timestamps();
         });

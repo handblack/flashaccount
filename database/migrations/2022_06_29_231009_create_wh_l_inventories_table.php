@@ -23,6 +23,7 @@ class CreateWhLInventoriesTable extends Migration
             $table->string('serial',5);
             $table->string('documentno',15);
             $table->string('glosa',200)->nullable();
+            $table->enum('movetype',['I','O']);
             $table->enum('docstatus',['O','C','A'])->default('C');
             $table->string('token',60)->nullable();
             $table->timestamps();

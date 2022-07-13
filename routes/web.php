@@ -135,7 +135,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/logistic/output/manager',LogisticOutputController::class, ['names' => 'loutput']);
     Route::resource('/logistic/transfer/manager',LogisticTransferController::class, ['names' => 'ltransfer']);
     Route::resource('/logistic/inventory/manager',LogisticInventoryController::class, ['names' => 'linventory']);
+    // Kardex
     Route::get('/logistic/kardex/manager',[LogisticKardexController::class,'index'])->name('lkardex.index');
+    Route::post('/logistic/kardex/result',[LogisticKardexController::class,'kardex_form'])->name('lkardex.form');
+
     Route::get('/logistic/stock/manager',[LogisticStockController::class,'index'])->name('lstock.index');
 
     /*
