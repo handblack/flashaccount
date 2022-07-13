@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css')}}">
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/css/docs.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/android-icon-32x32.png') }}">
+
     @yield('header')
     <style>
   

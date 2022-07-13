@@ -71,24 +71,7 @@ class COrderController extends Controller
         ]);
     }
 
-    public function create_()
-    {   
-        $row = new WhCOrder();
-        $lines = TempLine::where('session','corder-'.session()->getId())->get();
-        $item = new TempLine();
-        $item->typeproduct = 'P';
-        $sequence = auth()->user()->sequence('OVE');
-        return view('ventas.order_form_new',[
-            'row' => $row,
-            'lines' => $lines,
-            'item'  => $item,
-            'taxes' => WhTax::all(),
-            'sequence' => $sequence,
-            'currency' => WhCurrency::all(),
-            'warehouse' => WhWarehouse::all(),
-            'typeoperation' => WhParam::where('group_id',3)->get(),
-        ]);
-    }
+   
 
     /**
      * Store a newly created resource in storage.

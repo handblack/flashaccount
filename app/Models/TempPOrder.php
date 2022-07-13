@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhPOrder extends Model
+class TempPOrder extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -27,15 +27,6 @@ class WhPOrder extends Model
     }
 
     public function lines(){
-        return $this->hasMany(WhPOrderLine::class,'order_id','id');
+        return $this->hasMany(TempPOrderLine::class,'order_id','id');
     }
-
-    public function currency(){
-        return $this->hasOne(WhCurrency::class,'id','currency_id');
-    }
-
-    public function warehouse(){
-        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
-    }
-
 }

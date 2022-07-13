@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTempCOrdersTable extends Migration
+class CreateWhPOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTempCOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('temp_c_orders', function (Blueprint $table) {
+        Schema::create('wh_p_orders', function (Blueprint $table) {
             $table->id();
             $table->date('dateorder');
             $table->date('dateacct')->nullable();
@@ -45,6 +45,6 @@ class CreateTempCOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp_c_orders');
+        Schema::dropIfExists('wh_p_orders');
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WhPOrderLine extends Model
+class TempPOrderLine extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -24,10 +24,7 @@ class WhPOrderLine extends Model
         'amounttax',
         'amountgrand',
     ];
-
-    public function order(){
-        return $this->hasOne(WhCOrder::class,'id','order_id');
-    }
+ 
     public function product(){
         return $this->hasOne(WhProduct::class,'id','product_id');
     }
@@ -40,4 +37,5 @@ class WhPOrderLine extends Model
     public function typeoperation(){
         return $this->hasOne(WhParam::class,'id','typeoperation_id');
     }
+    
 }

@@ -19,46 +19,50 @@
 @endsection
 
 @section('container')
-    <table>
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Almacen</th>
-                <th>Producto</th>
-                <th>Detalle</th>
-                <th>INGRESO</th>
-                <th>SALIDA</th>
-                <th>SALDO</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $saldo = 0
-            @endphp
-            @foreach ($result as $item)
-                @php
-                    if($item->movetype == 'I'){
-                        $saldo = $saldo + $item->quantity;
-                    }else{
-                        $saldo = $saldo - $item->quantity;
-                    }
-                    
-                @endphp
+<div class="card">
+    <div class="card-body table-responsive">
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $item->datetrx }}</td>
-                    <td>{{ $item->warehouse_id }}</td>
-                    <td>{{ $item->product_id }}</td>
-                    <td>--</td>
-                    @if($item->movetype=='I')
-                        <td class="text-right">{{ $item->quantity }}</td>
-                        <td></td>
-                    @else
-                        <td></td>
-                        <td class="text-right">{{ $item->quantity }}</td>
-                    @endif
-                    <td class="text-right">{{ $saldo }}</td>
+                    <th>Fecha</th>
+                    <th>Almacen</th>
+                    <th>Producto</th>
+                    <th>Detalle</th>
+                    <th>INGRESO</th>
+                    <th>SALIDA</th>
+                    <th>SALDO</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @php
+                    $saldo = 0
+                @endphp
+                @foreach ($result as $item)
+                    @php
+                        if($item->movetype == 'I'){
+                            $saldo = $saldo + $item->quantity;
+                        }else{
+                            $saldo = $saldo - $item->quantity;
+                        }
+                        
+                    @endphp
+                    <tr>
+                        <td>{{ $item->datetrx }}</td>
+                        <td>{{ $item->warehouse_id }}</td>
+                        <td>{{ $item->product_id }}</td>
+                        <td>--</td>
+                        @if($item->movetype=='I')
+                            <td class="text-right">{{ $item->quantity }}</td>
+                            <td></td>
+                        @else
+                            <td></td>
+                            <td class="text-right">{{ $item->quantity }}</td>
+                        @endif
+                        <td class="text-right">{{ $saldo }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

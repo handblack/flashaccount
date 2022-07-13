@@ -142,6 +142,65 @@ END;
 DB::unprepared($sql);
 // ---------------------------------------------------------------------------------------------------------------------------------------------------
 $sql = "      
+DROP PROCEDURE IF EXISTS `pax_corder_actualiza_totales`;        
+CREATE PROCEDURE `pax_corder_actualiza_totales`(p_id BIGINT)
+BEGIN
+/*
+    Aqui se debe de modificar para que busque saldos de pagos
+*/
+    UPDATE wh_c_orders a
+    INNER JOIN (
+        SELECT order_id,
+            SUM(amountbase) AS tbase,
+            SUM(amountexo) AS texo,
+            SUM(amounttax) AS tigv,
+            SUM(amountgrand) AS total
+        FROM wh_c_order_lines
+        WHERE order_id = p_id 
+        GROUP BY order_id
+    ) b ON b.order_id = a.id
+    SET 
+        a.amountbase = IFNULL(b.tbase,0),
+        a.amountexo = IFNULL(b.texo,0),
+        a.amounttax = IFNULL(b.tigv,0),
+        a.amountgrand = IFNULL(b.total,0),
+        a.amountopen = IFNULL(b.total,0)
+    WHERE a.id = p_id;
+    
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
+DROP PROCEDURE IF EXISTS `pax_porder_actualiza_totales`;        
+CREATE PROCEDURE `pax_porder_actualiza_totales`(p_id BIGINT)
+BEGIN
+/*
+    Aqui se debe de modificar para que busque saldos de pagos
+*/
+    UPDATE wh_p_orders a
+    INNER JOIN (
+        SELECT order_id,
+            SUM(amountbase) AS tbase,
+            SUM(amountexo) AS texo,
+            SUM(amounttax) AS tigv,
+            SUM(amountgrand) AS total
+        FROM wh_p_order_lines
+        WHERE order_id = p_id 
+        GROUP BY order_id
+    ) b ON b.order_id = a.id
+    SET 
+        a.amountbase = IFNULL(b.tbase,0),
+        a.amountexo = IFNULL(b.texo,0),
+        a.amounttax = IFNULL(b.tigv,0),
+        a.amountgrand = IFNULL(b.total,0)
+    WHERE a.id = p_id;
+    
+END;              
+";
+DB::unprepared($sql);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+$sql = "      
 DROP PROCEDURE IF EXISTS `pax_update_amount`;        
 CREATE PROCEDURE `pax_update_amount`(p_module VARCHAR(30),p_id BIGINT)
 BEGIN
@@ -251,6 +310,8 @@ DB::unprepared($sql);
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_bank_income_actualiza_saldos`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_saldos`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_cinvoice_actualiza_totales`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_corder_actualiza_totales`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_porder_actualiza_totales`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_customers`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_supplier`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`");

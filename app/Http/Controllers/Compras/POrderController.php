@@ -5,10 +5,19 @@ namespace App\Http\Controllers\Compras;
 use App\Http\Controllers\Controller;
 use App\Models\TempHeader;
 use App\Models\TempLine;
+use App\Models\TempPOrder;
+use App\Models\TempPOrderLine;
+use App\Models\WhDocType;
+use App\Models\WhParam;
 use App\Models\WhPOrder;
+use App\Models\WhPOrderLine;
+use App\Models\WhSequence;
+use App\Models\WhTax;
+use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class POrderController extends Controller
 {
@@ -17,11 +26,21 @@ class POrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'compras.order';
     public function index()
     {
-        $result = WhPOrder::paginate(env('PAGINATE_CORDER',10));
+        $grant = auth()->user()->grant($this->module); 
+        if($grant->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
+        $result = WhPOrder::orderBy('documentno','DESC')
+            ->paginate(env('PAGINATE_CORDER',10));
         return view('compras.order',[
-            'result' => $result
+            'result' => $result,
+            'grant'  => $grant,
         ]);
     }
 
@@ -32,7 +51,18 @@ class POrderController extends Controller
      */
     public function create()
     {
-        
+        if(!session('session_compras_order_id')){
+            return redirect()->route('porder.index');
+        }        
+        $row = TempPOrder::where('id',session('session_compras_order_id'))->first();
+        if(!$row){
+            return redirect()->route('porder.index');
+        }
+        return view('compras.order_form_new',[
+            'row' => $row,
+            'taxes' => WhTax::all(),
+            'typeoperation' => WhParam::where('group_id',3)->get(),
+        ]);
     }
 
     /**
@@ -43,37 +73,120 @@ class POrderController extends Controller
      */
     public function store(Request $request)
     {
-        $data['status'] = '100';
-        $data['message'] = 'Seleccione los documentos a consignar';
-        $fields = [
-            'bpartner_id',
-            'warehouse_id',
-            'datetrx',
-            'rate',
-            'currency_id',
-        ];
-        foreach($fields as $field){
-            if(!$request->has($field)){
-                $data['status'] = '101';
-                $data['message'] = "Falta especificar {$field}";
-            }
+        if(!$request->has('mode')){
+            abort(403,'No especifico la accion');         
         }
-        if(!($data['status'] == '100')){
-            return response()->json($data);
+        switch($request->mode){
+            case 'temp':
+                        $data['status'] = '100';
+                        $data['message'] = 'Seleccione los documentos a consignar';
+                        $fields = [
+                            'bpartner_id',                
+                            'dateorder',
+                            'datedue',
+                            'typepayment',
+                            'warehouse_id',
+                            'sequence_id',
+                            
+                        ];
+                        foreach($fields as $field){
+                            if(!$request->has($field)){
+                                $data['status'] = '101';
+                                $data['message'] = "Falta especificar {$field}";
+                            }
+                        }
+                        if($request->typepayment == 'R'){
+                            if($request->dateinvoiced == $request->datedue){
+                                $data['status'] = '101';
+                                $data['message'] = "En credito las fecha de vencimiento debe ser distinta a la de emision";
+                            }
+                        }else{
+                            $request->datedue = $request->dateinvoiced;
+                        }
+                        if(!($data['status'] == '100')){
+                            return response()->json($data);
+                        }
+                        DB::transaction(function () use($request) {
+                            // TEMPORAL -- Creando cabecera ------------------------------------------------
+                            $header = new TempPOrder();
+                            $header->fill($request->all());
+                            $header->dateacct   = $request->dateinvoiced;
+                            $header->period     = Carbon::parse($request->dateinvoiced)->format('Ym');
+                            $header->save();
+                            $header->doctype_id = $header->sequence->doctype->id;
+                            $header->serial     = $header->sequence->serial; 
+                            $header->save();
+                            session(['session_compras_order_id' => $header->id]);
+                        });
+                        $data['url'] = route('porder.create');
+                        return response()->json($data);
+                        break;
+            case 'item-add':
+                        $tline = new TempPOrderLine();
+                        $this->item_calc($tline,$request);
+                        $data['status']  = '100';
+                        $data['message'] = 'Producto agregado';
+                        $data['tr_item']  = view('compras.order_form_list_item',['item' => $tline])->render();
+                        return response()->json($data);
+                        break;
+            case 'item-edit':
+                        $tline = TempPOrderLine::where('id',$request->line_id)->first();
+                        $this->item_calc($tline,$request);
+                        $data['status']  = '100';
+                        $data['tr_item']  = view('compras.order_form_list_item',['item' => $tline])->render();
+                        $data['modeline'] = 'edit';
+                        $data['item'] = $tline->toArray();
+                        $data['product'] = "{$tline->product->productcode} - {$tline->product->productname}"; 
+                        return response()->json($data);
+                        break;
+            case 'create':
+                        if(!session()->has('session_compras_order_id')){
+                            abort(403,'Id temporal ya no existe');
+                        }
+                        $temp = TempPOrderLine::where('order_id',session('session_compras_order_id'))->get();
+                        if($temp->isEmpty()){
+                            return back()->with('error','documento no tiene detalle');
+                        }
+                        DB::transaction(function () use($request) {
+                            $hash = new Hashids(env('APP_HASH'));
+                            $temp = TempPOrder::where('id',session('session_compras_order_id'))->first();
+                            $header = new WhPOrder();
+                            $header->fill($temp->toArray());
+                            $header->dateacct   = $temp->datetrx;
+                            $header->dateacct   = $request->dateorder;
+                            $header->period     = Carbon::parse($request->dateorder)->format('Ym');
+                            $header->serial     = auth()->user()->get_serial($temp->sequence_id);
+                            $header->documentno = auth()->user()->set_lastnumber($temp->sequence_id);
+                            $header->token      = date("YmdHis");
+                            $header->save();
+                            $header->token      = $hash->encode($header->id);
+                            $header->save();
+                            foreach($temp->lines  as $tline){
+                                $line = new WhPOrderLine();
+                                $line->fill($tline->toArray());
+                                $line->order_id = $header->id;
+                                $line->save();
+                            }
+                            DB::select('CALL pax_porder_actualiza_totales(?)',[$header->id]);
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
+                        });
+                        return redirect()->route('porder.index')->with('message','Documento creado');
+                        break;            
         }
-        DB::transaction(function () use($request) {
-            $hash = new Hashids(env('APP_HASH'));
-            // Creando cabecera ------------------------------------------------
-            $header = new TempHeader();
-            $header->fill($request->all());
-            $header->datetrx     = $request->datetrx;
-            $header->save();
-            $header->token       = $hash->encode($header->id);
-            $header->save();
-            session(['session_order_create' => $header->token]);
-        });
-        $data['url'] = route('porder.edit',session('session_order_create'));
-        return response()->json($data);
+    }
+
+    private function item_calc($tline,$request){
+        $tline->fill($request->all());
+        $tline->amountbase  = $request->quantity * $request->priceunit;        
+        $tline->save();
+        $tline->description = ($request->typeproduct == 'P') ? $tline->product->productname : $request->servicename;
+        $tline->um_id       = ($request->typeproduct == 'P') ? $tline->product->um->id : $request->um_id;
+        $tline->priceunittax = round(($tline->tax->ratio / 100) * $tline->priceunit,5) + $tline->priceunit; 
+        $tline->amounttax   = round(($tline->tax->ratio / 100) * $tline->amountbase,2);
+        $tline->amountgrand = $tline->amountbase + $tline->amounttax;
+        $tline->save();
     }
 
     /**
@@ -84,7 +197,27 @@ class POrderController extends Controller
      */
     public function show($id)
     {
-        //
+        if($id == 'pdf'){
+            if(!session()->has('session_compras_order_id')){
+                return redirect()->route('corder.index');
+            }
+            $row = WhPOrder::where('token',session('session_compras_order_id'))->first();  
+            $filename = 'order_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('compras.order_pdf', ['row' => $row]);
+            return $pdf->download($filename);
+        }else{
+            if(auth()->user()->grant($this->module)->isread == 'N'){
+                return back()->with('error','No tienes privilegio para ver');
+            }
+            session(['session_compras_order_id' => $id]);
+            $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+            $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            $row = WhPOrder::where('token',$id)->first();
+            return view('compras.order_show',[
+                'row' => $row,
+                'sequence_invoice' => $sequence_invoice
+            ]);
+        }
     }
 
     /**
