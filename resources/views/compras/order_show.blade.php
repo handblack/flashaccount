@@ -152,14 +152,29 @@
                     </table>
                 </div>
             </div>
-
         </div>
         <div class="row">
-            <div class="col-md-12">
-                
-            </div>
-        </div>
+            <table>
 
+                @foreach ($input as $item)
+                    <tr>
+                        <td>{{ $item->datetrx }}:{{ $item->serial }}-{{ $item->documentno }}</td>
+                        <td>
+                            @if($item->lines)
+                            <table>
+                                @foreach($item->lines as $line)
+                                    <tr>
+                                        <td>{{ $line->product->productcode }}</td>
+                                        <td class="text-right">{{ $line->quantity }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                            @endif
+                        </td>
+                    </tr>                
+                @endforeach
+            </table>
+        </div>
 
          
     </div>

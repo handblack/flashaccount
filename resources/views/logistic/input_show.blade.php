@@ -70,8 +70,8 @@
                 <tbody>
                     @foreach ($row->lines as $item)
                     <tr>
-                        <td>{{ $item->product->productcode }}</td>
                         <td>{{ $item->product->productname }}</td>
+                        <td>{{ $item->product->productcode }}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>{{ $item->product->um->shortname }}</td>
                         <td>{{ $item->package }}</td>

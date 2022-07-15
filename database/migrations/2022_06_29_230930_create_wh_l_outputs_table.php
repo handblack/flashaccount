@@ -21,6 +21,7 @@ class CreateWhLOutputsTable extends Migration
             $table->foreignId('warehouse_id');
             $table->foreignId('sequence_id');
             $table->foreignId('reason_id');
+            $table->foreignId('order_id');
             $table->string('serial',5);
             $table->string('documentno',15);
             $table->string('glosa',200)->nullable();

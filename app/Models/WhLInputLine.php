@@ -19,5 +19,9 @@ class WhLInputLine extends Model
     public function product(){
         return $this->hasOne(WhProduct::class,'id','product_id');
     }
+
+    public function orderline(){
+        return $this->hasOne(WhPOrderLine::class,'id','orderline_id');
+    }
     
 }

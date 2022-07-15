@@ -10,6 +10,7 @@ use App\Models\TempLogisticInputLine;
 use App\Models\TempPOrder;
 use App\Models\TempPOrderLine;
 use App\Models\WhDocType;
+use App\Models\WhLInput;
 use App\Models\WhParam;
 use App\Models\WhPOrder;
 use App\Models\WhPOrderLine;
@@ -218,10 +219,12 @@ class POrderController extends Controller
             $sequence_input = auth()->user()->sequence('LIN');
             $reason = WhReason::all();
             $row = WhPOrder::where('token',$id)->first();
+            $input = WhLInput::where('order_id',$row->id)->get();
             return view('compras.order_show',[
                 'row' => $row,
                 'sequence_input' => $sequence_input,
                 'reason' => $reason,
+                'input' => $input,
             ]);
         }
     }

@@ -20,6 +20,7 @@ class CreateTempLogisticOutputsTable extends Migration
             $table->foreignId('warehouse_id');
             $table->foreignId('sequence_id');
             $table->foreignId('reason_id');
+            $table->foreignId('order_id');
             $table->string('glosa',200)->nullable();
             $table->timestamps();
         });

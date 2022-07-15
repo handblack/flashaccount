@@ -18,7 +18,9 @@ use App\Models\WhSequence;
 use App\Models\WhTax;
 use App\Models\WhWarehouse;
 use App\Models\TempLine;
+use App\Models\WhLOutput;
 use App\Models\WhParam;
+use App\Models\WhReason;
 use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
@@ -221,10 +223,14 @@ class COrderController extends Controller
             session(['session_ventas_order_id' => $id]);
             $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
             $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            $reason = WhReason::all();
             $row = WhCOrder::where('token',$id)->first();
+            $output = WhLOutput::where('order_id',$row->id)->get();
             return view('ventas.order_show',[
                 'row' => $row,
-                'sequence_invoice' => $sequence_invoice
+                'sequence_invoice' => $sequence_invoice,
+                'sequence_output' => auth()->user()->sequence('LOU'),
+                'reason' => $reason,
             ]);
         }
     }
