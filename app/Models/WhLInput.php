@@ -14,6 +14,7 @@ class WhLInput extends Model
         'warehouse_id',
         'sequence_id',
         'reason_id',
+        'order_id',
         'glosa',
     ];
     
@@ -27,6 +28,10 @@ class WhLInput extends Model
 
     public function warehouse(){
         return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
+    public function order(){
+        return $this->hasOne(WhPOrder::class,'id','order_id');
     }
 
 }

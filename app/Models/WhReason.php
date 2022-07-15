@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class WhReason extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'reasonname',
+        'shortname',
+    ];
 }

@@ -18,7 +18,8 @@ class CreateTempLogisticInputLinesTable extends Migration
             $table->foreignId('product_id');
             $table->float('quantity',12,5)->default(0)->nullable();
             $table->float('package',12,5)->default(0)->nullable();
-            $table->unsignedBigInteger('input_id');
+            $table->foreignId('orderline_id')->nullable();
+            $table->foreignId('input_id');
             $table->foreign('input_id')
                                     ->references('id')
                                     ->on('temp_logistic_inputs')

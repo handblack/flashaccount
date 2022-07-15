@@ -14,11 +14,16 @@ class TempLogisticInput extends Model
         'warehouse_id',
         'sequence_id',
         'reason_id',
+        'doctype_id',
         'glosa',
     ];
 
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
+    }
+
+    public function sequence(){
+        return $this->hasOne(WhSequence::class,'id','sequence_id');
     }
 
     public function lines(){

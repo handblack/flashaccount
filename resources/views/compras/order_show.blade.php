@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
 
 @section('breadcrumb')
     <section class="content-header pb-2">
@@ -41,12 +45,12 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Copiar a Comprobante</a>
-                                <a class="dropdown-item" href="#"><i class="far fa-copy fa-fw"></i> Copiar a Ingreso de Mercaderia</a>
+                                <!--  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Copiar a Comprobante</a> -->
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-copy fa-fw"></i> Copiar a Ingreso de Mercaderia</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar documento</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('corder.show','pdf') }}"><i class="fas fa-download fa-fw"></i> Descargar PDF</a>
+                                <a class="dropdown-item" href="{{ route('porder.show','pdf') }}"><i class="fas fa-download fa-fw"></i> Descargar PDF</a>
                                 <!-- 
                                 <a class="dropdown-item" href="#"><i class="fas fa-print fa-fw"></i> Imprimir</a> 
                                 <a class="dropdown-item" href="#"><i class="fas fa-envelope fa-fw"></i> Enviar por Email</a>
@@ -55,7 +59,7 @@
                         </div>
                     </div>
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-success" href="{{ route('corder.create') }}"
+                        <a class="btn btn-sm btn-success" href="{{ route('porder.create') }}"
                             title="Marcar como página de inicio">
                             <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-sm-inline-block">Nuevo OV</span>
@@ -162,34 +166,79 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <form action="{{ route('corder_copy_to_invoice') }}" method="POST">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            <input type="hidden" name="order_id" value="{{ $row->id }}">
-            <input type="hidden" name="token" value="{{ $row->token }}">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Emitir Comprobante</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <select name="sequence_id" id="" class="form-control" required>
-                    <option value="" selected disabled>-- SELECCIONE --</option>
-                    @foreach ($sequence_invoice as $item)
-                        <option value="{{ $item->id }}">{{ $item->serial }} - {{ $item->doctype->doctypename }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Crear</button>
-            </div>
-        </form>
+<div class="modal fade" id="ModalCreateInput" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{ route('porder_copy_to_input') }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="order_id" value="{{ $row->id }}">
+                <input type="hidden" name="token" value="{{ $row->token }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Emitir Parte INGRESO</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mt-2">
+                            <label class="mb-0">Serie</label>
+                            <select name="sequence_id" id="" class="form-control" required>
+                                <option value="" selected disabled>-- SELECCIONE --</option>
+                                @foreach ($sequence_input as $item)
+                                    <option value="{{ $item->id }}">{{ $item->serial }} - {{ $item->doctype->doctypename }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label class="mb-0">Almacen Ingreso</label>
+                            <select name="warehouse_id" id="" class="form-control select2-warehouse" required></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-2">
+                            <label class="mb-0">Motivo</label>
+                            <select name="reason_id" id="" class="form-control" required>
+                                @foreach ($reason as $item)
+                                    <option value="{{ $item->id }}">{{ $item->reasonname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 </div>    
 @endsection
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script>
+$(function(){
+    // warehouse ----------------------------------------------------------------
+    $('.select2-warehouse').select2({
+        ajax: {
+            url: '{{ route('api.warehouse') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0,
+        theme:'bootstrap4'
+    });
+});
+</script>
+@endsection
+

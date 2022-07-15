@@ -126,6 +126,7 @@ class LogisticInputController extends Controller
                             $hash = new Hashids(env('APP_HASH'));
                             $temp = TempLogisticInput::where('id',session('session_logistic_input_id'))->first();
                             $header = new WhLInput();
+                            //dd($header);
                             $header->fill($temp->toArray());
                             $header->dateacct   = $temp->datetrx;
                             $header->serial     = auth()->user()->get_serial($temp->sequence_id);
@@ -139,7 +140,9 @@ class LogisticInputController extends Controller
                                 $line->input_id = $header->id;
                                 $line->save();
                             }
-                            $temp->delete();
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
                         });
                         return redirect()->route('linput.index')->with('message','Documento creado');
                         break;            

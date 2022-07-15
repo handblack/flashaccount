@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Compras;
 use App\Http\Controllers\Controller;
 use App\Models\TempHeader;
 use App\Models\TempLine;
+use App\Models\TempLogisticInput;
+use App\Models\TempLogisticInputLine;
 use App\Models\TempPOrder;
 use App\Models\TempPOrderLine;
 use App\Models\WhDocType;
 use App\Models\WhParam;
 use App\Models\WhPOrder;
 use App\Models\WhPOrderLine;
+use App\Models\WhReason;
 use App\Models\WhSequence;
 use App\Models\WhTax;
 use Carbon\Carbon;
@@ -210,12 +213,15 @@ class POrderController extends Controller
                 return back()->with('error','No tienes privilegio para ver');
             }
             session(['session_compras_order_id' => $id]);
-            $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
-            $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            #$dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+            #$sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            $sequence_input = auth()->user()->sequence('LIN');
+            $reason = WhReason::all();
             $row = WhPOrder::where('token',$id)->first();
             return view('compras.order_show',[
                 'row' => $row,
-                'sequence_invoice' => $sequence_invoice
+                'sequence_input' => $sequence_input,
+                'reason' => $reason,
             ]);
         }
     }
@@ -258,4 +264,46 @@ class POrderController extends Controller
     {
         //
     }
+
+
+    
+
+    public function copy_to_input(Request $request){
+        /*
+            Este proceso hace una copia de Order=>Temp para el invoice
+        */
+        $hash = new Hashids(env('APP_HASH'));
+        if($request->token != $hash->encode($request->order_id)){
+            abort(403,'Token no valido para copiar');
+        }
+        $source = WhPOrder::where('id',$request->order_id)->first();
+        if(!$source){
+            abort(403,'No hay registro');
+        }    
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new TempLogisticInput();
+            $target->fill($source->toArray());
+            $target->order_id    = $request->order_id;
+            $target->sequence_id = $request->sequence_id;
+            $target->datetrx     = $source->dateorder;
+            $target->reason_id  =  $request->reason_id;
+            $target->save();
+            $target->doctype_id  = $target->sequence->doctype_id;
+            $target->save();
+            //Detalle ##########################################################
+            foreach($source->lines as $line){
+                $templ = new TempLogisticInputLine();
+                $templ->fill($line->toArray());
+                $templ->orderline_id = $line->id;
+                $templ->input_id = $target->id;
+                $templ->save();                
+            }        
+            session(['session_logistic_input_id' => $target->id]);
+        });
+        return redirect()->route('linput.create');
+        
+    }
+
+
 }

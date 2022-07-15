@@ -16,13 +16,13 @@ class CreateWhReasonsTable extends Migration
     {
         Schema::create('wh_reasons', function (Blueprint $table) {
             $table->id();
-            $table->string('reasoname');
+            $table->string('reasonname');
             $table->string('shortname')->nullable();
             $table->timestamps();
         });
         $row = new WhReason();
-        $row->reasoname = 'INGRESO POR COMPRAS';
-        $row->save();
+        $row->create(['reasonname'=>'INGRESO POR COMPRAS']);
+        $row->create(['reasonname'=>'SALIDA POR VENTAS']);
     }
 
     /**

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('assets/pdf.css') }}">
 </head>
 <body>
-    ORDEN DE VENTA
+    ORDEN DE COMPRA
 <table width="100%">
     <tr>
         <td>

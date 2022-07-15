@@ -124,6 +124,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     */
     Route::resource('compras/order/manager',POrderController::class, ['names' => 'porder']);
     Route::resource('compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
+    Route::post('compras/order/manager/copy_to_input',[POrderController::class,'copy_to_input'])->name('porder_copy_to_input');
     //INVOICE
     Route::resource('compras/invoice/manager',PInvoiceController::class, ['names' => 'pinvoice']);
     /*

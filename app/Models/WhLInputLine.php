@@ -13,6 +13,7 @@ class WhLInputLine extends Model
         'product_id',
         'quantity',
         'package',
+        'orderline_id',
     ];
 
     public function product(){
