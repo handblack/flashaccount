@@ -52,7 +52,10 @@
 @section('container')
 <div class="invoice p-3 mb-3">
     <div class="row invoice-info">
-        {{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}
+        <div class="col-md-12">
+
+            {{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}
+        </div>
     </div>
     <div class="row">
         <div class="col-12 table-responsive">
@@ -62,19 +65,18 @@
                         <th>Producto</th>
                         <th class="d-none d-sm-inline-block">Codigo</th>
                         <th class="text-right">Cantidad</th>
-                        <th class="d-none d-sm-inline-block">UM</th>
-                        <th class="text-right">Precio</th>
-                        <th class="text-right">Total</th>
+                        <th>UM</th>
+                        <th class="text-right">Pack</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($row->lines as $item)
                     <tr>
                         <td>{{ $item->product->productname }}</td>
-                        <td>{{ $item->product->productcode }}</td>
-                        <td>{{ $item->quantity }}</td>
+                        <td class="d-none d-sm-inline-block">{{ $item->product->productcode }}</td>
+                        <td class="text-right" width="100">{{ $item->quantity }}</td>
                         <td>{{ $item->product->um->shortname }}</td>
-                        <td>{{ $item->package }}</td>
+                        <td class="text-right" width="60">{{ (int)$item->package }}</td>
                     </tr>
                     @endforeach
                 </tbody>

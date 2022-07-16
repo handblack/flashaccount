@@ -23,6 +23,7 @@ class CreateWhPOrderLinesTable extends Migration
             $table->foreignId('tax_id');
             $table->float('quantity',12,5)->default(0);
             $table->float('quantityopen',12,5)->default(0);
+            $table->float('quantitysuspended',12,5)->default(0);
             $table->float('priceunit',12,5)->default(0);
             $table->float('priceunittax',12,5)->default(0);
             $table->float('amountbase',12,5)->default(0);

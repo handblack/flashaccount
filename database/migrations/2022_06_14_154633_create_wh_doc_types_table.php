@@ -39,7 +39,7 @@ class CreateWhDocTypesTable extends Migration
             'isactive'    => 'Y',
             'group_id'    => 1,
         ]);
-        // Tipo de Comprobante ELECTRONICO
+        // Tipo de Comprobante ELECTRONICO - VENTAS
         $row->create([
             'doctypename' => 'FACTURA ELECTRONICA',
             'shortname'   => 'FAC',
@@ -94,7 +94,7 @@ class CreateWhDocTypesTable extends Migration
         $row->create(['group_id' => 4,'doctypecode' => '03','shortname' => 'BVE','isactive' => 'Y','doctypename' => 'BOLETA DE VENTA']);
         $row->create(['group_id' => 4,'doctypecode' => '07','shortname' => 'NCR','isactive' => 'Y','doctypename' => 'NOTA CREDITO']);
         $row->create(['group_id' => 4,'doctypecode' => '08','shortname' => 'NDB','isactive' => 'Y','doctypename' => 'NOTA DEBITO']);
-        $row->create(['group_id' => 4,'doctypecode' => '00','shortname' => 'REC','isactive' => 'Y','doctypename' => 'RECIBO']);
+        $row->create(['group_id' => 4,'doctypecode' => '00','shortname' => 'REC','isactive' => 'Y','doctypename' => 'RECIBO HONORARIO']);
     }
 
     /**

@@ -46,6 +46,7 @@
                             </button>
                             <div class="dropdown-menu" role="menu">
                                 <!--  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Copiar a Comprobante</a> -->
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Registrar Factura de Proveedor</a>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-copy fa-fw"></i> Copiar a Ingreso de Mercaderia</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar documento</a>
@@ -79,6 +80,7 @@
 @endsection
 
 @section('container')
+
     <div class="invoice p-3 mb-3">
 
      
@@ -120,6 +122,8 @@
                             <th class="d-none d-sm-inline-block">UM</th>
                             <th class="text-right">Precio</th>
                             <th class="text-right">Total</th>
+                            <th class="text-right">Abierto</th>
+                            <th class="text-right">Suspendido</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,50 +135,54 @@
                                 <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
                                 <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+                                <td class="text-right border-left"></td>
+                                <td class="text-right"></td>
+                                <td class="text-right"></td>
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-right" colspan="5">TOTAL: </th>
+                            <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
 
-        <div class="row border-top">
-            <div class="col-6 col-md-8"></div>
-            <div class="col-6 col-md-4">
-                <div class="table-responsive">
-                    <table class="table-sm" width="100%">
-                        <tbody>
-                            <tr>
-                                <th>Total:</th>
-                                <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+         
+        
         <div class="row">
-            <table>
-
-                @foreach ($input as $item)
-                    <tr>
-                        <td>{{ $item->datetrx }}:{{ $item->serial }}-{{ $item->documentno }}</td>
-                        <td>
-                            @if($item->lines)
-                            <table>
-                                @foreach($item->lines as $line)
+            <div class="col-md-6">
+                <h5><strong>Documentos Vinculados</strong></h5>
+            </div>
+            <div class="col-md-6">
+                <h5><strong>Documentos Almacen</strong></h5>
+                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                    @foreach ($input as $item)
+                        <tr>
+                            <td class="align-top">{{ $item->datetrx }}:<strong>{{ $item->serial }}-{{ $item->documentno }}</strong></td>
+                            <td>&nbsp;&nbsp;</td>
+                            <td>
+                                @if($item->lines)
+                                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                                    @foreach($item->lines as $line)
                                     <tr>
-                                        <td>{{ $line->product->productcode }}</td>
+                                        <td>{{ $line->product->productcode }}&nbsp;</td>
+                                        <td>{{ $line->product->productname }}&nbsp;</td>
                                         <td class="text-right">{{ $line->quantity }}</td>
                                     </tr>
-                                @endforeach
-                            </table>
-                            @endif
-                        </td>
-                    </tr>                
-                @endforeach
-            </table>
+                                    @endforeach
+                                </table>
+                                @endif
+                            </td>
+                        </tr>                
+                    @endforeach
+                </table>
+            </div>
         </div>
+        
 
          
     </div>
@@ -189,12 +197,12 @@
                 <input type="hidden" name="order_id" value="{{ $row->id }}">
                 <input type="hidden" name="token" value="{{ $row->token }}">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Emitir Parte INGRESO</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Parte INGRESO</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body bg-light">
                     <div class="row">
                         <div class="col-md-6 mt-2">
                             <label class="mb-0">Serie</label>
@@ -222,8 +230,53 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>    
+
+{{-- FACTURA DE COMPRA  --}}
+<div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{{ route('porder_copy_to_invoice') }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="order_id" value="{{ $row->id }}">
+                <input type="hidden" name="token" value="{{ $row->token }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar Factura de Proveedor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light pt-0">
+                    <div class="row">
+                        <div class="col-12 col-md-4 mt-2">
+                            <label class="mb-0">Tipo Documento</label>
+                            <select name="sequence_id" id="" class="form-control" required>
+                                <option value="" selected disabled>-- SELECCIONE --</option>
+                                @foreach ($doctype as $item)
+                                    <option value="{{ $item->id }}">{{ $item->doctypename }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4 col-md-3 mt-2">
+                            <label class="mb-0">Serie</label>
+                            <input type="text" name="serial" class="form-control" maxlength="" required>
+                        </div>
+            
+                        <div class="col-8 col-md-5 mt-2">
+                            <label class="mb-0">Numero</label>
+                            <input type="text" name="serial" class="form-control" maxlength="" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
                 </div>
             </form>
         </div>

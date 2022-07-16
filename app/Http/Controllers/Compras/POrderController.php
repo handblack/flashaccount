@@ -220,11 +220,13 @@ class POrderController extends Controller
             $reason = WhReason::all();
             $row = WhPOrder::where('token',$id)->first();
             $input = WhLInput::where('order_id',$row->id)->get();
+            $doctype = WhDocType::where('group_id',4)->get();
             return view('compras.order_show',[
                 'row' => $row,
                 'sequence_input' => $sequence_input,
                 'reason' => $reason,
                 'input' => $input,
+                'doctype' => $doctype,
             ]);
         }
     }
@@ -286,6 +288,44 @@ class POrderController extends Controller
         DB::transaction(function () use($request,$source) {    
             //Cabecera #########################################################      
             $target = new TempLogisticInput();
+            $target->fill($source->toArray());
+            $target->order_id    = $request->order_id;
+            $target->sequence_id = $request->sequence_id;
+            $target->datetrx     = $source->dateorder;
+            $target->reason_id  =  $request->reason_id;
+            $target->save();
+            $target->doctype_id  = $target->sequence->doctype_id;
+            $target->save();
+            //Detalle ##########################################################
+            foreach($source->lines as $line){
+                $templ = new TempLogisticInputLine();
+                $templ->fill($line->toArray());
+                $templ->orderline_id = $line->id;
+                $templ->input_id = $target->id;
+                $templ->save();                
+            }        
+            session(['session_logistic_input_id' => $target->id]);
+        });
+        return redirect()->route('linput.create');
+        
+    }
+
+
+    public function copy_to_invoice(Request $request){
+        /*
+            Este proceso hace una copia de Order=>Temp para el invoice
+        */
+        $hash = new Hashids(env('APP_HASH'));
+        if($request->token != $hash->encode($request->order_id)){
+            abort(403,'Token no valido para copiar');
+        }
+        $source = WhPOrder::where('id',$request->order_id)->first();
+        if(!$source){
+            abort(403,'No hay registro');
+        }    
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new Temp();
             $target->fill($source->toArray());
             $target->order_id    = $request->order_id;
             $target->sequence_id = $request->sequence_id;
