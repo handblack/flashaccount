@@ -7,6 +7,7 @@ use App\Models\TempHeader;
 use App\Models\TempLine;
 use App\Models\TempLogisticInput;
 use App\Models\TempLogisticInputLine;
+use App\Models\TempPInvoice;
 use App\Models\TempPOrder;
 use App\Models\TempPOrderLine;
 use App\Models\WhDocType;
@@ -325,7 +326,7 @@ class POrderController extends Controller
         }    
         DB::transaction(function () use($request,$source) {    
             //Cabecera #########################################################      
-            $target = new Temp();
+            $target = new TempPInvoice();
             $target->fill($source->toArray());
             $target->order_id    = $request->order_id;
             $target->sequence_id = $request->sequence_id;

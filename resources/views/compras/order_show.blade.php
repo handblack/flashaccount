@@ -256,7 +256,7 @@
                     <div class="row">
                         <div class="col-12 col-md-4 mt-2">
                             <label class="mb-0">Tipo Documento</label>
-                            <select name="sequence_id" id="" class="form-control" required>
+                            <select name="doctype_id" id="" class="form-control" required>
                                 <option value="" selected disabled>-- SELECCIONE --</option>
                                 @foreach ($doctype as $item)
                                     <option value="{{ $item->id }}">{{ $item->doctypename }}</option>
@@ -270,7 +270,7 @@
             
                         <div class="col-8 col-md-5 mt-2">
                             <label class="mb-0">Numero</label>
-                            <input type="text" name="serial" class="form-control" maxlength="" required>
+                            <input type="text" name="documentno" class="form-control" maxlength="" required>
                         </div>
                     </div>
                 </div>
