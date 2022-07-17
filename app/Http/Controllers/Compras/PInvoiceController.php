@@ -45,10 +45,10 @@ class PInvoiceController extends Controller
      */
     public function create()
     {
-        if(!session('session_invoice_create')){
+        if(!session('session_compras_invoice_id')){
             return redirect()->route('pinvoice.index');
         }
-        $row = TempHeader::where('session',session('session_invoice_create'))->first();
+        $row = TempHeader::where('session',session('session_compras_invoice_id'))->first();
         return view('compras.invoice_form_new',[
             'row' => $row,
             'mode' => 'new',

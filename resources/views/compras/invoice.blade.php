@@ -6,6 +6,24 @@
 @endsection
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Registro de Compra</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Compras</li>
+                    <li class="breadcrumb-item">Registro de Compra</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
@@ -51,7 +69,7 @@
 
 @section('container')
     <div class="card mb-0">
-        <div class="card-body  p-0" style="font-size:0.9rem;">
+        <div class="card-body table-responsive p-0" style="font-size:0.9rem;">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
                     <tr>

@@ -10,5 +10,11 @@ class TempPInvoice extends Model
     use HasFactory;
     protected $fillable = [
         'bpartner_id',
+        'doctype_id',
+        'dateinvoiced',
+        'dateacct',
+        'period',
+        'serial',
+        'documentno',
     ];
 }

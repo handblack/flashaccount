@@ -241,6 +241,149 @@
 {{-- FACTURA DE COMPRA  --}}
 <div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
+        <form action="{{ route('porder_copy_to_invoice') }}" method="POST" id="form-create">
+            @csrf
+            <input type="hidden" name="mode" value="temp">
+            <div class="modal-content">
+                <div class="modal-header pt-2 pb-2">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Comprobante de Gasto</h5>
+              
+                </div>
+                <div class="modal-body pt-2" style="background-color:#dcdcdc74;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="mb-0">Socio de Negocio</label>
+                            <input type="text" class="form-control" value="{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}" disabled>
+                        </div>
+                        
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-6 mt-2">
+                                    <label class="mb-0">Tipo Comprobante</label>
+                                    <select name="doctype_id" class="form-control" required>
+                                        <option value="" selected disabled>-- SELECCIONA --</option>
+                                        @foreach ($doctype as $item)
+                                            <option value="{{ $item->id }}">{{ $item->doctypename }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+    
+                                <div class="col-md-6 mt-2">
+                                    <label class="mb-0">Documento</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <input type="text" name="serial" class="form-control console mr-1" style="width:65px;text-transform: uppercase;" maxlength="4" placeholder="####" aria-label="Username" aria-describedby="basic-addon1" required>
+                                        </div>
+                                        <input type="text" name="documentno" class="form-control console" maxlength="15" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 col-md-3 mt-2">
+                                    <label class="mb-0">Moneda</label>
+                                    <select name="currency_id" class="form-control" required>
+                                        @foreach (auth()->user()->currency() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-5 col-md-3 mt-2">
+                                    <label class="mb-0">Emision</label>
+                                    <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control">
+                                </div>
+                                <div class="col-4 col-md-3 mt-2 d-none d-sm-inline-block">
+                                    <label class="mb-0">Contabilidad</label>
+                                    <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control">
+                                </div>
+                                <div class="col-4 col-md-3 mt-2">
+                                    <label class="mb-0">Tipo Cambio</label>
+                                    <input type="number" name="rate" value="1.000" step="0.001" class="form-control text-right">
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mt-2">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text console" id="basic-addon1">BASE&nbsp;</span>
+                                        </div>
+                                        <input type="text" name="amountbase" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text console" id="basic-addon1">EXO&nbsp;&nbsp;</span>
+                                        </div>
+                                        <input type="text" name="amountexo" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text console" id="basic-addon1">IGV&nbsp;&nbsp;</span>
+                                        </div>
+                                        <input type="text" name="amounttax" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text console" id="basic-addon1">TOTAL</span>
+                                        </div>
+                                        <input type="text" name="amountgrand" id="amountgrand" class="form-control text-right console font-weight-bold" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">                                                           
+                        <div class="col-md-12 mt-2">
+                            <label class="mb-0">Glosa</label>
+                            <input type="text" name="glosa" class="form-control">
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+                <div class="modal-footer p-1">
+                    <div class="row w-100">
+                        <div class="col-md-6 mt-2">
+                            
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">RETENCION</span>
+                                    </div>
+                                    <select name="typeproduct" id="typeproduct" class="form-control">
+                                        @foreach ($retencion as $item)
+                                            <option value="{{ $item->id }}">{{ $item->identity }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>                                    
+                            
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalCreateInvoice2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="{{ route('porder_copy_to_invoice') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -254,6 +397,12 @@
                 </div>
                 <div class="modal-body bg-light pt-0">
                     <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <label class="mb-0">Tipo Documento</label>
+                            <input type="text" class="form-control" disabled value="{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}">
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12 col-md-4 mt-2">
                             <label class="mb-0">Tipo Documento</label>
                             <select name="doctype_id" id="" class="form-control" required>
@@ -263,14 +412,39 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-4 col-md-3 mt-2">
+                        <div class="col-8 col-md-5 mt-2">
                             <label class="mb-0">Serie</label>
-                            <input type="text" name="serial" class="form-control" maxlength="" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend pr-1">
+                                    <input type="text" name="serial" class="form-control" style="width:80px;" maxlength="4" required>
+                                </div>
+                                <input type="text" class="form-control console" placeholder="" aria-describedby="basic-addon1" required>
+                            </div>
                         </div>
             
-                        <div class="col-8 col-md-5 mt-2">
-                            <label class="mb-0">Numero</label>
-                            <input type="text" name="documentno" class="form-control" maxlength="" required>
+                        <div class="col-4 col-md-3 mt-2">
+                            <label class="mb-0">Divisa</label>
+                            <select name="currency_id" class="form-control">
+                                @foreach (auth()->user()->currency() as $item)
+                                    <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8 col-md-3 mt-2">
+                            <label class="mb-0">Emision</label>
+                            <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control">
+                        </div>
+           
+                        <div class="col-4 col-md-3 mt-2 d-none d-lg-inline-block">
+                            <label class="mb-0">Contable</label>
+                            <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control">
+                        </div>
+                
+                        <div class="col-4 col-md-3 mt-2">
+                            <label class="mb-0">Tipo Cambio</label>
+                            <input type="numeric" value="1" class="form-control">
                         </div>
                     </div>
                 </div>

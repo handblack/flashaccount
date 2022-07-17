@@ -19,9 +19,11 @@ class CreateTempPInvoicesTable extends Migration
             $table->date('datedue')->nullable();
             $table->date('dateacct')->nullable();
             $table->string('period',6)->nullable();
+            $table->foreignId('sequence_id')->nullable();
             $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
             $table->foreignId('doctype_id');
+            $table->foreignId('order_id');
             $table->string('serial',4);
             $table->string('documentno',15);
             $table->float('amountbase',12,5)->default(0);

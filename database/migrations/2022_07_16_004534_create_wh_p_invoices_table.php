@@ -22,6 +22,8 @@ class CreateWhPInvoicesTable extends Migration
             $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
             $table->foreignId('doctype_id');
+            $table->foreignId('sequence_id')->nullable();
+            $table->string('sequencenro',15);
             $table->string('serial',4);
             $table->string('documentno',15);
             $table->float('amountbase',12,5)->default(0);

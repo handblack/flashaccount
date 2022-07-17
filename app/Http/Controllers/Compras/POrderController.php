@@ -228,6 +228,7 @@ class POrderController extends Controller
                 'reason' => $reason,
                 'input' => $input,
                 'doctype' => $doctype,
+                'retencion' => WhParam::where('group_id',6)->get(),
             ]);
         }
     }
@@ -328,24 +329,17 @@ class POrderController extends Controller
             //Cabecera #########################################################      
             $target = new TempPInvoice();
             $target->fill($source->toArray());
+            $target->fill($request->all());
             $target->order_id    = $request->order_id;
-            $target->sequence_id = $request->sequence_id;
-            $target->datetrx     = $source->dateorder;
-            $target->reason_id  =  $request->reason_id;
-            $target->save();
-            $target->doctype_id  = $target->sequence->doctype_id;
-            $target->save();
-            //Detalle ##########################################################
-            foreach($source->lines as $line){
-                $templ = new TempLogisticInputLine();
-                $templ->fill($line->toArray());
-                $templ->orderline_id = $line->id;
-                $templ->input_id = $target->id;
-                $templ->save();                
-            }        
-            session(['session_logistic_input_id' => $target->id]);
+            $target->dateinvoiced= date("Ymd");            
+            $target->dateacct    = date("Ymd");            
+            $target->period      = date("Ym");            
+            //$target->currency_id    = auth()->user()->get_param('SYSTEM.DEFAULT.CURRENCY_ID',1);
+            //$target->doctype_id  = $target->sequence->doctype_id;
+            $target->save();                    
+            session(['session_compras_invoice_id' => $target->id]);
         });
-        return redirect()->route('linput.create');
+        return redirect()->route('pinvoice.create');
         
     }
 
