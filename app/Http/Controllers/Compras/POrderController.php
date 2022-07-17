@@ -327,7 +327,7 @@ class POrderController extends Controller
         $source = WhPOrder::where('id',$request->order_id)->first();
         if(!$source){
             abort(403,'No hay registro');
-        }    
+        }
         DB::transaction(function () use($request,$source) {    
             //Cabecera #########################################################      
             $target = new TempPInvoice();
@@ -337,6 +337,12 @@ class POrderController extends Controller
             $target->dateinvoiced= date("Ymd");            
             $target->dateacct    = date("Ymd");            
             $target->period      = date("Ym");            
+            // fix values
+            $target->series = strtoupper($request->serial);
+            $target->amountbase = (double)str_replace(',','',$request->amountbase);
+            $target->amountexo = (double)str_replace(',','',$request->amountexo);
+            $target->amounttax = (double)str_replace(',','',$request->amounttax);
+            $target->amountgrand = (double)str_replace(',','',$request->amountgrand);
             //$target->currency_id    = auth()->user()->get_param('SYSTEM.DEFAULT.CURRENCY_ID',1);
             //$target->doctype_id  = $target->sequence->doctype_id;
             $target->save();                    

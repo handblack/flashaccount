@@ -326,7 +326,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text console" id="basic-addon1">BASE&nbsp;</span>
                                         </div>
-                                        <input type="text" name="amountbase" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                        <input type="text" name="amountbase" class="form-control text-right amount console" value="{{ number_format($row->amountbase,env('DECIMAL_AMOUNT',2)) }}" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -334,7 +334,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text console" id="basic-addon1">EXO&nbsp;&nbsp;</span>
                                         </div>
-                                        <input type="text" name="amountexo" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                        <input type="text" name="amountexo" class="form-control text-right amount console" value="{{ number_format($row->amountexo,env('DECIMAL_AMOUNT',2)) }}" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -342,7 +342,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text console" id="basic-addon1">IGV&nbsp;&nbsp;</span>
                                         </div>
-                                        <input type="text" name="amounttax" class="form-control text-right amount console" value="0.00" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
+                                        <input type="text" name="amounttax" class="form-control text-right amount console" value="{{ number_format($row->amounttax,env('DECIMAL_AMOUNT',2)) }}" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -350,7 +350,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text console" id="basic-addon1">TOTAL</span>
                                         </div>
-                                        <input type="text" name="amountgrand" id="amountgrand" class="form-control text-right console font-weight-bold" placeholder="0.00" aria-label="0.00" aria-describedby="basic-addon1" disabled>
+                                        <input type="text" name="amountgrand" id="amountgrand" class="form-control text-right console font-weight-bold" value="{{ number_format($row->amountgrand,env('DECIMAL_AMOUNT',2)) }}" aria-label="0.00" aria-describedby="basic-addon1" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                     <div class="row">                                                           
                         <div class="col-md-12 mt-2">
                             <label class="mb-0">Glosa</label>
-                            <input type="text" name="glosa" class="form-control">
+                            <input type="text" name="glosa" class="form-control" value="FACTURA DE COMPRA">
                         </div>
                         
                     </div>

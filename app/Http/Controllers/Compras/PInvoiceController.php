@@ -118,8 +118,15 @@ class PInvoiceController extends Controller
                             $target->dateacct     = $request->dateacct;
                             $target->period       = \Carbon\Carbon::parse($request->dateacct)->format('Ym');
                             $target->amountbase   = $this->cleanData($request->amountbase);
-                            $target->amountgrand  = $source->amountbase + $source->amountexo + $source->amounttax;
-                            $target->amountopen   = $source->amountgrand;
+                            $target->amountexo    = $this->cleanData($request->amountexo);
+                            $target->amounttax    = $this->cleanData($request->amounttax);
+                            $target->amountgrand  = $this->cleanData($source->amountbase + $source->amountexo + $source->amounttax);
+                            $target->amountopen   = $this->cleanData($source->amountgrand);
+                            //fix
+                            #$target->amountbase = (double)str_replace(',','',$request->amountbase);
+                            #$target->amountexo = (double)str_replace(',','',$request->amountexo);
+                            #$target->amounttax = (double)str_replace(',','',$request->amounttax);
+                            #$target->amountgrand = (double)str_replace(',','',$request->amountgrand);
                             $target->save();
                             $target->token = $hash->encode($target->id);
                             $target->docstatus = 'C';
