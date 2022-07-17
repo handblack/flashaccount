@@ -338,7 +338,7 @@ class POrderController extends Controller
             $target->dateacct    = date("Ymd");            
             $target->period      = date("Ym");            
             // fix values
-            $target->series = strtoupper($request->serial);
+            $target->serial = strtoupper($request->serial);
             $target->amountbase = (double)str_replace(',','',$request->amountbase);
             $target->amountexo = (double)str_replace(',','',$request->amountexo);
             $target->amounttax = (double)str_replace(',','',$request->amounttax);
