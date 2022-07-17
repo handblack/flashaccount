@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Compras;
 
 use App\Http\Controllers\Controller;
 use App\Models\TempHeader;
+use App\Models\TempPInvoice;
 use App\Models\WhDocType;
 use App\Models\WhParam;
 use App\Models\WhPInvoice;
@@ -48,7 +49,7 @@ class PInvoiceController extends Controller
         if(!session('session_compras_invoice_id')){
             return redirect()->route('pinvoice.index');
         }
-        $row = TempHeader::where('session',session('session_compras_invoice_id'))->first();
+        $row = TempPInvoice::where('id',session('session_compras_invoice_id'))->first();
         return view('compras.invoice_form_new',[
             'row' => $row,
             'mode' => 'new',
@@ -99,7 +100,7 @@ class PInvoiceController extends Controller
                             $header->serial      = strtoupper($header->serial);
                             $header->documentno  = trim($header->documentno);
                             $header->save();
-                            session(['session_invoice_create' => $header->token]);
+                            session(['session_compras_invoice_id' => $header->token]);
                         });
                         $data['url'] = route('pinvoice.create');
                         return response()->json($data);
@@ -107,12 +108,13 @@ class PInvoiceController extends Controller
             case 'new': 
                         DB::transaction(function () use($request) {
                             $hash = new Hashids(env('APP_HASH'));
-                            $source = TempHeader::where('session',session('session_invoice_create'))->first();
+                            $source = TempPInvoice::where('id',session('session_compras_invoice_id'))->first();
                             $target = new WhPInvoice();
-                            //$target->fill($source->toArray());
+                            $target->fill($source->toArray());
                             $target->fill($request->all());
+                            $target->serial = strtoupper($target->serial);
                             $target->bpartner_id  = $source->bpartner_id;
-                            $target->dateinvoiced = $source->datetrx;
+                            //$target->dateinvoiced = $source->datetrx;
                             $target->dateacct     = $request->dateacct;
                             $target->period       = \Carbon\Carbon::parse($request->dateacct)->format('Ym');
                             $target->amountbase   = $this->cleanData($request->amountbase);

@@ -13,6 +13,7 @@ use App\Models\TempPOrderLine;
 use App\Models\WhDocType;
 use App\Models\WhLInput;
 use App\Models\WhParam;
+use App\Models\WhPInvoice;
 use App\Models\WhPOrder;
 use App\Models\WhPOrderLine;
 use App\Models\WhReason;
@@ -222,6 +223,7 @@ class POrderController extends Controller
             $row = WhPOrder::where('token',$id)->first();
             $input = WhLInput::where('order_id',$row->id)->get();
             $doctype = WhDocType::where('group_id',4)->get();
+            $invoice = WhPInvoice::where('order_id',$row->id)->get();            
             return view('compras.order_show',[
                 'row' => $row,
                 'sequence_input' => $sequence_input,
@@ -229,6 +231,7 @@ class POrderController extends Controller
                 'input' => $input,
                 'doctype' => $doctype,
                 'retencion' => WhParam::where('group_id',6)->get(),
+                'invoice' => $invoice,
             ]);
         }
     }

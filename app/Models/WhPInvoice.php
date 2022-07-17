@@ -9,6 +9,7 @@ class WhPInvoice extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'order_id',
         'bpartner_id',
         'currency_id',
         'serial',

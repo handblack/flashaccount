@@ -19,6 +19,7 @@ class CreateWhPInvoicesTable extends Migration
             $table->date('datedue')->nullable();
             $table->date('dateacct')->nullable();
             $table->string('period',6);
+            $table->foreignId('order_id');
             $table->foreignId('bpartner_id');
             $table->foreignId('currency_id');
             $table->foreignId('doctype_id');

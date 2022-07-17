@@ -156,6 +156,13 @@
         <div class="row">
             <div class="col-md-6">
                 <h5><strong>Documentos Vinculados</strong></h5>
+                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                    @foreach ($invoice as $item)
+                        <tr>
+                            <td>{{ $item->serial }}-{{ $item->documentno }}</td>
+                        </tr>
+                    @endforeach
+                </table>
             </div>
             <div class="col-md-6">
                 <h5><strong>Documentos Almacen</strong></h5>
@@ -242,7 +249,9 @@
 <div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('porder_copy_to_invoice') }}" method="POST" id="form-create">
-            @csrf
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="order_id" value="{{ $row->id }}">
+            <input type="hidden" name="token" value="{{ $row->token }}">
             <input type="hidden" name="mode" value="temp">
             <div class="modal-content">
                 <div class="modal-header pt-2 pb-2">
@@ -251,9 +260,14 @@
                 </div>
                 <div class="modal-body pt-2" style="background-color:#dcdcdc74;">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-8 col-md-10">
                             <label class="mb-0">Socio de Negocio</label>
-                            <input type="text" class="form-control" value="{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}" disabled>
+                            <span class="input-group-text"><span class="d-none d-lg-inline-block">{{ $row->bpartner->bpartnercode }} - </span>{{ $row->bpartner->bpartnername }}</span>
+
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <label class="mb-0">Orden Compra</label>
+                            <input type="text" class="form-control" value="{{ $row->serial }} - {{ $row->documentno }}" disabled>
                         </div>
                         
                     </div>
@@ -460,6 +474,7 @@
 
 @section('script')
 <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
 <script>
 $(function(){
     // warehouse ----------------------------------------------------------------
@@ -479,6 +494,14 @@ $(function(){
         },
         minimumInputLength: 0,
         theme:'bootstrap4'
+    });
+    // Sumando totales --------------------------------------------------------------
+    $(".amount").change(function() {
+        var total = 0;
+        $( ".amount" ).each( function(){
+            total += parseFloat( $( this ).val() ) || 0;
+        });
+        $('#amountgrand').val($.number(total,2,'.', ','));
     });
 });
 </script>

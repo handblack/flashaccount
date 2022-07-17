@@ -149,52 +149,26 @@
                 <input type="hidden" name="mode" value="temp">
                 <div class="modal-content">
                     <div class="modal-header pt-2 pb-2">
-                        <h5 class="modal-title" id="exampleModalLabel">Crear Comprobante de Gasto</h5>
-                        <div class="card-tools float-sm-right">
-                            <div class="btn-group">
-
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">
-                                            <i class="fas fa-calendar-alt fa-fw"></i> Emision
-                                        </span>
-                                    </div>
-                                    <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required style="width:120px;">
-                                </div>
-                            </div>
-                            <div class="btn-group">
-
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">
-                                            <i class="fas fa-donate fa-fw"></i> Tipo Cambio
-                                        </span>
-                                    </div>
-                                    <input type="text" name="rate" class="form-control text-right text-monospace" value="1.000" maxlength="5" required style="width:80px;">
-                                </div>
-                            </div>
-                        </div>
-                        
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar Factura de Proveedor <strong>[Sin referencia de OC]</strong></h5>
+                  
                     </div>
-                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                    <div class="modal-body pt-2" style="background-color:#dcdcdc74;">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-8 col-md-10">
                                 <label class="mb-0">Socio de Negocio</label>
-                                <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                                <select name="bpartner_id" class="form-control select2-bpartner"></select>
+    
                             </div>
-                            <div class="col-md-2">
-                                <label class="mb-0">Moneda</label>
-                                <select name="currency_id" class="form-control" required>
-                                    @foreach (auth()->user()->currency() as $item)
-                                        <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-4 col-md-2">
+                                <label class="mb-0">Orden Compra</label>
+                                <span class="input-group-text">[--SIN REF--]</span>
                             </div>
+                            
                         </div>
                         <div class="row mt-2">
-                            <div class="col-9">
+                            <div class="col-md-9">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mt-2">
                                         <label class="mb-0">Tipo Comprobante</label>
                                         <select name="doctype_id" class="form-control" required>
                                             <option value="" selected disabled>-- SELECCIONA --</option>
@@ -204,29 +178,44 @@
                                         </select>
                                     </div>
         
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mt-2">
                                         <label class="mb-0">Documento</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
-                                                <input type="text" name="serial" class="form-control console mr-1" style="width:65px;text-transform: uppercase;" maxlength="4" placeholder="####" aria-label="Username" aria-describedby="basic-addon1">
+                                                <input type="text" name="serial" class="form-control console mr-1" style="width:65px;text-transform: uppercase;" maxlength="4" placeholder="####" aria-label="Username" aria-describedby="basic-addon1" required>
                                             </div>
-                                            <input type="text" name="documentno" class="form-control console" maxlength="15">
+                                            <input type="text" name="documentno" class="form-control console" maxlength="15" required>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-2">
-                                                               
-                                    <div class="col-md-12">
-                                        <label class="mb-0">Glosa</label>
-                                        <input type="text" name="glosa" class="form-control">
-                                    </div>
-                                    
-                                </div>
-
-                            </div>
-                            <div class="col-3">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-3 col-md-3 mt-2">
+                                        <label class="mb-0">Moneda</label>
+                                        <select name="currency_id" class="form-control" required>
+                                            @foreach (auth()->user()->currency() as $item)
+                                                <option value="{{ $item->id }}">{{ $item->currencyiso }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-5 col-md-3 mt-2">
+                                        <label class="mb-0">Emision</label>
+                                        <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control">
+                                    </div>
+                                    <div class="col-4 col-md-3 mt-2 d-none d-sm-inline-block">
+                                        <label class="mb-0">Contabilidad</label>
+                                        <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control">
+                                    </div>
+                                    <div class="col-4 col-md-3 mt-2">
+                                        <label class="mb-0">Tipo Cambio</label>
+                                        <input type="number" name="rate" value="1.000" step="0.001" class="form-control text-right">
+                                    </div>
+                                </div>
+                                
+    
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-12 mt-2">
                                         <div class="input-group input-group-sm">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text console" id="basic-addon1">BASE&nbsp;</span>
@@ -261,13 +250,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">                                                           
+                            <div class="col-md-12 mt-2">
+                                <label class="mb-0">Glosa</label>
+                                <input type="text" name="glosa" class="form-control">
+                            </div>
+                            
+                        </div>
                         
-
+    
                     </div>
                     <div class="modal-footer p-1">
                         <div class="row w-100">
-                            <div class="col-md-6">
-                                <div class="btn-group">
+                            <div class="col-md-6 mt-2">
+                                
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">RETENCION</span>
@@ -278,9 +274,9 @@
                                             @endforeach
                                         </select>
                                     </div>                                    
-                                </div>
+                                
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-2">
                                 <div class="float-right">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>

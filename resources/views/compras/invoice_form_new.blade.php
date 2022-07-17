@@ -57,11 +57,19 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-8">
                     <label class="mb-0">Socio de Negocio</label>
-                    <select name="bpartner_id" class="form-control select2-bpartner" required disabled>
-                        <option value="{{ $row->id }}">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</option>
-                    </select>
+                    <span class="input-group-text">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</span>
+                </div>
+                <div class="col-md-2">
+                    <label class="mb-0">Orden Compra</label>
+                    <span class="input-group-text">
+                        @if($row->order_id)
+                            {{ $row->order->serial }}-{{ $row->order->documentno }}
+                        @else
+                            [-- SIN REF --]
+                        @endif
+                    </span>
                 </div>
                 <div class="col-md-2">
                     <label class="mb-0">Moneda</label>
@@ -98,15 +106,15 @@
                     <div class="row mt-2">
                         <div class="col-md-3">
                             <label class="mb-0">Emision</label>
-                            <input type="date" name="dateinvoiced" value="{{ $row->datetrx }}" class="form-control" required>
+                            <input type="date" name="dateinvoiced" value="{{ $row->dateinvoiced }}" class="form-control" required>
                         </div>                            
                         <div class="col-md-3">
                             <label class="mb-0">Vencimiento</label>
-                            <input type="date" name="datedue" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            <input type="date" name="datedue" value="{{ $row->datedue }}" class="form-control">
                         </div>                            
                         <div class="col-md-3">
                             <label class="mb-0">Periodo</label>
-                            <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            <input type="date" name="dateacct" value="{{ $row->dateacct }}" class="form-control" required>
                         </div>                            
                         <div class="col-md-3">
                             <label class="mb-0">Tipo Cambio</label>
