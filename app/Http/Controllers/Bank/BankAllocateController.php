@@ -119,7 +119,7 @@ class BankAllocateController extends Controller
             ['bpartner_id',session('session_allocate_bpartner_id')],
             ['amountopen','<>',0],
         ];
-        $expense = WhBExpense::get();
+        $expense = WhBExpense::where($filter)->get();
         $income = WhBIncome::where($filter)->get();
         $cinvoices = WhCInvoice::where($filter)->get();
         $pinvoices = WhPInvoice::where($filter)->get();

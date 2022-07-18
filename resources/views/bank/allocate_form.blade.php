@@ -110,7 +110,7 @@
                             </td>
                             <td class="align-middle" width="95">{{ $line->datetrx }}</td>
                             <td class="align-middle">
-                                {{ $line->bankaccount->shortname }}  
+                                {{ $line->sequenceserial }}-{{ $line->sequenceno }}-{{ $line->bankaccount->shortname }}  
                             </td>
                           
                             <td class="text-right">
