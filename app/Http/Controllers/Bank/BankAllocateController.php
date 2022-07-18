@@ -62,9 +62,9 @@ class BankAllocateController extends Controller
         $data['message'] = 'Seleccione los documentos a consignar';
         $fields = [
             'bpartner_id',
-            'bankaccount_id',
             'datetrx',
             'rate',
+            'glosa',
         ];
         foreach($fields as $field){
             if(!$request->has($field)){

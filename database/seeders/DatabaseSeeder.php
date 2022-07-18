@@ -19,4 +19,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\WhBpartner::factory(150)->create();
         \App\Models\WhWarehouse::factory(10)->create();
     }
+
+    
+
 }

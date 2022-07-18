@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-<section class="content-header pb-2">
+<section class="content-header pb-0">
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
@@ -21,7 +21,7 @@
         </div>
     </div>
 </section>
-    <section class="content-header">
+    <section class="content-header pt-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
@@ -29,6 +29,7 @@
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('ballocate.index') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
 
@@ -108,22 +109,18 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Cuenta</th>
-                        <th>Cliente</th>
-                        <th>Divisa</th>
+                        <th>Codigo</th>
+                        <th class="d-none d-sm-table-cell">Cliente</th>
                         <th class="text-right">Importe</th>
-                        <th class="text-right">Abierto</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
-                            <td width="110">{{ $item->datetrx }}</td>
-                            <td width="110">{{ $item->bpartner->bpartnercode }}</td>
-                            <td>{{ $item->bpartner->bpartnername }}</td>
+                            <td width="100">{{ $item->datetrx }}</td>
+                            <td width="100">{{ $item->bpartner->bpartnercode }}</td>
+                            <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
-                            <td class="text-right"></td>
                         </tr>
                     @empty
                         <tr>
@@ -142,53 +139,37 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header bg-light">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Asignacion de Valores</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Reconciliacion de Saldos</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" style="background-color:#dcdcdc74;">
+                    <div class="modal-body pt-1" style="background-color:#dcdcdc74;">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-2">
                                 <label class="mb-0">Socio de Negocio</label>
                                 <select name="bpartner_id" class="form-control select2-bpartner" required></select>
                             </div>
                         </div>
-                        <p class="lead mt-3">Para todo ingreso a CAJA/BANCO se debe de identificar al Socio de Negocio, asi tambien podra especificar como ANTICIPO a su cuenta</p>
 
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <label class="mb-0">Banco / Caja [MATCH]</label>
-                                <select class="form-control" name="bankaccount_id" required>
-                                    <option value="" disabled selected>-- SELECCIONA --</option>
-                                    @foreach ($bankaccount as $item)
-                                        <option value="{{ $item->id }}">{{ $item->shortname }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-7 col-md-3 mt-2">
                                 <label class="mb-0">Fecha TRX</label>
                                 <input type="date" name="datetrx" value="{{ date("Y-m-d") }}" class="form-control" required>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-5 col-md-3 mt-2">
                                 <label class="mb-0">Tipo de Cambio</label>
                                 <input type="text" name="rate" class="form-control text-right text-monospace" value="1.000" maxlength="5" required>
                             </div>
-                        </div>
-                
-                        <div class="row mt-2">
-                            <div class="col-md-12">
+                            <div class="col-md-6 mt-2">
                                 <label class="mb-0">Glosa</label>
-                                <input type="text" class="form-control">
+                                <input type="text" name="glosa" class="form-control">
                             </div>
                         </div>
-                        
                     </div>
-                    <div class="modal-footer bg-light">
-                        <button type="reset" class="btn btn-default"><i class="far fa-window-restore fa-fw"></i> Limpiar</button>
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Crear ASIGNACION</button>
-                
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
                     </div>
                 </div>
             </form>

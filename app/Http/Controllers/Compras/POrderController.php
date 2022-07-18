@@ -348,7 +348,7 @@ class POrderController extends Controller
             $target->save();                    
             session(['session_compras_invoice_id' => $target->id]);
         });
-        return redirect()->route('pinvoice.create');
+        return redirect()->route('porder.show',$source->token);
         
     }
 
