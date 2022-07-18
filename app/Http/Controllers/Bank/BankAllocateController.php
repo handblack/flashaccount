@@ -10,10 +10,12 @@ use App\Models\WhBAllocate;
 use App\Models\WhBAllocateLine;
 use App\Models\WhBAllocatePayment;
 use App\Models\WhBankAccount;
+use App\Models\WhBExpense;
 use App\Models\WhBIncome;
 use App\Models\WhCInvoice;
 use App\Models\WhCurrency;
 use App\Models\WhParam;
+use App\Models\WhPInvoice;
 use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
@@ -117,13 +119,18 @@ class BankAllocateController extends Controller
             ['bpartner_id',session('session_allocate_bpartner_id')],
             ['amountopen','<>',0],
         ];
-        $anticipos = WhBIncome::where($filter)->get();
-        $invoices = WhCInvoice::where($filter)->get();
+
+        $income = WhBIncome::where($filter)->get();
+        $expense = WhBExpense::where($filter)->get();
+        $cinvoices = WhCInvoice::where($filter)->get();
+        $pinvoices = WhPInvoice::where($filter)->get();
         return view('bank.allocate_form',[
             'row'       => $row,
             'mode'      => 'step1',
-            'anticipos' => $anticipos,
-            'invoices'  => $invoices,
+            'income'    => $income,
+            'expense'   => $expense,
+            'cinvoices' => $cinvoices,
+            'pinvoices' => $pinvoices,
             'url'  => route('ballocate.update',$row->token),
         ]);
     }

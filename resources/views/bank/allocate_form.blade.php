@@ -94,8 +94,8 @@
                 </thead>
 
                 <tbody>
-                    {{-- ANTICIPOS --}}
-                    @foreach ($anticipos as $line)
+                    {{-- ANTICIPOS - INGRESOS --}}
+                    @foreach ($income as $line)
                         <tr id="{{ $line->token }}">
                             <td class="align-middle" width="60">
                                 <div class="custom-control custom-checkbox">
@@ -129,8 +129,43 @@
                             </td>
                         </tr>
                     @endforeach
-                    {{-- COMPROBANTES --}}
-                    @forelse ($invoices as $line)
+                    {{-- ANTICIPOS - EGRESOS --}}
+                    @foreach ($expense as $line)
+                        <tr id="{{ $line->token }}">
+                            <td class="align-middle" width="60">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkBoxPayment" 
+                                        name="chk_payment[]" 
+                                        type="checkbox" 
+                                        id="customCheckbox{{ $line->token }}" 
+                                        data-token="{{ $line->token }}" 
+                                        value="{{ $line->id }}">
+                                    <label for="customCheckbox{{ $line->token }}" class="custom-control-label"></label>
+                                </div>
+                            </td>
+                            <td class="align-middle" width="95">{{ $line->datetrx }}</td>
+                            <td class="align-middle">
+                                {{ $line->bankaccount->shortname }}  
+                            </td>
+                          
+                            <td class="text-right">
+                                {{ number_format($line->amount,env('DECIMAL_AMOUNT',2)) }} 
+                                <small>{{ $line->currency->currencyiso }}</small>
+                            </td>
+                            <td class="text-right">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td width="120">
+                                <input type="text" 
+                                    name="apply_payment[]" data-id="{{ $line->id }}" 
+                                    id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
+                            </td>
+                            <td><!-- value --></td>
+                            <td class="d-none d-md-table-cell">
+                                {{ $line->bpartner->bpartnername }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    {{-- COMPROBANTES - VENTAS --}}
+                    @foreach($cinvoices as $line)
                         <tr id="{{ $line->token }}">
                             <td class="align-middle" width="60">
                                 <div class="custom-control custom-checkbox">
@@ -156,11 +191,36 @@
                                 {{ $line->bpartner->bpartnername }}
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="10">No hay documentos para aplicar</td>
+                    @endforeach
+                    
+                    {{-- COMPROBANTES - COMPRAS --}}
+                    @foreach($cinvoices as $line)
+                        <tr id="{{ $line->token }}">
+                            <td class="align-middle" width="60">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkBoxInvoice"name="chk_invoice[]" type="checkbox" 
+                                        id="customCheckbox{{ $line->id }}" data-token="{{ $line->token }}" value="{{ $line->id }}">
+                                    <label for="customCheckbox{{ $line->id }}" class="custom-control-label"></label>
+                                </div>
+                            </td>
+                            <td>{{ $line->dateinvoiced }}</td>
+                            <td>
+                                FAC F001-12345
+                            </td>
+                            <td class="text-right">
+                                {{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}
+                                <small>{{ $line->currency_id }}</small>
+                            </td>
+                            <td class="text-right">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
+                            <td></td>
+                            <td width="120">
+                                <input type="text" name="apply_invoice[]" data-id="{{ $line->id }}" id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {{ $line->bpartner->bpartnername }}
+                            </td>
                         </tr>
-                    @endforelse
+                    @endforeach
 
                     
                 </tbody>
