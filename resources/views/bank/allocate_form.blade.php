@@ -83,7 +83,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Fecha</th>
+                        <th width="60">Fecha</th>
                         <th>Documento</th>
                         <th class="text-right">Total</th>
                         <th class="text-right">Abierto</th>
@@ -180,7 +180,7 @@
                             </td>
                             <td class="text-right">
                                 {{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}
-                                <small>{{ $line->currency_id }}</small>
+                                <small>{{ $line->currency->currencyiso }}</small>
                             </td>
                             <td class="text-right">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
                             <td></td>
@@ -205,11 +205,11 @@
                             </td>
                             <td>{{ $line->dateinvoiced }}</td>
                             <td>
-                                FAC F001-12345
+                                {{ $line->doctype->shortname  }} {{ $line->serial }}-{{ $line->documentno }}
                             </td>
                             <td class="text-right">
                                 {{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}
-                                <small>{{ $line->currency_id }}</small>
+                                <small>{{ $line->currency->currencyiso }}</small>
                             </td>
                             <td class="text-right">{{ number_format($line->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
                             <td></td>
