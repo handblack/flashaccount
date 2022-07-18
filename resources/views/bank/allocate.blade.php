@@ -109,6 +109,7 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
+                        <th>Documento</th>
                         <th>Codigo</th>
                         <th class="d-none d-sm-table-cell">Cliente</th>
                         <th class="text-right">Importe</th>
@@ -118,6 +119,7 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="100">{{ $item->datetrx }}</td>
+                            <td width="100">{{ $item->sequenceserial }}-{{ $item->sequenceno }}</td>
                             <td width="100">{{ $item->bpartner->bpartnercode }}</td>
                             <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>

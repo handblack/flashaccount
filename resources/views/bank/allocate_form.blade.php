@@ -76,7 +76,7 @@
     <input type="hidden" name="mode" value="{{ $mode }}">
     <div class="card">
         <div class="card-header">
-            <div class="card-title">AT</div>
+            <div class="card-title"><strong>{{ $row->bpartner->bpartnercode }}</strong> - {{ $row->bpartner->bpartnername }}</div>
         </div>
         <div class="card-body table-responsive p-0">
             <table class="table text-nowrap table-sm">
