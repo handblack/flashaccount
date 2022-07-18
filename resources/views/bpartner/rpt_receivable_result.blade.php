@@ -58,75 +58,76 @@
 
 @section('container')
     
-<div class="card mb-3">
-    @if($result)
-        <div class="card-header pt-1 pb-1">
-            <i class="fas fa-file-alt fa-fw"></i> <strong>COMPROBANTES</strong>
-        </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
-                <thead>
+<div class="card mb-3">    
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
+            <thead>
+                <tr>
+                    <th width="100">Fecha</th>
+                    <th width="100">Codigo</th>
+                    <th>Socio de Negocio</th>
+                    <th>Documento</th>                    
+                    <th class="text-right">Importe</th>
+                    <th class="text-right">Abierto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($income)
                     <tr>
-                        <th width="100">Fecha</th>
-                        <th width="100">Codigo</th>
-                        <th>Socio de Negocio</th>
-                        <th>Documento</th>                    
-                        <th class="text-right">Importe</th>
-                        <th class="text-right">Abierto</th>
+                        <td colspan="6" class="bg-light "><span class="text-primary">Anticipos</span> [{{ count($income) }} Registros]</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse ($result as $item)
-                        <tr>
-                            <td>{{ $item->datetrx }}</td>
-                            <td>{{ $item->bpartner->bpartnercode }}</td>
-                            <td>{{ $item->bpartner->bpartnername }}</td>
-                            <td>
-                                {{ $item->cinvoice->sequence->doctype->doctypecode }}-{{ $item->cinvoice->serial }}-{{ $item->cinvoice->documentno }} 
-                            </td>
-                            <td class="text-right border-left" width="120">
-                                {{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}
-                                <small>{{ $item->cinvoice->currency->currencyiso }}</small>
-                            </td>
-                            <td class="text-right" width="120">
-                                {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td coslpan="4">No hay resultado</td>
-                        </tr>                    
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    @endif
-    @if($income)
-        <div class="card-header pt-1 pb-1">
-            <i class="far fa-file-alt fa-fw"></i> <strong>ANTICIPOS</strong>
-        </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
-                <tbody>
-                    @foreach ($income as $item)
-                        <tr>
-                            <td>{{ $item->datetrx }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right border-left" width="120">
-                                {{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}
-                                <small>{{ $item->currency->currencyiso }}</small>
-                            </td>
-                            <td class="text-right" width="120">
-                                {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
+                @endif
+                @forelse ($income as $item)
+                    <tr>
+                        <td>{{ $item->datetrx }}</td>
+                        <td>{{ $item->bpartner->bpartnercode }}</td>
+                        <td>{{ $item->bpartner->bpartnername }}</td>
+                        <td></td>
+                        <td class="text-right border-left" width="120">
+                            {{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}
+                            <small>{{ $item->currency->currencyiso }}</small>
+                        </td>
+                        <td class="text-right" width="120">
+                            {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5">No hay anticipos</td>
+                    </tr>
+                @endforelse  
+                @if($result)
+                    <tr>
+                        <td colspan="6" class="bg-light "><span class="text-primary">Comprobantes</span> [{{ count($result) }} Registros]</td>
+                    </tr>
+                @endif
+                @forelse ($result as $item)
+                    <tr>
+                        <td>{{ $item->datetrx }}</td>
+                        <td>{{ $item->bpartner->bpartnercode }}</td>
+                        <td>{{ $item->bpartner->bpartnername }}</td>
+                        <td>
+                            {{ $item->cinvoice->sequence->doctype->doctypecode }}-{{ $item->cinvoice->serial }}-{{ $item->cinvoice->documentno }} 
+                        </td>
+                        <td class="text-right border-left" width="120">
+                            {{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}
+                            <small>{{ $item->cinvoice->currency->currencyiso }}</small>
+                        </td>
+                        <td class="text-right" width="120">
+                            {{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td coslpan="4">No hay comprobantes</td>
+                    </tr>                    
+                @endforelse      
+            </tbody>
+
+        </table>
+    </div>
+ 
+    
 </div>
 <div class="row">
     <div class="col-md-12 mt-0">
