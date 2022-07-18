@@ -185,14 +185,18 @@ class BankAllocateController extends Controller
                                 'mode'    => 'create',
                             ]);
                             break;
-            case 'create':  // como todo ya esta validado, solo confirmamos con la creacion de los registros de movimiento
-                            echo '1';
+            case 'create':  // como todo ya esta validado, solo confirmamos con la creacion de los registros de movimiento                            
                             DB::transaction(function () use($request) {
+                                $seq = auth()->user()->sequence('BAL')->first();
                                 $hash = new Hashids(env('APP_HASH','miasoftware'));
                                 $htem = TempBankAllocate::where('id',session('session_allocate_id'))->first();
                                 $targ = new WhBAllocate();
                                 $targ->fill($htem->toArray());
+                                $targ->sequence_id    = $seq->id; // Serie de reconciliacion
+                                $targ->doctype_id     = $seq->doctype_id;
                                 $targ->save();
+                                $targ->sequenceserial = auth()->user()->get_serial($seq->id);
+                                $targ->sequenceno     =  auth()->user()->set_lastnumber($seq->id);
                                 $targ->token = $hash->encode($targ->id);
                                 $targ->save();
                                 // Guardamos los payment
@@ -206,17 +210,13 @@ class BankAllocateController extends Controller
                                     }
                                     if($tpay->expense_id){
                                         DB::select('CALL pax_bank_expense_actualiza_saldos(?)',[$tpay->expense_id]);
-                                    }
-                                    
+                                    }                                    
                                 }
                                 foreach($htem->lines as $tlin){
                                     $line = new WhBAllocateLine();
                                     $line->fill($tlin->toArray());
                                     $line->allocate_id = $targ->id;
                                     $line->save();
-                                    echo '3.1';
-                                    //dd($tlin);
-                                    //Actualizamos SALDOS
                                     DB::select('CALL pax_cinvoice_actualiza_saldos(?)',[$tlin->cinvoice_id]);
                                 }
                             });

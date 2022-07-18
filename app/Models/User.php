@@ -154,6 +154,7 @@ class User extends Authenticatable
             FAC -> Facturas
             BVE -> Boleta de Venta
             PIN -> Parte de Ingreso
+            BAL -> Bank Allocate
         */
         $dt = WhDocType::where('shortname',$doctype)->first();
         return WhSequence::where('doctype_id',$dt->id)->get();

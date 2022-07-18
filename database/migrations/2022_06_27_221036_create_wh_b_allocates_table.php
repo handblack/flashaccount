@@ -20,6 +20,10 @@ class CreateWhBAllocatesTable extends Migration
             $table->string('period',6)->nullable();
             $table->foreignId('bpartner_id'); 
             $table->foreignId('bankaccount_id')->nullable();
+            $table->foreignId('doctype_id')->nullable();
+            $table->foreignId('sequence_id')->nullable();
+            $table->string('sequenceserial',4)->nullable();
+            $table->string('sequenceno',15)->nullable();
             $table->float('rate'); 
             $table->string('token',60)->nullable();
             $table->timestamps();

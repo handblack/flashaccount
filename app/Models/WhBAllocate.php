@@ -16,9 +16,17 @@ class WhBAllocate extends Model
         'bankaccount_id',
         'amount',
         'rate',
+        'sequence_id',
+        'sequenceno',
+        'doctype_id',
     ];
 
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
+
+    public function sequence(){
+        return $this->hasOne(WhSequence::class,'id','sequence_id');
+    }
+
 }

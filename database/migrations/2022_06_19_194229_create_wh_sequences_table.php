@@ -119,6 +119,16 @@ class CreateWhSequencesTable extends Migration
             'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
             'warehouse_id' => 1,
         ]);
+        /*
+            ----------------------------------------------------------------------
+            BANCO
+            ----------------------------------------------------------------------
+        */
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','BAL')->first()->id,
+            'serial'     => '0001',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+        ]);
 
     }
 
