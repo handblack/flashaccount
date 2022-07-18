@@ -113,11 +113,11 @@ class BankAllocateController extends Controller
     public function edit($id)
     {
         $row = TempBankAllocate::where('id',$id)->first();
-        $anticipos = WhBIncome::where('amountopen','<>',0)->get();
         $filter = [
             ['bpartner_id',session('session_allocate_bpartner_id')],
             ['amountopen','<>',0],
         ];
+        $anticipos = WhBIncome::where($filter)->get();
         $invoices = WhCInvoice::where($filter)->get();
         return view('bank.allocate_form',[
             'row'       => $row,

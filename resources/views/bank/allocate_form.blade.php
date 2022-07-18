@@ -23,7 +23,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('bexpense.index') }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('ballocate.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -124,7 +124,9 @@
                                     id="input-apply-{{ $line->token }}" class="text-right form-control form-control-sm apply-sum" value="0.00" disabled>
                             </td>
                             <td><!-- value --></td>
-                            <td><!-- bpartner --></td>
+                            <td class="d-none d-md-table-cell">
+                                {{ $line->bpartner->bpartnername }}
+                            </td>
                         </tr>
                     @endforeach
                     {{-- COMPROBANTES --}}
