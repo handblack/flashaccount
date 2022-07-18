@@ -204,7 +204,7 @@ aria-hidden="true">
                 <input type="hidden" name="order_id" value="{{ $row->id }}">
                 <input type="hidden" name="token" value="{{ $row->token }}">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Emitir Parte INGRESO</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Parte SALIDA</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -221,7 +221,7 @@ aria-hidden="true">
                             </select>
                         </div>
                         <div class="col-md-6 mt-2">
-                            <label class="mb-0">Almacen Ingreso</label>
+                            <label class="mb-0">Almacen Salida</label>
                             <select name="warehouse_id" id="" class="form-control select2-warehouse" required></select>
                         </div>
                     </div>
