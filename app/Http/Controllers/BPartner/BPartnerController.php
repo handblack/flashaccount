@@ -336,6 +336,7 @@ class BPartnerController extends Controller
             ]);
             session(['session_rpt_invoice_open' => $session]);
             $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))
+                ->where('amount','<>',0)
                 ->paginate(env('PAGINATE_RECEIVABLE',20));
         }else{
             $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))

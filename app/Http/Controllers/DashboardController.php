@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index(){
-        return view('dashboard');
+        $dashboard = (env('APP_IFRAME',true)) ? 'dashboard_iframe' : 'dashboard';   
+        return view($dashboard);
     }
 
     public function building(){
