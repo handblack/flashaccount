@@ -89,7 +89,7 @@ class BankAllocateController extends Controller
             $header->token = md5($header->id);
             $header->save();
             session(['session_allocate_id' => $header->id]);
-            session(['session_allocate_bpartner_id' => $header->bpartner_id]);
+            session(['session_allocate_bpartner_id' => $request->bpartner_id]);
         });
         $data['url'] = route('ballocate.edit',session('session_allocate_id'));
         return response()->json($data);
@@ -119,9 +119,8 @@ class BankAllocateController extends Controller
             ['bpartner_id',session('session_allocate_bpartner_id')],
             ['amountopen','<>',0],
         ];
-
+        $expense = WhBExpense::get();
         $income = WhBIncome::where($filter)->get();
-        $expense = WhBExpense::where($filter)->get();
         $cinvoices = WhCInvoice::where($filter)->get();
         $pinvoices = WhPInvoice::where($filter)->get();
         return view('bank.allocate_form',[

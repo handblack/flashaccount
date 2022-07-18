@@ -15,6 +15,10 @@ class CreateWhBExpensesTable extends Migration
     {
         Schema::create('wh_b_expenses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('doctype_id')->nullable();
+            $table->foreignId('sequence_id')->nullable();
+            $table->string('sequenceserial',4)->nullable();
+            $table->string('sequenceno',15)->nullable();
             $table->date('datetrx');
             $table->foreignId('bankaccount_id');
             $table->foreignId('currency_id');
@@ -25,7 +29,7 @@ class CreateWhBExpensesTable extends Migration
             $table->float('amount',12,5)->default(0);
             $table->float('amountopen',12,5)->default(0);
             $table->float('amountanticipation',12,5)->default(0);
-
+            $table->string('token',60)->nullable();
             $table->timestamps();
         });
     }

@@ -129,6 +129,16 @@ class CreateWhSequencesTable extends Migration
             'serial'     => '0001',
             'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
         ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','BIN')->first()->id,
+            'serial'     => '0001',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+        ]);
+        $row->create([
+            'doctype_id' => WhDocType::where('shortname','BEX')->first()->id,
+            'serial'     => '0001',
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+        ]);
 
     }
 

@@ -22,7 +22,7 @@
         </div>
     </section>
 
-    <section class="content-header">
+    <section class="content-header pt-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
@@ -103,28 +103,32 @@
             </form>
         </div>
         
-        <div class="card-body p-0">
+        <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless">    
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Cuenta</th>
-                        <th>Cliente</th>
-                        <th>Divisa</th>
+                        <th>Documento</th>
+                        <th class="d-none d-sm-inline-block">Codigo</th>
+                        <th class="d-none d-sm-inline-block">Cliente</th>                        
                         <th class="text-right">Importe</th>
+                        <th class="text-right">Anticipo</th>
                         <th class="text-right">Abierto</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($result as $item)
-                        <tr>
-                            <td width="110">{{ $item->datetrx }}</td>
-                            <td width="110">{{ $item->bpartner->bpartnercode  }}</td>
-                            <td width="110">{{ $item->bpartner->bpartnername  }}</td>
-                            <td class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
-                            <td class="text-right"></td>
-                        </tr>
+                    <tr>
+                        <td width="110">{{ $item->datetrx }}</td>
+                        <td width="110">{{ $item->sequenceserial }}-{{ $item->sequenceno }}</td>
+                        <td width="110" class="d-none d-sm-inline-block">{{ $item->bpartner->bpartnercode }}</td>
+                        <td class="d-none d-sm-inline-block">{{ $item->bpartner->bpartnername }}</td>
+                        <td width="120" class="text-right">{{ number_format($item->amount,env('DECIMAL_AMOUNT',2)) }}</td>
+                        <td width="120" class="text-right">{{ number_format($item->amountanticipation,env('DECIMAL_AMOUNT',2)) }}</td>
+                        <td width="120" class="text-right">{{ number_format($item->amountopen,env('DECIMAL_AMOUNT',2)) }}</td>
+                        <td class="text-right"></td>
+                    </tr>
                     @empty
                         <tr>
                             <td colspan="10">No hay informacion</td>

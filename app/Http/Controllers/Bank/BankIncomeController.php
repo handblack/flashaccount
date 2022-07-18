@@ -191,6 +191,10 @@ class BankIncomeController extends Controller
                 $header->amountopen = $header->amount - $amt;
                 $hash = new Hashids(env('APP_HASH','miasoftware'));
                 $header->token = 'bi_' . $hash->encode($header->id);
+                $seq = auth()->user()->sequence('BIN')->first();
+                $header->doctype_id     = $seq->doctype_id;
+                $header->sequenceserial = auth()->user()->get_serial($seq->id);
+                $header->sequenceno     =  auth()->user()->set_lastnumber($seq->id);
                 $header->save();
                 
                

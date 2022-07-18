@@ -78,7 +78,7 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="100">{{ $item->dateinvoiced }}</td>
-                            <td class="d-none d-sm-inline-block" width="100">{{ $item->period }}</td>
+                            <td width="60" class="d-none d-sm-inline-block" >{{ $item->period }}</td>
                             <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
                             <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnercode }}</td>
                             <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnername }}</td>

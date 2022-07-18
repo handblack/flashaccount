@@ -177,16 +177,24 @@ class BankExpensesController extends Controller
                 DB::transaction(function () use($id){
                     $thea = TempBankExpense::where('token',$id)->first();  
                     // cabecera -------------------------------------
-                    $head = new WhBExpense();
-                    $head->fill($thea->toArray());
-                    $head->save();
+                    $header = new WhBExpense();
+                    $header->fill($thea->toArray());
+                    $header->amountopen = $header->amount;
+                    $header->save();
                     // lineas ---------------------------------------
                     foreach($thea->line as $tline){
                         $line = new WhBExpenseLine();
                         $line->fill($tline->toArray());
-                        $line->expense_id = $head->id;
+                        $line->expense_id = $header->id;
                         $line->save();
                     }
+                    $hash = new Hashids(env('APP_HASH','miasoftware'));
+                    $header->token = 'be_' . $hash->encode($header->id);
+                    $seq = auth()->user()->sequence('BIN')->first();
+                    $header->doctype_id     = $seq->doctype_id;
+                    $header->sequenceserial = auth()->user()->get_serial($seq->id);
+                    $header->sequenceno     = auth()->user()->set_lastnumber($seq->id);
+                    $header->save();
                 });
                 return redirect()->route('bexpense.index');
                 break;
