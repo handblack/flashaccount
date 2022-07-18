@@ -110,7 +110,7 @@
                             </td>
                             <td class="align-middle" width="95">{{ $line->datetrx }}</td>
                             <td class="align-middle">
-                                {{ $line->sequenceserial }}-{{ $line->sequenceno }}-{{ $line->bankaccount->shortname }}  
+                                {{ $line->sequenceserial }}-{{ $line->sequenceno }} / {{ $line->bankaccount->shortname }}  
                             </td>
                           
                             <td class="text-right">
@@ -145,7 +145,7 @@
                             </td>
                             <td class="align-middle" width="95">{{ $line->datetrx }}</td>
                             <td class="align-middle">
-                                {{ $line->bankaccount->shortname }}  
+                                {{ $line->sequenceserial }}-{{ $line->sequenceno }} / {{ $line->bankaccount->shortname }}  
                             </td>
                           
                             <td class="text-right">
@@ -176,7 +176,7 @@
                             </td>
                             <td>{{ $line->dateinvoiced }}</td>
                             <td>
-                                FAC F001-12345
+                                {{ $line->doctype->shortname  }} {{ $line->serial }}-{{ $line->documentno }}
                             </td>
                             <td class="text-right">
                                 {{ number_format($line->amountgrand,env('DECIMAL_AMOUNT',2)) }}
@@ -194,7 +194,7 @@
                     @endforeach
                     
                     {{-- COMPROBANTES - COMPRAS --}}
-                    @foreach($cinvoices as $line)
+                    @foreach($pinvoices as $line)
                         <tr id="{{ $line->token }}">
                             <td class="align-middle" width="60">
                                 <div class="custom-control custom-checkbox">
