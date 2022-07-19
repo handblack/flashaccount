@@ -45,7 +45,7 @@ class COrderController extends Controller
             ]);
         }
         $result = WhCOrder::orderBy('documentno','DESC')
-            ->paginate(env('PAGINATE_CORDER',10));
+            ->paginate(env('PAGINATE_CORDER',30));
         return view('ventas.order',[
             'result' => $result,
             'grant'  => $grant,
@@ -309,7 +309,7 @@ class COrderController extends Controller
         /*
             Este proceso hace una copia de Order=>Temp para el invoice
         */
-        $hash = new Hashids(env('APP_HASH'));
+        $hash = new Hashids(env('APP_HASH','miasoftware'));
         if($request->token != $hash->encode($request->order_id)){
             abort(403,'Token no valido para copiar');
         }
