@@ -21,7 +21,14 @@ class CreateTempInvoiceOpensTable extends Migration
             $table->foreignId('bpartner_id')->nullable();
             $table->foreignId('cinvoice_id')->nullable();
             $table->foreignId('pinvoice_id')->nullable();
+            $table->foreignId('expense_id')->nullable();
+            $table->foreignId('income_id')->nullable();
+            $table->foreignId('allocate_id')->nullable();
+            $table->foreignId('doctype_id')->nullable();
             $table->foreignId('currency_id')->nullable();
+            $table->foreignId('sequence_id')->nullable();
+            $table->string('sequenceserial',4)->nullable();
+            $table->string('sequencenro',15)->nullable();
             $table->float('amount',12,5);
             $table->float('amountopen',12,5);
             $table->timestamps();

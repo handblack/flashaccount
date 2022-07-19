@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-<section class="content-header pb-2">
+<section class="content-header pb-0">
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
@@ -21,7 +21,7 @@
         </div>
     </div>
 </section>
-<section class="content-header">
+<section class="content-header pt-1">
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">

@@ -22,18 +22,22 @@ CREATE PROCEDURE `pax_rpt_invoice_open_customers`(
     IN p_bpartner_id BIGINT
 )
 BEGIN
-    INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amount,amountopen) SELECT 
-                                                    p_session
-                                                    ,i.dateinvoiced
-                                                    ,i.id
-                                                    ,i.bpartner_id
-                                                    ,i.amountgrand
-                                                    ,i.amountopen
-                                                FROM
-                                                    `wh_c_invoices` i
-                                                WHERE
-                                                    i.dateinvoiced <= p_datetrx
-                                                    AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
+/* 
+Reporte de CUENTAS POR COBRAR 
+*/
+INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amount,amountopen) 
+                                            SELECT 
+                                                p_session
+                                                ,i.dateinvoiced
+                                                ,i.id
+                                                ,i.bpartner_id
+                                                ,i.amountgrand
+                                                ,fn_cinvoice_open(i.id,p_datetrx)
+                                            FROM
+                                                `wh_c_invoices` i
+                                            WHERE
+                                                i.dateinvoiced <= p_datetrx
+                                                AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
 END;              
 ";
 DB::unprepared($sql);
