@@ -18,6 +18,8 @@ use App\Models\WhSequence;
 use App\Models\WhTax;
 use App\Models\WhWarehouse;
 use App\Models\TempLine;
+use App\Models\TempLogisticOutput;
+use App\Models\TempLogisticOutputLine;
 use App\Models\WhLOutput;
 use App\Models\WhParam;
 use App\Models\WhReason;
@@ -338,6 +340,43 @@ class COrderController extends Controller
             session(['session_ventas_invoice_id' => $target->id]);
         });
         return redirect()->route('cinvoice.create');
+        
+    }
+
+    public function copy_to_output(Request $request){
+        /*
+            Este proceso hace una copia de Order=>Temp para el invoice
+        */
+        $hash = new Hashids(env('APP_HASH'));
+        if($request->token != $hash->encode($request->order_id)){
+            abort(403,'Token no valido para copiar');
+        }
+        $source = WhCOrder::where('id',$request->order_id)->first();
+        if(!$source){
+            abort(403,'No hay registro');
+        }    
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new TempLogisticOutput();
+            $target->fill($source->toArray());
+            $target->order_id    = $request->order_id;
+            $target->sequence_id = $request->sequence_id;
+            $target->datetrx     = $source->dateorder;
+            $target->reason_id  =  $request->reason_id;
+            $target->save();
+            $target->doctype_id  = $target->sequence->doctype_id;
+            $target->save();
+            //Detalle ##########################################################
+            foreach($source->lines as $line){
+                $templ = new TempLogisticOutputLine();
+                $templ->fill($line->toArray());
+                $templ->orderline_id = $line->id;
+                $templ->output_id = $target->id;
+                $templ->save();                
+            }        
+            session(['session_logistic_output_id' => $target->id]);
+        });
+        return redirect()->route('loutput.create');
         
     }
 

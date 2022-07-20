@@ -1,7 +1,22 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Inventarios</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Logistica</li>
+                    <li class="breadcrumb-item">Inventarios</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-4">
@@ -12,19 +27,14 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                    
                 </div>
                 <div class="col-sm-8">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Inventario de almacenes
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-                        </h1>
-                    </div>
+                   
                 </div>
             </div>
         </div>

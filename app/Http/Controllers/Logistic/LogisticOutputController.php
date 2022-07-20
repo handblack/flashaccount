@@ -133,7 +133,10 @@ class LogisticOutputController extends Controller
                                 $line->output_id = $header->id;
                                 $line->save();
                             }
-                            $temp->delete();
+                            DB::select('CALL pax_logistic_output_update(?)',[$header->id]);
+                            if(env('APP_ENV','local') == 'production'){
+                                $temp->delete();
+                            }
                         });
                         return redirect()->route('loutput.index')->with('message','Documento creado');
                         break;            

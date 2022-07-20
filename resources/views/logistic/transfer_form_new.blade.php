@@ -12,7 +12,8 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
                    

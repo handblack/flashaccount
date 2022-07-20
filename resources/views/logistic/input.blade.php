@@ -21,14 +21,15 @@
         </div>
     </div>
 </section>
-    <section class="content-header">
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
 
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('linput.index') }}" title="Recargar">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
 
@@ -40,14 +41,7 @@
 
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Ingreso de Mercaderia
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-
-                        </h1>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -67,7 +61,7 @@
                         <th>DOCUMENTO</th>
                         <th>SOCIO NEGOCIO</th>
                         <th>ALMACEN</th>
-                        <th>GLOSA</th>
+                        <th>OC</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -78,7 +72,13 @@
                             <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>
                             <td>{{ $item->bpartner->bpartnercode .' - ' . $item->bpartner->bpartnername }}</td>
                             <td>{{ $item->warehouse->shortname }}</td>
-                            <td>{{ $item->glosa }}</td>
+                            <td>
+                                @if($item->order_id)
+                                    {{ $item->order->serial }}-{{ $item->order->documentno }}
+                                @else
+                                    ----
+                                @endif
+                            </td>
                             <td class="text-right">
                                 <a href="{{ route('linput.show',$item->token) }}"><i class="far fa-file-alt fa-fw"></i> Ver</a>
                             </td>
@@ -126,9 +126,13 @@
                     </div>
                     <div class="modal-body" style="background-color:#dcdcdc74;">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-10 mt-2">
                                 <label class="mb-0">Socio de Negocio</label>
                                 <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                            </div>                           
+                            <div class="col-md-2 mt-2">
+                                <label class="mb-0">Orden Compra</label>
+                                <span class="input-group-text">-- SIN OC --</span>
                             </div>                           
                         </div>
                         <div class="row mt-2">

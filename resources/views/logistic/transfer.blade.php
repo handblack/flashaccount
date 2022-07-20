@@ -6,14 +6,30 @@
 @endsection
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Transferencias</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Logistica</li>
+                    <li class="breadcrumb-item">Transferencias</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-5">
 
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('ltransfer.index') }}" title="Recargar">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
 
@@ -25,14 +41,7 @@
 
                 </div>
                 <div class="col-sm-7">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Transferencia entre almacenes
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-
-                        </h1>
-                    </div>
+                     
                 </div>
             </div>
         </div>
@@ -48,7 +57,7 @@
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
                     <tr>
-                        <th>FECHA</th>
+                        <th width="100">FECHA</th>
                         <th>DOCUMENTO</th>
                         <th>ALMACEN</th>
                         <th>GLOSA</th>

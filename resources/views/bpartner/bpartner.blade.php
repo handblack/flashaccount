@@ -1,14 +1,30 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-edit fa-fw"></i> Maestro de Socio de Negocio</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Socio de Negocio</li>
+                    <li class="breadcrumb-item">Maestro de Socio de Negocio</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
 
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('bpartner.index') }}" title="Recargar">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
 
@@ -31,13 +47,7 @@
 
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Socio de Negocio
-                            &nbsp;<i class="nav-icon fas fa-user-tie ml-3"></i>
-
-                        </h1>
-                    </div>
+                     
                 </div>
             </div>
         </div>

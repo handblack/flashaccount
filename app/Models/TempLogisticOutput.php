@@ -22,6 +22,10 @@ class TempLogisticOutput extends Model
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
 
+    public function sequence(){
+        return $this->hasOne(WhSequence::class,'id','sequence_id');
+    }
+
     public function lines(){
         return $this->hasMany(TempLogisticOutputLine::class,'output_id','id');
     }

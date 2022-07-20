@@ -16,7 +16,7 @@
         </div>
     </div>
 </section>
-    <section class="content-header">
+<section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-4">
@@ -27,7 +27,8 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                     <a href="{{ route('linput.show','pdf') }}" class="btn btn-default btn-sm">
@@ -36,13 +37,7 @@
                    
                 </div>
                 <div class="col-sm-8">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Ingreso de Mercaderia
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-                        </h1>
-                    </div>
+                   
                 </div>
             </div>
         </div>

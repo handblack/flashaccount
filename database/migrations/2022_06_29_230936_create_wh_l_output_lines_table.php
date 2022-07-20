@@ -15,10 +15,10 @@ class CreateWhLOutputLinesTable extends Migration
     {
         Schema::create('wh_l_output_lines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('orderline_id');
             $table->foreignId('product_id');
             $table->float('quantity',12,5)->default(0)->nullable();
             $table->float('package',12,5)->default(0)->nullable();
+            $table->foreignId('orderline_id')->nullable();
             $table->foreignId('output_id');
             $table->foreign('output_id')
                                     ->references('id')

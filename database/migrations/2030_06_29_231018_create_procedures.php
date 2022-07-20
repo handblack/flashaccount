@@ -284,20 +284,78 @@ DB::unprepared($sql);
         END;
         ";
         DB::unprepared($sql);
-        // ------------------------------------------------------------------------------------------------------------------------------------
-        $sql = "
-        DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`;
-        CREATE PROCEDURE `pax_rpt_bpartner_move`(
-            IN p_session VARCHAR(60),
-            IN p_dateinit DATE,
-            IN p_dateend DATE,
-            IN p_bpartner_id BIGINT
-        )
-        BEGIN
-            SELECT 0;
-        END;
-        ";
-        DB::unprepared($sql);
+// ------------------------------------------------------------------------------------------------------------------------------------
+$sql = "
+DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`;
+CREATE PROCEDURE `pax_rpt_bpartner_move`(
+    IN p_session VARCHAR(60),
+    IN p_dateinit DATE,
+    IN p_dateend DATE,
+    IN p_bpartner_id BIGINT
+)
+BEGIN
+    SELECT 0;
+END;
+";
+DB::unprepared($sql);
+// ------------------------------------------------------------------------------------------------------------------------------------
+/*
+$sql = "
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `pax_logistic_output_update`$$
+CREATE PROCEDURE `pax_logistic_output_update`(IN p_id BIGINT)
+BEGIN
+    UPDATE wh_c_invoices a
+    INNER JOIN (
+        SELECT 
+            input_id,
+            orderline_id,
+            SUM(quantity) AS qty
+        FROM `wh_l_input_lines`
+        WHERE input_id = p_id
+        GROUP BY orderline_id
+    ) b ON b.input_id = a.id
+    SET 
+        a.quantityopen = IFNULL(b.qty,0)
+    WHERE a.id = p_id;
+END$$
+DELIMITER ;
+";
+DB::unprepared($sql);
+*/
+// ------------------------------------------------------------------------------------------------------------------------------------      
+/*  
+$sql = "
+DROP PROCEDURE IF EXISTS `pax_logistic_input_update`;
+CREATE PROCEDURE `pax_logistic_output_update`(IN p_id BIGINT)
+BEGIN
+    SELECT 0;
+END;
+";
+DB::unprepared($sql);
+*/
+// ------------------------------------------------------------------------------------------------------------------------------------  
+/*      
+$sql = "
+DROP PROCEDURE IF EXISTS `pax_logistic_transfer_update`;
+CREATE PROCEDURE `pax_logistic_transfer_update`(IN p_id BIGINT)
+BEGIN
+    SELECT 0;
+END;
+";
+DB::unprepared($sql);
+*/
+// ------------------------------------------------------------------------------------------------------------------------------------        
+/*
+$sql = "
+DROP PROCEDURE IF EXISTS `pax_logistic_inventory_update`;
+CREATE PROCEDURE `pax_logistic_inventory_update`(IN p_id BIGINT)
+BEGIN
+    SELECT 0;
+END;
+";
+DB::unprepared($sql);
+*/
 // ------------------------------------------------------------------------------------------------------------------------------------        
  
  
@@ -320,5 +378,9 @@ DB::unprepared($sql);
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_invoice_open_supplier`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_rpt_bpartner_move`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `pax_update_amount`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_logistic_output_update`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_logistic_input_update`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_logistic_transfer_update`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `pax_logistic_inventory_update`");
     }
 }

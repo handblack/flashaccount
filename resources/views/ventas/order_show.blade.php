@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('header')
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+@endsection
 
 @section('breadcrumb')
     <section class="content-header pb-2">
@@ -29,7 +33,8 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                     
@@ -116,6 +121,8 @@
                             <th class="d-none d-sm-inline-block">UM</th>
                             <th class="text-right">Precio</th>
                             <th class="text-right">Total</th>
+                            <th class="text-right border-left">Qty-Abierto</th>
+                            <th class="text-right">Qty-Suspendido</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,6 +134,12 @@
                                 <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
                                 <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+                                <td class="text-right border-left">
+                                    {{ $item->quantityopen }}
+                                </td>
+                                <td class="text-right">
+                                    {{ $item->quantityopen }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -148,12 +161,19 @@
                     </table>
                 </div>
             </div>
-
         </div>
+        
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                Documentos Vinculados
                 @foreach ($row->invoice as $inv)
                     <br><span class="console">{{ $inv->serial }}-{{ $inv->documentno }} {{ $inv->currency->currencyiso }} {{ $inv->amountgrand }}</span>
+                @endforeach
+            </div>
+            <div class="col-md-6">
+                Movimiento Almacen
+                @foreach ($row->output as $line)
+                    <br><span class="console">{{ $line->serial }}-{{ $line->documentno }}</span>
                 @endforeach
             </div>
         </div>
@@ -187,8 +207,8 @@ aria-hidden="true">
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
                 </div>
             </form>
         </div>
@@ -196,10 +216,10 @@ aria-hidden="true">
 </div>    
 
 
-<div class="modal fade" id="ModalCreateOutput" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="ModalCreateOutput"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content">
-            <form action="{{ route('porder_copy_to_input') }}" method="POST">
+            <form action="{{ route('corder_copy_to_output') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <input type="hidden" name="order_id" value="{{ $row->id }}">
                 <input type="hidden" name="token" value="{{ $row->token }}">
@@ -209,9 +229,24 @@ aria-hidden="true">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body bg-light">
                     <div class="row">
-                        <div class="col-md-6 mt-2">
+                        <div class="col-8 col-md-10 mt-2">
+                            <label class="mb-0">Proveedor</label>
+                            <span class="input-group-text">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</span>
+                        </div>
+                        <div class="col-4 col-md-2 mt-2">
+                            <label class="mb-0">Orden Venta</label>
+                            <span class="input-group-text">{{ $row->serial }} - {{ $row->documentno }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-6 col-md-3 mt-2">
+                            <label class="mb-0">Fecha</label>
+                            <input type="date" name="datetrx" class="form-control" value="{{ date("Y-m-d") }}"> 
+                        </div>
+                        <div class="col-6 col-md-3 mt-2">
                             <label class="mb-0">Serie</label>
                             <select name="sequence_id" id="" class="form-control" required>
                                 <option value="" selected disabled>-- SELECCIONE --</option>
@@ -237,11 +272,42 @@ aria-hidden="true">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
                 </div>
             </form>
         </div>
     </div>
 </div> 
+@endsection
+
+
+
+@section('script')
+<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
+<script>
+$(function(){
+    // warehouse ----------------------------------------------------------------
+    $('.select2-warehouse').select2({
+        ajax: {
+            url: '{{ route('api.warehouse') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0,
+        theme:'bootstrap4'
+    });
+    // Sumando totales --------------------------------------------------------------
+    
+});
+</script>
 @endsection

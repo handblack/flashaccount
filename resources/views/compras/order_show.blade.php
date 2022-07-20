@@ -33,7 +33,8 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                     
@@ -59,14 +60,15 @@
                             </div>
                         </div>
                     </div>
+                    <!--
                     <div class="btn-group">
                         <a class="btn btn-sm btn-success" href="{{ route('porder.create') }}"
                             title="Marcar como página de inicio">
                             <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                            <span class="d-none d-sm-inline-block">Nuevo OV</span>
+                            <span class="d-none d-sm-inline-block">Nuevo OC</span>
                         </a>
                     </div>
-
+                    -->
                 </div>
 
                 <div class="col-sm-6">
@@ -123,7 +125,7 @@
                             <th class="text-right">Precio</th>
                             <th class="text-right">Total</th>
                             <th class="text-right">Abierto</th>
-                            <th class="text-right">Suspendido</th>
+                            <th class="text-right">Suspend.</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,9 +137,12 @@
                                 <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
                                 <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
-                                <td class="text-right border-left"></td>
-                                <td class="text-right"></td>
-                                <td class="text-right"></td>
+                                <td class="text-right border-left" width="100">
+                                    {{ $item->quantityopen }}
+                                </td>
+                                <td class="text-right" width="100">
+                                    {{ $item->quantityopen }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -197,7 +202,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="ModalCreateInput" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="{{ route('porder_copy_to_input') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -211,7 +216,21 @@
                 </div>
                 <div class="modal-body bg-light">
                     <div class="row">
-                        <div class="col-md-6 mt-2">
+                        <div class="col-md-10 mt-2">
+                            <label class="mb-0">Proveedor</label>
+                            <span class="input-group-text">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</span>
+                        </div>
+                        <div class="col-md-2 mt-2">
+                            <label class="mb-0">Orden Compra</label>
+                            <span class="input-group-text">{{ $row->serial }} - {{ $row->documentno }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mt-2">
+                            <label class="mb-0">Fecha</label>
+                            <input type="date" name="datetrx" class="form-control" value="{{ date("Y-m-d") }}">
+                        </div>
+                        <div class="col-md-3 mt-2">
                             <label class="mb-0">Serie</label>
                             <select name="sequence_id" id="" class="form-control" required>
                                 <option value="" selected disabled>-- SELECCIONE --</option>
@@ -226,7 +245,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mt-2">
+                        <div class="col-md-12 mt-2">
                             <label class="mb-0">Motivo</label>
                             <select name="reason_id" id="" class="form-control" required>
                                 @foreach ($reason as $item)
@@ -396,80 +415,7 @@
 </div>
 
 
-<div class="modal fade" id="ModalCreateInvoice2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <form action="{{ route('porder_copy_to_invoice') }}" method="POST">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="order_id" value="{{ $row->id }}">
-                <input type="hidden" name="token" value="{{ $row->token }}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Registrar Factura de Proveedor</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body bg-light pt-0">
-                    <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <label class="mb-0">Tipo Documento</label>
-                            <input type="text" class="form-control" disabled value="{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-4 mt-2">
-                            <label class="mb-0">Tipo Documento</label>
-                            <select name="doctype_id" id="" class="form-control" required>
-                                <option value="" selected disabled>-- SELECCIONE --</option>
-                                @foreach ($doctype as $item)
-                                    <option value="{{ $item->id }}">{{ $item->doctypename }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-8 col-md-5 mt-2">
-                            <label class="mb-0">Serie</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend pr-1">
-                                    <input type="text" name="serial" class="form-control" style="width:80px;" maxlength="4" required>
-                                </div>
-                                <input type="text" class="form-control console" placeholder="" aria-describedby="basic-addon1" required>
-                            </div>
-                        </div>
-            
-                        <div class="col-4 col-md-3 mt-2">
-                            <label class="mb-0">Divisa</label>
-                            <select name="currency_id" class="form-control">
-                                @foreach (auth()->user()->currency() as $item)
-                                    <option value="{{ $item->id }}">{{ $item->currencyname }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8 col-md-3 mt-2">
-                            <label class="mb-0">Emision</label>
-                            <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control">
-                        </div>
-           
-                        <div class="col-4 col-md-3 mt-2 d-none d-lg-inline-block">
-                            <label class="mb-0">Contable</label>
-                            <input type="date" name="dateacct" value="{{ date("Y-m-d") }}" class="form-control">
-                        </div>
-                
-                        <div class="col-4 col-md-3 mt-2">
-                            <label class="mb-0">Tipo Cambio</label>
-                            <input type="numeric" value="1" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>    
+   
 @endsection
 
 @section('script')
