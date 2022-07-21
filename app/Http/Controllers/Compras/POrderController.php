@@ -45,7 +45,7 @@ class POrderController extends Controller
         $result = WhPOrder::orderBy('dateorder','DESC')
             ->orderBy('serial','desc')
             ->orderBy('documentno','desc')
-            ->paginate(env('PAGINATE_CORDER',30));
+            ->paginate(env('PAGINATE_CORDER',40));
         return view('compras.order',[
             'result' => $result,
             'grant'  => $grant,

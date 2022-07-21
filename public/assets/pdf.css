@@ -1,3 +1,48 @@
-text-right{
+@font-face {
+    font-family: 'Arial Narrow';
+    src: url('{{ storage_path('fonts\ARIALN.TTF') }}') format("truetype");
+    /*
+         url('{{ storage_path('fonts\ARIALNB.TTF') }}') format("truetype"),
+         url('{{ storage_path('fonts\ARIALNBI.TTF') }}') format("truetype"),
+         url('{{ storage_path('fonts\ARIALNI.TTF') }}') format("truetype");
+    */
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+body{
+    font-family: 'Arial Narrow';
+    font-size: 12px;
+}
+
+hr{
+    border-top: 1px solid #222;
+}
+
+.text-right{
     text-align: right;
 }
+.text-left{
+    text-align: left;
+}
+/* 
+-------------------------------------------------------------------------------------
+TABLA 
+-------------------------------------------------------------------------------------
+*/
+table{
+    border-collapse: collapse;
+}
+td{
+    padding-left:2px;
+    padding-right:2px;
+}
+/* 
+-------------------------------------------------------------------------------------
+BORDES 
+-------------------------------------------------------------------------------------
+*/
+.border-top{ border-top:1px solid #222; }
+.border-bottom{ border-bottom:1px solid #222; }
