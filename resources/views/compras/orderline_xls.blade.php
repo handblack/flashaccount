@@ -19,7 +19,12 @@
             @forelse($result as $line)
                 @if($line->quantity <> $line->quantityopen)
                     <tr>
-                        <td>{{ $line->order->serial }}-{{ $line->order->documentno }}</td>
+
+                        <td>
+                            @if($line->order)
+                                {{ $line->order->serial }}-{{ $line->order->documentno }}
+                            @endif
+                        </td>
                         <td>{{ $line->product->productcode }}</td>
                         <td>{{ $line->product->productname }}</td>
                         <td class="text-right">{{ $line->quantity }}</td>
