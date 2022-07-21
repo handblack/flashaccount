@@ -11,6 +11,7 @@ class TempPOrder extends Model
     protected $fillable = [
         'dateorder',
         'datedue',
+        'period',
         'typepayment',
         'bpartner_id',
         'sequence_id',

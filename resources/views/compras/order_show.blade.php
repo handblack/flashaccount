@@ -47,8 +47,10 @@
                             </button>
                             <div class="dropdown-menu" role="menu">
                                 <!--  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Copiar a Comprobante</a> -->
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Registrar Factura de Proveedor</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-copy fa-fw"></i> Copiar a Ingreso de Mercaderia</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-file-alt fa-fw"></i> Registrar Factura de Proveedor</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-file-alt fa-fw"></i> Registrar Ingreso de Mercaderia</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateOrder"><i class="far fa-copy fa-fw"></i> Copiar a nueva Orden de Compra</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar documento</a>
                                 <div class="dropdown-divider"></div>
@@ -158,7 +160,7 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr>
+                        <tr class="border-top">
                             <th>{{ count($row->lines) }} - Item(s)</th>
                             <th></th>
                             <th></th>
@@ -207,6 +209,61 @@
 
 
 <!-- Modal -->
+<!-- CREAR/DUPLICAR ORDEN DE VENTA -->
+<div class="modal fade" id="ModalCreateOrder" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{{ route('porder_copy_to_order') }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="order_id" value="{{ $row->id }}">
+                <input type="hidden" name="token" value="{{ $row->token }}">
+                <input type="hidden" name="mode" value="temp">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Nueva Orden de Compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light pt-1">
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <label class="mb-0">Proveedor</label>
+                            <select name="bpartner_id" class="form-control select2-bpartner">
+                                <option value="{{ $row->bpartner_id }}">{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</option>
+                            </select>                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mt-2">
+                            <label class="mb-0">Fecha</label>
+                            <input type="date" name="dateorder" class="form-control" value="{{ date("Y-m-d") }}">
+                        </div>
+                        <div class="col-md-3 mt-2">
+                            <label class="mb-0">Serie</label>
+                            <select name="sequence_id" id="" class="form-control" required>
+                                <option value="" selected disabled>-- SELECCIONE --</option>
+                                @foreach(auth()->user()->sequence('OCO') as $item)
+                                    <option value="{{ $item->id }}">{{ $item->serial }} - {{ $item->doctype->doctypename }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-2">
+                            <label class="mb-0">Almacen Ingreso</label>
+                            <select name="warehouse_id" id="" class="form-control select2-warehouse" required></select>
+                        </div>
+                    </div>
+                     
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>    
+
+<!-- CREAR ENTRADA DE MERCADERIA -->
 <div class="modal fade" id="ModalCreateInput" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -429,6 +486,25 @@
 <script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
 <script>
 $(function(){
+    // bpartner ----------------------------------------------------------------
+    $('.select2-bpartner').select2({
+        ajax: {
+            url: '{{ route('api.bpartner') }}',
+            type: 'post',
+            dataType: 'json',
+            delay: 150,
+            data: function (params) {
+                return {
+                    q: params.term, // search term
+                    t:'P',
+                    page: params.page
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 3,
+        theme:'bootstrap4'
+    });
     // warehouse ----------------------------------------------------------------
     $('.select2-warehouse').select2({
         ajax: {

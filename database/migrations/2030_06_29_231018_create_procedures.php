@@ -304,6 +304,31 @@ DROP PROCEDURE IF EXISTS pax_logistic_output_update;
 CREATE PROCEDURE pax_logistic_output_update(IN p_id BIGINT)
 BEGIN
     DECLARE l_order_id BIGINT;
+    SET l_order_id =  (SELECT order_id FROM wh_l_outputs WHERE id = p_id);
+    UPDATE wh_c_order_lines c
+        INNER JOIN (
+            SELECT    
+                b.order_id,
+                a.orderline_id,
+                SUM(a.quantity) AS qty
+            FROM
+                wh_l_input_lines a
+            INNER JOIN wh_l_inputs  b ON b.id = a.input_id
+            WHERE b.order_id = l_order_id
+            GROUP BY b.order_id, orderline_id
+        ) d ON d.orderline_id = c.id 
+    SET c.quantityopen = IFNULL (d.qty, 0)
+    WHERE c.id = d.orderline_id;
+END;
+";
+DB::unprepared($sql);
+// ------------------------------------------------------------------------------------------------------------------------------------      
+ 
+$sql = "
+DROP PROCEDURE IF EXISTS `pax_logistic_input_update`;
+CREATE PROCEDURE `pax_logistic_input_update`(IN p_id BIGINT)
+BEGIN
+    DECLARE l_order_id BIGINT;
     SET l_order_id =  (SELECT order_id FROM wh_l_inputs WHERE id = p_id);
     UPDATE wh_p_order_lines c
         INNER JOIN (
@@ -322,17 +347,7 @@ BEGIN
 END;
 ";
 DB::unprepared($sql);
-// ------------------------------------------------------------------------------------------------------------------------------------      
-/*  
-$sql = "
-DROP PROCEDURE IF EXISTS `pax_logistic_input_update`;
-CREATE PROCEDURE `pax_logistic_output_update`(IN p_id BIGINT)
-BEGIN
-    SELECT 0;
-END;
-";
-DB::unprepared($sql);
-*/
+ 
 // ------------------------------------------------------------------------------------------------------------------------------------  
 /*      
 $sql = "

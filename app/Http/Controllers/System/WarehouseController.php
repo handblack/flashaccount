@@ -153,8 +153,8 @@ class WarehouseController extends Controller
 
     public function search(Request $request){
         $result = WhWarehouse::where('warehousename','LIKE',"%{$request->q}%")
-            ->limit(20)
             ->where('isactive','Y')
+            ->limit(20)
             ->orderBy('warehousename','asc')
             ->get(['id',DB::raw("CONCAT(warehousename,'') as text")]);
         return response()->json([

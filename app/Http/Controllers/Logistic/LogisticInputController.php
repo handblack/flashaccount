@@ -140,6 +140,7 @@ class LogisticInputController extends Controller
                                 $line->input_id = $header->id;
                                 $line->save();
                             }
+                            DB::select('CALL pax_logistic_input_update(?)',[$header->id]);
                             if(env('APP_ENV','local') == 'production'){
                                 $temp->delete();
                             }

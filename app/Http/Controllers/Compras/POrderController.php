@@ -305,11 +305,14 @@ class POrderController extends Controller
             $target->save();
             //Detalle ##########################################################
             foreach($source->lines as $line){
-                $templ = new TempLogisticInputLine();
-                $templ->fill($line->toArray());
-                $templ->orderline_id = $line->id;
-                $templ->input_id = $target->id;
-                $templ->save();                
+                if($line->quantityopen < $line->quantity){
+                    $templ = new TempLogisticInputLine();
+                    $templ->fill($line->toArray());
+                    $templ->quantity = $line->quantity - $line->quantityopen;
+                    $templ->orderline_id = $line->id;
+                    $templ->input_id = $target->id;
+                    $templ->save();                
+                }
             }        
             session(['session_logistic_input_id' => $target->id]);
         });
@@ -352,6 +355,39 @@ class POrderController extends Controller
         });
         //return redirect()->route('porder.show',$source->token);
         return redirect()->route('pinvoice.create');
+    }
+
+    public function copy_to_order(Request $request){
+        /*
+            Este proceso hace una copia de Order=>Temp para el invoice
+        */
+        $hash = new Hashids(env('APP_HASH'));
+        if($request->token != $hash->encode($request->order_id)){
+            abort(403,'Token no valido para copiar');
+        }
+        $source = WhPOrder::where('id',$request->order_id)->first();
+        if(!$source){
+            abort(403,'No hay registro');
+        }
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new TempPOrder();
+            $target->fill($source->toArray());
+            $target->fill($request->all());
+            $target->save();
+            $target->doctype_id = $target->sequence->doctype_id;
+            $target->serial = $target->sequence->serial;
+            $target->save();
+            foreach($source->lines as $line){
+                $tline = new TempPOrderLine();
+                $tline->fill($line->toArray());
+                $tline->order_id = $target->id;
+                $tline->save();
+            }
+            session(['session_compras_order_id' => $target->id]);
+        });
+        //return redirect()->route('porder.show',$source->token);
+        return redirect()->route('porder.create');
     }
 
 
