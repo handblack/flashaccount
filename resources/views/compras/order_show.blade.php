@@ -48,7 +48,7 @@
                             <div class="dropdown-menu" role="menu">
                                 <!--  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-copy fa-fw"></i> Copiar a Comprobante</a> -->
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateInvoice"><i class="far fa-file-alt fa-fw"></i> Registrar Factura de Proveedor</a>
-                                <a class="dropdown-item {{ ($row->lines->sum('quantityopen') == $row->lines->sum('quantityopen')) ? 'disabled tachado' : '' }}" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-file-alt fa-fw"></i> Registrar Ingreso de Mercaderia</a>
+                                <a class="dropdown-item {{ ($row->lines->sum('quantity') == $row->lines->sum('quantityopen')) ? 'disabled tachado' : '' }}" href="#" data-toggle="modal" data-target="#ModalCreateInput"><i class="far fa-file-alt fa-fw"></i> Registrar Ingreso de Mercaderia</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateOrder"><i class="far fa-copy fa-fw"></i> Copiar a nueva Orden de Compra</a>
                                 <div class="dropdown-divider"></div>
