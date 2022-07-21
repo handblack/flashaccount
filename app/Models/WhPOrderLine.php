@@ -26,7 +26,7 @@ class WhPOrderLine extends Model
     ];
 
     public function order(){
-        return $this->hasOne(WhCOrder::class,'id','order_id');
+        return $this->hasOne(WhPOrder::class,'id','order_id');
     }
     public function product(){
         return $this->hasOne(WhProduct::class,'id','product_id');

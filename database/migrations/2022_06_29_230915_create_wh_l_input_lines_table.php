@@ -24,6 +24,7 @@ class CreateWhLInputLinesTable extends Migration
                                     ->references('id')
                                     ->on('wh_l_inputs')
                                     ->cascadeOnDelete();
+        
             $table->timestamps();
         });
     }
