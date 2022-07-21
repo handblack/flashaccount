@@ -207,7 +207,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="ModalCreateInput" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalCreateInput" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="{{ route('porder_copy_to_input') }}" method="POST">
@@ -271,7 +271,7 @@
 </div>    
 
 {{-- FACTURA DE COMPRA  --}}
-<div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalCreateInvoice" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('porder_copy_to_invoice') }}" method="POST" id="form-create">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
