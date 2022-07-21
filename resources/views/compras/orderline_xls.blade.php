@@ -9,26 +9,25 @@
         <thead>
             <tr>
                 <th>O.Compra</th>
+                <th>Proveedor</th>
                 <th>Codigo</th>
                 <th>Producto</th>
-                <th>QtyOrder</th>
-                <th>QtyRecived</th>
+                <th>Qty-Ordenado</th>
+                <th>Qty-Recibido</th>
+                <th>Qty-Pendiente</th>
             </tr>
         </thead>
         <tbody>
             @forelse($result as $line)
                 @if($line->quantity <> $line->quantityopen)
                     <tr>
-                        <td>{{ $line->id }}</td>
-                        <td>
-                            @if($line->order)
-                                {{ $line->order->serial }}-{{ $line->order->documentno }}
-                            @endif
-                        </td>
+                        <td>{{ $line->order->serial }}-{{ $line->order->documentno }}</td>
+                        <td>{{ $line->bpartner->bpartnername }}</td>
                         <td>{{ $line->product->productcode }}</td>
                         <td>{{ $line->product->productname }}</td>
                         <td class="text-right">{{ $line->quantity }}</td>
                         <td>{{ $line->quantityopen }}</td>
+                        <td>{{ $line->quantity - $line->quantityopen }}</td>
                     </tr>
                 @endif
             @empty
