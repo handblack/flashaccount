@@ -124,7 +124,7 @@
                             <th class="d-none d-sm-inline-block">UM</th>
                             <th class="text-right">Precio</th>
                             <th class="text-right">Total</th>
-                            <th class="text-right">Abierto</th>
+                            <th class="text-right">Recibido</th>
                             <th class="text-right">Suspend.</th>
                         </tr>
                     </thead>
@@ -138,10 +138,10 @@
                                 <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right border-left" width="100">
-                                    {{ $item->quantityopen }}
+                                    {{ number_format($item->quantityopen,env('DECIMAL_QUANTITY',5)) }}
                                 </td>
                                 <td class="text-right" width="100">
-                                    {{ $item->quantityopen }}
+                                    {{ number_format($item->quantitysuspended,env('DECIMAL_QUANTITY',5)) }}
                                 </td>
                             </tr>
                         @endforeach
