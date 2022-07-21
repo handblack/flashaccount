@@ -59,7 +59,7 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="http://flash.localhost/compras/order/manager/pdf"><i class="fas fa-download fa-fw"></i> Descargar - Orden Compra Abiertos/Pendientes</a>
+                            <a class="dropdown-item" href="{{ route('porder_download_open') }}"><i class="fas fa-download fa-fw"></i> Descargar - Orden Compra Abiertos/Pendientes</a>
                         </div>
                     </div>
                 </div>

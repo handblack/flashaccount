@@ -123,11 +123,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         Compras - Proveedores
         ---------------------------------------------------------------------------------------------------------------
     */
-    Route::resource('compras/order/manager',POrderController::class, ['names' => 'porder']);
-    Route::resource('compras/order/managers/line',POrderLineController::class, ['names' => 'porderline']);
+    Route::resource('compras/order/manager/list',POrderController::class, ['names' => 'porder']);
+    Route::resource('compras/order/manager/line',POrderLineController::class, ['names' => 'porderline']);
     Route::post('compras/order/manager/copy_to_input',[POrderController::class,'copy_to_input'])->name('porder_copy_to_input');
     Route::post('compras/order/manager/copy_to_invoice',[POrderController::class,'copy_to_invoice'])->name('porder_copy_to_invoice');
     Route::post('compras/order/manager/copy_to_order',[POrderController::class,'copy_to_order'])->name('porder_copy_to_order');
+    Route::get('compras/order/manager/download_open',[POrderController::class,'download_open'])->name('porder_download_open');
     //INVOICE
     Route::resource('compras/invoice/manager',PInvoiceController::class, ['names' => 'pinvoice']);
     /*

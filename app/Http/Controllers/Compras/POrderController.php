@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Compras;
 
+use App\Exports\POrderLineOpenExport;
 use App\Http\Controllers\Controller;
 use App\Models\TempHeader;
 use App\Models\TempLine;
@@ -23,6 +24,7 @@ use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class POrderController extends Controller
@@ -391,7 +393,7 @@ class POrderController extends Controller
     }
 
     public function download_open(Request $request){
-        
+        return Excel::download(new POrderLineOpenExport, 'p_order_line_open_'.date("Ymd").'.xlsx');
     }
 
 }
