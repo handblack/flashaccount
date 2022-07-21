@@ -6,7 +6,7 @@
 @endsection
 
 @section('breadcrumb')
-<section class="content-header pb-2">
+<section class="content-header pb-1">
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
@@ -21,13 +21,12 @@
         </div>
     </div>
 </section>
-     
-@endsection
 
-@section('container')
-    <div class="card">
-        <form action="">
-            <div class="card-header pt-2 pb-2">
+<section class="content-header pt-1 pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-8 col-sm-6">
+
                 <div class="btn-group">
                     <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
                         <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
@@ -35,15 +34,9 @@
                     </a>
                 </div>
 
-                <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
-                    title="Marcar como página de inicio">
-                    <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Nueva Orden</span>
-                </a>
-
                 <div class="btn-group" width="50">
                     <div class="input-group input-group-sm">
-                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
+                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 80px;">
                         <span class="input-group-append">
                             <button type="submit" class="btn btn-secondary">
                                 <i class="fas fa-search" aria-hidden="true"></i>
@@ -52,11 +45,53 @@
                         </span>
                     </div>
                 </div>
-                
+
                 <a href="#" class="btn btn-secondary btn-sm">
                     <i class="fas fa-filter fa-fw"></i>
                     <span class="d-none d-sm-inline-block">Filtrar</span>
                 </a>
+
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"> 
+                            <i class="fas fa-th-large fa-fw"></i>
+                              Accion 
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu">
+                            <a class="dropdown-item" href="http://flash.localhost/compras/order/manager/pdf"><i class="fas fa-download fa-fw"></i> Descargar - Orden Compra Abiertos/Pendientes</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-4 col-md-6">
+                <div class="float-right">
+
+                    
+
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
+                        title="Marcar como página de inicio">
+                            <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Nueva Orden</span>
+                        </a>
+                    </div>
+                                        
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+     
+@endsection
+
+@section('container')
+    <div class="card">
+        <form action="">
+            <div class="card-header pt-2 pb-2">
             </div>
         </form>
         <div class="card-body table-responsive p-0">

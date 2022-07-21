@@ -390,5 +390,8 @@ class POrderController extends Controller
         return redirect()->route('porder.create');
     }
 
+    public function download_open(Request $request){
+        
+    }
 
 }

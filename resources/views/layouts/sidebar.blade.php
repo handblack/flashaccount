@@ -218,7 +218,7 @@
                         <i class="far fa-circle nav-icon"></i>
                         <p>Nota de Credito</p>
                     </a>
-                </li>
+                </li>                
             </ul>
         </li>
         {{-- CAJA Y BANCOS --}}
