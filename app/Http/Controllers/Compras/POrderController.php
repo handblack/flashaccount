@@ -393,7 +393,7 @@ class POrderController extends Controller
     }
 
     public function download_open(Request $request){
-        return Excel::download(new POrderLineOpenExport, 'p_order_line_open_'.date("Ymd").'.xlsx');
+        return Excel::download(new POrderLineOpenExport, 'p_order_line_open_'.date("Y_m_d_His").'.xlsx');
     }
 
 }
