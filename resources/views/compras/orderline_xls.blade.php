@@ -22,7 +22,7 @@
                 @if($line->quantity <> $line->quantityopen)
                     <tr>
                         <td>{{ $line->order->serial }}-{{ $line->order->documentno }}</td>
-                        <td>{{ $line->bpartner->bpartnername }}</td>
+                        <td>{{ $line->order->bpartner->bpartnername }}</td>
                         <td>{{ $line->product->productcode }}</td>
                         <td>{{ $line->product->productname }}</td>
                         <td class="text-right">{{ $line->quantity }}</td>
