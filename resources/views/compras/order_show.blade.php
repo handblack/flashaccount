@@ -94,22 +94,33 @@
                 <br>{{ auth()->user()->get_param('system.entity.ruc','10123456780') }}                
             </div>
             -->
-            <div class="col-md-8 invoice-col">
-                {{ $row->bpartner->bpartnername }}
-                <br>{{ $row->bpartner->bpartnercode }}
+            <div class="col-12 col-md-6 invoice-col">
+                <strong>Proveedor:</strong>
+                <p class="text-muted">
+                    {{ $row->bpartner->bpartnername }}
+                    <br>{{ $row->bpartner->bpartnercode }}
+                </p>
             </div>
-
-            <div class="col-12 col-md-4">
-                <dl class="row">
-                    <dt class="col-xs-6">Orden de Venta</dt>
-                    <dd class="col-xs-6">{{ $row->serial }}-{{ $row->documentno }}</dd>
-                    <dt class="col-sm-6">Fecha</dt>
-                    <dd class="col-sm-6">{{ $row->dateorder }}</dd>
-                    <dt class="col-sm-6">Almacen</dt>
-                    <dd class="col-sm-6">{{ $row->warehouse->warehousename }}</dd>
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Orden Venta</dt>
+                    <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
+                    <dt class="col-sm-5">Fecha</dt>
+                    <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
+                    <dt class="col-sm-5">Almacen</dt>
+                    <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
                 </dl>
             </div>
-
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Solicitado</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dt class="col-sm-5">Recibido</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dt class="col-sm-5">Suspendido</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                </dl>
+            </div>
         </div>
 
 
@@ -119,13 +130,13 @@
                     <thead>
                         <tr>
                             <th>Producto</th>
-                            <th class="d-none d-sm-inline-block">Codigo</th>
-                            <th class="text-right">Cantidad</th>
-                            <th class="d-none d-sm-inline-block">UM</th>
-                            <th class="text-right">Precio</th>
-                            <th class="text-right">Total</th>
-                            <th class="text-right">Recibido</th>
-                            <th class="text-right">Suspend.</th>
+                            <th width="60" class="d-none d-sm-inline-block">Codigo</th>
+                            <th width="80" class="text-right">Cantidad</th>
+                            <th width="50" class="d-none d-sm-inline-block">UM</th>
+                            <th width="80" class="text-right">Precio</th>
+                            <th width="110" class="text-right">Total</th>
+                            <th width="100" class="text-right"><small>Recibido</small></th>
+                            <th width="100" class="text-right"><small>Suspendido</small></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,9 +145,9 @@
                                 <td>{{ $item->description }}</td>
                                 <td class="d-none d-sm-inline-block">{{ ($item->product_id) ? $item->product->productcode : '' }}</td>
                                 <td class="text-right">{{ $item->quantity }}</td>
-                                <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
-                                <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
-                                <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+                                <td class="">{{ $item->um->shortname }}</td>
+                                <td width="80" class="text-right border-right">{{ number_format($item->priceunittax,env('DECIMAL_PRICEUNIT',5)) }}</td>
+                                <td width="110" class="text-right border-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right border-left" width="100">
                                     {{ number_format($item->quantityopen,env('DECIMAL_QUANTITY',5)) }}
                                 </td>
@@ -148,56 +159,51 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="text-right" colspan="5">TOTAL: </th>
-                            <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
+                            <th>{{ count($row->lines) }} - Item(s)</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right">TOTAL: </th>
+                            <th class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</th>
+                            <th></th>
+                            <th></th>
+
+                            <!--
+                            <th class="text-right">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</th>
+                            <th class="text-right">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</th>
+                            -->
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
+    </div>
 
-         
-        
-        <div class="row">
-            <div class="col-md-6">
-                <h5><strong>Documentos Vinculados</strong></h5>
-                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-                    @foreach ($invoice as $item)
-                        <tr>
-                            <td>{{ $item->serial }}-{{ $item->documentno }}</td>
-                        </tr>
-                    @endforeach
-                </table>
-            </div>
-            <div class="col-md-6">
-                <h5><strong>Documentos Almacen</strong></h5>
-                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-                    @foreach ($input as $item)
-                        <tr>
-                            <td class="align-top">{{ $item->datetrx }}:<strong>{{ $item->serial }}-{{ $item->documentno }}</strong></td>
-                            <td>&nbsp;&nbsp;</td>
-                            <td>
-                                @if($item->lines)
-                                <table cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-                                    @foreach($item->lines as $line)
-                                    <tr>
-                                        <td>{{ $line->product->productcode }}&nbsp;</td>
-                                        <td>{{ $line->product->productname }}&nbsp;</td>
-                                        <td class="text-right">{{ $line->quantity }}</td>
-                                    </tr>
-                                    @endforeach
-                                </table>
-                                @endif
-                            </td>
-                        </tr>                
-                    @endforeach
-                </table>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Documentos Vinculados</strong>
+                    <ul>
+                        @foreach ($row->invoices as $item)
+                            <li>{{ $item->doctype->doctypename }} {{ $item->serial }}-{{ $item->documentno }} - {{ $item->currency->prefix }} {{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <strong>Ingreso Almacen</strong>
+                    <ul class="mb-0">
+                        @foreach ($row->inputs as $item)
+                          <li>{{ $item->sequence->doctype->doctypename }} {{ $item->serial }}-{{ $item->documentno }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
-        
-
-         
     </div>
+
+
+ 
 
 
 <!-- Modal -->

@@ -56,6 +56,11 @@
             border-bottom: 2px solid #dee2e6;
         }
 
+        table {
+            
+            word-wrap: break-word;
+        }
+
         .card-header {
             padding: 0.75rem 1.25rem;
             margin-bottom: 0;
