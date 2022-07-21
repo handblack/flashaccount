@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\WhCOrderLine::factory(300)->create();
         #\App\Models\WhCInvoice::factory(15)->create();
         #\App\Models\WhCInvoiceLine::factory(15)->create();
-        \App\Models\WhPOrder::factory(100)->create();
-        \App\Models\WhPOrderLine::factory(300)->create();
+        \App\Models\WhPOrder::factory(5)->create();
+        \App\Models\WhPOrderLine::factory(15)->create();
         #\App\Models\WhPInvoice::factory(5)->create();
         \App\Models\WhBIncome::factory(100)->create();
         

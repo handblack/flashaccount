@@ -36,7 +36,7 @@
 
                 <div class="btn-group" width="50">
                     <div class="input-group input-group-sm">
-                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 80px;">
+                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 100px;">
                         <span class="input-group-append">
                             <button type="submit" class="btn btn-secondary">
                                 <i class="fas fa-search" aria-hidden="true"></i>
