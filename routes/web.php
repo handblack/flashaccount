@@ -128,7 +128,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::post('compras/order/manager/copy_to_input',[POrderController::class,'copy_to_input'])->name('porder_copy_to_input');
     Route::post('compras/order/manager/copy_to_invoice',[POrderController::class,'copy_to_invoice'])->name('porder_copy_to_invoice');
     Route::post('compras/order/manager/copy_to_order',[POrderController::class,'copy_to_order'])->name('porder_copy_to_order');
-    Route::get('compras/order/manager/download_open',[POrderController::class,'download_open'])->name('porder_download_open');
+    Route::get('compras/order/manager/download/excel-quantity',[POrderController::class,'download_open_quantity'])->name('porder_download_open_quantity');
+    Route::get('compras/order/manager/download/excel-amount',[POrderController::class,'download_open_amount'])->name('porder_download_open_amount');
     //INVOICE
     Route::resource('compras/invoice/manager',PInvoiceController::class, ['names' => 'pinvoice']);
     /*

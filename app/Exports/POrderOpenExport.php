@@ -2,8 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\WhPOrderLine;
-use Illuminate\Support\Facades\DB;
+use App\Models\WhPOrder;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -14,9 +13,9 @@ class POrderLineOpenExport implements FromView
     */
     public function view(): View
     {
-        //$result = WhPOrderLine::where(DB::raw('quantity <> quantityopen'))->get();
-        $result = WhPOrderLine::get();
-        return view('compras.orderline_xls_quantity',[
+        //
+        $result = WhPOrder::where('docstatus','O')->get();
+        return view('compras.order_xls_amount',[
             'result' => $result,
         ]);
     }

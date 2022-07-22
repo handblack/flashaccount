@@ -84,18 +84,8 @@
 @endsection
 
 @section('container')
-
     <div class="invoice p-3 mb-3">
-
-     
-
-        <div class="row invoice-info">
-            <!--
-            <div class="col-sm-4 invoice-col">
-                {{ auth()->user()->get_param('system.entity.bpartnername','EMPRESA_PRUEBA') }}
-                <br>{{ auth()->user()->get_param('system.entity.ruc','10123456780') }}                
-            </div>
-            -->
+        <div class="row invoice-info">          
             <div class="col-12 col-md-6 invoice-col">
                 <strong>Proveedor:</strong>
                 <p class="text-muted">
@@ -105,7 +95,7 @@
             </div>
             <div class="col-6 col-md-3">
                 <dl class="row mb-2">
-                    <dt class="col-sm-5">Orden Venta</dt>
+                    <dt class="col-sm-5">Orden Compra</dt>
                     <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
                     <dt class="col-sm-5">Fecha</dt>
                     <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
@@ -196,7 +186,7 @@
                     <strong>Ingreso Almacen</strong>
                     <ul class="mb-0">
                         @foreach ($row->inputs as $item)
-                          <li>{{ $item->sequence->doctype->doctypename }} {{ $item->serial }}-{{ $item->documentno }}</li>
+                          <li>{{ $item->sequence->doctype->doctypename }} #{{ $item->serial }}-{{ $item->documentno }}  <i class="fas fa-calendar-alt fa-fw"></i> {{ \Carbon\Carbon::parse($item->datetrx)->format('d/m/Y')}}</li>
                         @endforeach
                     </ul>
                 </div>

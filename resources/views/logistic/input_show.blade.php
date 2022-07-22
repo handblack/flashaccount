@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
-                <h1><i class="fas fa-edit fa-fw"></i> Ingreso</h1>
+                <h1><i class="far fa-file-alt fa-fw"></i> Ingreso</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -47,10 +47,32 @@
 @section('container')
 <div class="invoice p-3 mb-3">
     <div class="row invoice-info">
-        <div class="col-md-12">
-
-            {{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}
-        </div>
+                
+            <div class="col-12 col-md-9 invoice-col">
+                <strong>Proveedor:</strong>
+                <p class="text-muted">
+                    {{ $row->bpartner->bpartnername }}
+                    <br>{{ $row->bpartner->bpartnercode }}
+                    <br>{{ $row->glosa }}
+                </p>
+            </div>
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">#Ingreso</dt>
+                    <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
+                    <dt class="col-sm-5">Orden Compra</dt>
+                    <dd class="col-sm-7">
+                        @if($row->order_id)
+                            {{ $row->order->serial }}-{{ $row->order->documentno }}
+                        @endif
+                    </dd>
+                    <dt class="col-sm-5">Fecha</dt>
+                    <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
+                    <dt class="col-sm-5">Almacen</dt>
+                    <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
+                </dl>
+            </div>
+            
     </div>
     <div class="row">
         <div class="col-12 table-responsive">
@@ -77,12 +99,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    Referencia 
-    <br>
-    @if($row->order_id)
-        {{ $row->order->serial }}-
-        {{ $row->order->documentno }}
-    @endif
+    </div>    
 </div>
 @endsection

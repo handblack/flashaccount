@@ -1,7 +1,22 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="far fa-file-alt fa-fw"></i> Ingreso</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Logistica</li>
+                    <li class="breadcrumb-item">Ingresos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-4">
@@ -13,18 +28,13 @@
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
                             <i class="fas fa-redo" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                    
                 </div>
                 <div class="col-sm-8">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Logistica / Ingreso de Mercaderia
-                            &nbsp;
-                            <i class="fas fa-warehouse fa-fw"></i>
-                        </h1>
-                    </div>
+                     
                 </div>
             </div>
         </div>
@@ -76,10 +86,12 @@
         <div class="card-body border-bottom">
             <div class="row">
                 <div class="col-6">
-                    <dl class="mb-0">
-                        <dt>Socio Negocio</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
-                    </dl>
+                    <strong>Proveedor:</strong>
+                    <p class="text-muted">
+                        {{ $row->bpartner->bpartnername }}
+                        <br>{{ $row->bpartner->bpartnercode }}
+                        <br>{{ $row->glosa }}
+                    </p>
                 </div>
                 <div class="col-2">
                     <dl class="mb-0">
@@ -90,13 +102,13 @@
                 <div class="col-2">
                     <dl class="mb-0">
                         <dt>Almacen</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                        
                     </dl>
                 </div>
                 <div class="col-2">
                     <dl class="mb-0">
                         <dt>Serie</dt>
-                        <dd>{{ $row->bpartner->bpartnername }}</dd>
+                        <dd>{{ $row->serial }}</dd>
                     </dl>
                 </div>
             </div>

@@ -145,7 +145,38 @@ class PInvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        if($id == 'pdf'){
+            if(!session()->has('session_compras_invoice_id')){
+                return redirect()->route('corder.index');
+            }
+            $row = WhPOrder::where('token',session('session_compras_invoice_id'))->first();  
+            $filename = 'order_'.$row->serial.'_'.$row->documentno.'_'.date("Ymd_His").'.pdf';        
+            $pdf = PDF::loadView('compras.order_pdf', ['row' => $row]);
+            return $pdf->download($filename);
+        }else{
+            if(auth()->user()->grant($this->module)->isread == 'N'){
+                return back()->with('error','No tienes privilegio para ver');
+            }
+            session(['session_compras_invoice_id' => $id]);
+            #$dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+            #$sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            #$sequence_input = auth()->user()->sequence('LIN');
+            #$reason = WhReason::all();
+            #$row = WhPOrder::where('token',$id)->first();
+            #$input = WhLInput::where('order_id',$row->id)->get();
+            #$doctype = WhDocType::where('group_id',4)->get();
+            #$invoice = WhPInvoice::where('order_id',$row->id)->get();            
+            #return view('compras.invoice_show',[
+            #    'row' => $row,
+            #    'sequence_input' => $sequence_input,
+            #    'reason' => $reason,
+            #    'input' => $input,
+            #    'doctype' => $doctype,
+            #    'retencion' => WhParam::where('group_id',6)->get(),
+            #    'invoice' => $invoice,
+            #]);
+            return view('compras.invoice_show');
+        }
     }
 
     /**

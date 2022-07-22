@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Compras;
 
-use App\Exports\POrderLineOpenExport;
 use App\Http\Controllers\Controller;
+use App\Exports\POrderLineOpenExport;
+use App\Exports\POrderOpenExport;
 use App\Models\TempHeader;
 use App\Models\TempLine;
 use App\Models\TempLogisticInput;
@@ -392,8 +393,12 @@ class POrderController extends Controller
         return redirect()->route('porder.create');
     }
 
-    public function download_open(Request $request){
-        return Excel::download(new POrderLineOpenExport, 'p_order_line_open_'.date("Y_m_d_His").'.xlsx');
+    public function download_open_quantity(Request $request){
+        return Excel::download(new POrderLineOpenExport, 'oc_detalle_pendientes_'.date("Y_m_d_His").'.xlsx');
+    }
+
+    public function download_open_amount(Request $request){
+        return Excel::download(new POrderOpenExport, 'oc_pendientes_facturacion_'.date("Y_m_d_His").'.xlsx');
     }
 
 }
