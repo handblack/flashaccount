@@ -49,10 +49,18 @@
                     @foreach ($result as $item)
                         <tr id="tr-{{ $item->id }}">
                             <td class="" style="{{ $item->isactive == 'Y' ? '' : 'tachado' }}">
-                                {{ $item->teamname }}
+                                <a href="{{ route('team.show',$item->token) }}">
+                                    {{ $item->teamname }} 
+                                </a>
                             </td>
                             
                             <td class="text-right">
+                                <a href="{{ route('teamgrant.schedule', $item->token) }}"> <i class="far fa-clock fa-fw"></i>
+                                    <span class="d-none d-md-inline-block">Horario</span></a>&nbsp;|&nbsp;
+                                <a href="{{ route('teamgrant.serial', $item->token) }}"> <i class="fas fa-list-ol fa-fw"></i>
+                                    <span class="d-none d-md-inline-block">Series</span></a>&nbsp;|&nbsp;
+                                <a href="{{ route('teamgrant.warehouse', $item->token) }}"> <i class="fas fa-warehouse fa-fw"></i>
+                                    <span class="d-none d-md-inline-block">Almacen</span></a>&nbsp;|&nbsp;
                                 <a href="{{ route('teamgrant.show', $item->token) }}"> <i class="fas fa-key"></i>
                                     <span class="d-none d-md-inline-block">Accesos</span></a>&nbsp;|&nbsp;
                                 <a href="{{ route('team.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
@@ -63,6 +71,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr class="border-top">
+                        <th colspan="6">{{ count($result) }} - Registros</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

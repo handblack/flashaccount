@@ -12,6 +12,8 @@ class CreateWhDocTypesTable extends Migration
      *
      * @return void
      */
+    private $group_id;
+
     public function up()
     {
         Schema::create('wh_doc_types', function (Blueprint $table) {
@@ -25,81 +27,67 @@ class CreateWhDocTypesTable extends Migration
             $table->enum('isactive',['Y','N'])->default('Y');
             $table->timestamps();
         });
-        $row = new WhDocType();
-        // Documento de Identidad
-        $row->create([
-            'doctypename' => 'REGISTRO UNICO DEL CONTRIBUYENTE',            
-            'shortname'   => 'RUC',
-            'isactive'    => 'Y',
-            'group_id'    => 1,
-        ]);
-        $row->create([
-            'doctypename' => 'DOCUMENTO NACIONAL DE IDENTIDAD',
-            'shortname'   => 'DNI',
-            'isactive'    => 'Y',
-            'group_id'    => 1,
-        ]);
+        /* Socio_Negocio - Tipo de Documento de Identidad */
+        $this->group_id = 1;
+        $this->CreateDocType('6','RUC','REGISTRO UNICO DEL CONTRIBUYENTE');
+        $this->CreateDocType('1','DNI','DOCUMENTO NACIONAL DE IDENTIDAD');
+        /* 
+            ----------------------------------------------------------------------------------
+            FEX - Facturacion Electronica 
+            ----------------------------------------------------------------------------------
+        */
         // Tipo de Comprobante ELECTRONICO - VENTAS
-        $row->create([
-            'doctypename' => 'FACTURA ELECTRONICA',
-            'shortname'   => 'FAC',
-            'isactive'    => 'Y',
-            'doctypecode' => '01',
-            'group_id'    => 2,
-        ]);
-        $row->create([
-            'doctypename' => 'BOLETA ELECTRONICA',
-            'shortname'   => 'BVE',
-            'isactive'    => 'Y',
-            'doctypecode' => '03',
-            'group_id'    => 2,
-        ]);
-        $row->create([
-            'doctypename' => 'NOTA CREDITO ELECTRONICO',
-            'shortname'   => 'NCR',
-            'isactive'    => 'Y',
-            'doctypecode' => '07',
-            'group_id'    => 2,
-        ]);
-        $row->create([
-            'doctypename' => 'NOTA DEBITO ELECTRONICO',
-            'shortname'   => 'NDB',
-            'isactive'    => 'Y',
-            'doctypecode' => '08',
-            'group_id'    => 2,
-        ]);
-        $row->create([
-            'doctypename' => 'GUIA REMISION REMITENTE',
-            'shortname'   => 'GRR',
-            'isactive'    => 'Y',
-            'doctypecode' => '09',
-            'group_id'    => 2,
-        ]);
-        $row->create([
-            'doctypename' => 'GUIA REMISION TRANSPORTISTA',
-            'shortname'   => 'GRT',
-            'isactive'    => 'Y',
-            'doctypecode' => '09',
-            'group_id'    => 2,
-        ]);
-        // Tipo de documentos transaccionales ----------------------------------------------
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'OVE','doctypename' => 'ORDEN DE VENTA',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'OCO','doctypename' => 'ORDEN DE COMPRA',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'LIN','doctypename' => 'Parte de Ingreso',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'LOU','doctypename' => 'Parte de Salida',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'LTR','doctypename' => 'Parte de Transferencia',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'LIV','doctypename' => 'Parte de Inventario',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'BAL','doctypename' => 'Reconciliacion',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'BIN','doctypename' => 'Ingreso',]);
-        $row->create(['group_id' => 3,'isactive' => 'Y','shortname' => 'BEX','doctypename' => 'Egreso',]);
+        $this->group_id = 2;
+        $this->CreateDocType('01','FAC','FACTURA ELECTRONICA');
+        $this->CreateDocType('03','BVE','BOLETA DE VENTA ELECTRONICA');
+        $this->CreateDocType('07','NCR','NOTA DE CREDITO ELECTRONICA');
+        $this->CreateDocType('08','NDB','NOTA DE DEBITO ELECTRONICA');
+        $this->CreateDocType('09','GRR','GUIA DE REMISION');
+        /* 
+            ----------------------------------------------------------------------------------
+            DOCUMENTOS TRANSACCIONALES 
+            ----------------------------------------------------------------------------------
+        */
+        $this->group_id = 3;
+        $row = new WhDocType();
+        // Tipo de documentos transaccionales ( GROUP_ID_3 ) ----------------------------------------------
+        // Ventas        
+        $this->CreateDocType('','OVE','Orden de Venta');
+        // Compras
+        $this->CreateDocType('','OCO','Orden de Compra');
+        $this->CreateDocType('','CCP','Comprobante de Compra');
+        $this->CreateDocType('','CNC','Nota de Credito');
+        $this->CreateDocType('','CND','Nota de Debito');
+        // Logistica
+        $this->CreateDocType('','LIN','Parte de Ingreso');
+        $this->CreateDocType('','LOU','Parte de Salida');
+        $this->CreateDocType('','LTR','Parte de Transferencia');
+        $this->CreateDocType('','LIV','Parte de Inventario');
+        // Bancos
+        $this->CreateDocType('','BAL','Reconciliacion');
+        $this->CreateDocType('','BIN','Banco Ingreso');
+        $this->CreateDocType('','BEX','Banco Egreso');
         // Tipo de documentos compras ------------------------------------------------------
-        $row->create(['group_id' => 4,'doctypecode' => '01','shortname' => 'FAC','isactive' => 'Y','doctypename' => 'FACTURA']);
-        $row->create(['group_id' => 4,'doctypecode' => '03','shortname' => 'BVE','isactive' => 'Y','doctypename' => 'BOLETA DE VENTA']);
-        $row->create(['group_id' => 4,'doctypecode' => '07','shortname' => 'NCR','isactive' => 'Y','doctypename' => 'NOTA CREDITO']);
-        $row->create(['group_id' => 4,'doctypecode' => '08','shortname' => 'NDB','isactive' => 'Y','doctypename' => 'NOTA DEBITO']);
-        $row->create(['group_id' => 4,'doctypecode' => '00','shortname' => 'REC','isactive' => 'Y','doctypename' => 'RECIBO HONORARIO']);
+        $this->group_id = 4;
+        $this->CreateDocType('01','FAC','FACTURA');
+        $this->CreateDocType('03','BVE','BOLETA DE VENTA');
+        $this->CreateDocType('07','BVE','NOTA DE CREDITO');
+        $this->CreateDocType('08','BVE','NOTA DE DEBITO');
+        $this->CreateDocType('','BVE','RECIBO POR HONORARIO');
+        $this->CreateDocType('','BVE','RECIBO SERVICIO PUBLICO');
+        
     }
 
+    public function CreateDocType($code,$short,$ident){
+        $row = new WhDocType();
+        $row->create([
+            'doctypename' => $ident,
+            'shortname'   => $short,
+            'isactive'    => 'Y',
+            'doctypecode' => $code,
+            'group_id'    => $this->group_id,
+        ]);
+    }
     /**
      * Reverse the migrations.
      *

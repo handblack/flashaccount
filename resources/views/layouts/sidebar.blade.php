@@ -209,7 +209,7 @@
                     <a href="{{ route('pinvoice.index') }}"
                         class="nav-link {{ request()->is('compras/invoice/manager*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Registro de Compras</p>
+                        <p>Comprobante de Compra</p>
                     </a>
                 </li>
                 <li class="nav-item  {{ !auth()->user()->menu('m_compras_credit')? 'd-none': '' }}">

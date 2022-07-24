@@ -6,7 +6,7 @@ use App\Models\WhPOrder;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class POrderLineOpenExport implements FromView
+class POrderOpenExport implements FromView
 {
     /**
     * @return \Illuminate\Support\Collection

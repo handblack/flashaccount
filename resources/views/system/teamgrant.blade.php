@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">Sistema</li>
-                    <li class="breadcrumb-item"><a href="{{ route('team.index') }}">Equipos</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('team.index') }}">Grupos &amp; Accesos</a></li>
                     <li class="breadcrumb-item">Accesos</li>
                 </ol>
             </div>

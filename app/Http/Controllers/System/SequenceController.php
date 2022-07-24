@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhDocType;
+use App\Models\WhDocTypeGroup;
 use App\Models\WhSequence;
 use App\Models\WhWarehouse;
 use Hashids\Hashids;
@@ -26,10 +27,27 @@ class SequenceController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhSequence::all();
+
+        $group = WhDocTypeGroup::whereIn('id',[2,3])->get();        
+        $result = WhSequence::where(function ($query) use($request){
+            if($request->og){
+                $dt = WhDocType::where('group_id',$request->og)->get('id');
+                $query->whereIn('doctype_id',$dt->toArray());
+                session(['session_sequence_group_id' => $request->og]);
+            }
+            if($request->has('od')){
+                if($request->od){
+                    $query->where('doctype_id',$request->od);
+                }
+            }
+        })->get();
+        $doctype = WhDocType::where('group_id',session('session_sequence_group_id'))->get();
         return view('system.sequence',[
             'result' => $result,
-            'q' => $request->q,
+            'group' => $group,
+            'doctype' => $doctype,
+            'og' => $request->og,
+            'od' => $request->od,
         ]);
     }
 

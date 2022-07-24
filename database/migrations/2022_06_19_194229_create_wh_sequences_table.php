@@ -14,6 +14,8 @@ class CreateWhSequencesTable extends Migration
      *
      * @return void
      */
+    private $group_id = 3;
+
     public function up()
     {
         Schema::create('wh_sequences', function (Blueprint $table) {
@@ -26,122 +28,85 @@ class CreateWhSequencesTable extends Migration
             $table->enum('isactive',['Y','N'])->default('Y');
             $table->enum('isdocref',['Y','N'])->default('N');
             $table->enum('isfex',['Y','N'])->default('Y');
+            $table->enum('isdefault',['Y','N'])->default('N');
             $table->foreignId('warehouse_id')->nullable();
             $table->timestamps();
         });
         $hash = new Hashids(env('APP_HASH'));
         /*
-            Comproban de Venta
+            ----------------------------------------------------------------------
+            VENTAS
+            ----------------------------------------------------------------------
         */
+        // FEX - Comprobantes
         $row  = new WhSequence();
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','FAC')->first()->id,
-            'serial'     => 'F001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','BVE')->first()->id,
-            'serial'     => 'B001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','NCR')->first()->id,
-            'serial'     => 'B001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','NCR')->first()->id,
-            'serial'     => 'F001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
+        $this->group_id = 2;
+        $this->CreateSequence('FAC','F001'); // Factura1
+        $this->CreateSequence('FAC','F002'); // Factura2
+        $this->CreateSequence('FAC','F003'); // Factura3
+        $this->CreateSequence('BVE','B001'); // Boleta de Venta1
+        $this->CreateSequence('BVE','B002'); // Boleta de Venta2
+        $this->CreateSequence('BVE','B003'); // Boleta de Venta3
+        // Transaccionales
+        $this->group_id = 3;
+        $this->CreateSequence('OVE','OV01'); // Orden Venta1
+        $this->CreateSequence('OVE','OV02'); // Orden Venta2
         /*
-            Orden de Venta
+            ----------------------------------------------------------------------
+            COMPRAS
+            Comprobante de Compra - Solo se usa como secuenciador interno para el codigo de asiento contable
+            ----------------------------------------------------------------------
         */
-        $row  = new WhSequence();
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
-            'serial'     => 'OV01',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','OVE')->first()->id,
-            'serial'     => 'OV02',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        /*
-            Orden de COMPRA
-        */
-        $row  = new WhSequence();
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','OCO')->first()->id,
-            'serial'     => 'OC01',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','OCO')->first()->id,
-            'serial'     => 'OC02',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
+        $this->CreateSequence('OCO','OC01'); // Orden Compra
+        $this->CreateSequence('CCP','0001'); // Comprobante de Compra
+        $this->CreateSequence('CNC','0001'); // Nota de Credito
+        $this->CreateSequence('CND','F002'); // Nota de Debito    
         /*
             ----------------------------------------------------------------------
             LOGISTICA
             ----------------------------------------------------------------------
         */
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','LIN')->first()->id,
-            'serial'     => 'LOG1',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','LOU')->first()->id,
-            'serial'     => 'LOG1',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','LTR')->first()->id,
-            'serial'     => 'LOG1',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','LIV')->first()->id,
-            'serial'     => 'LOG1',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-            'warehouse_id' => 1,
-        ]);
+        // Ingresos
+        $this->CreateSequence('LIN','I001');
+        $this->CreateSequence('LIN','I002');
+        $this->CreateSequence('LIN','I003');
+        // Salidas
+        $this->CreateSequence('LOU','I001');
+        $this->CreateSequence('LOU','I002');
+        $this->CreateSequence('LOU','I003');
+        // Transferencias
+        $this->CreateSequence('LTR','TR01');
+        $this->CreateSequence('LTR','TR02');
+        $this->CreateSequence('LTR','TR03');
+        // Inventario
+        $this->CreateSequence('LIV','INV1');
+        $this->CreateSequence('LIV','INV2');
+        $this->CreateSequence('LIV','INV3');        
         /*
             ----------------------------------------------------------------------
             BANCO
             ----------------------------------------------------------------------
         */
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','BAL')->first()->id,
-            'serial'     => '0001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','BIN')->first()->id,
-            'serial'     => '0001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-        ]);
-        $row->create([
-            'doctype_id' => WhDocType::where('shortname','BEX')->first()->id,
-            'serial'     => '0001',
-            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
-        ]);
+        $this->CreateSequence('BIN','0001'); // Banco Ingreso
+        $this->CreateSequence('BEX','0001'); // Banco Expense
+        $this->CreateSequence('BAL','0001'); // Reconciliacion
 
     }
 
+    private function CreateSequence($t,$s){
+        $filter = [
+            ['shortname',$t],
+            ['group_id',$this->group_id]
+        ];
+        $hash = new Hashids(env('APP_HASH','miasoftware'));
+        $row  = new WhSequence();
+        $row->create([
+            'doctype_id' => WhDocType::where($filter)->first()->id,
+            'serial'     => $s,
+            'token'      => $hash->encode(WhSequence::all()->count('id') + 1),
+            'warehouse_id' => 1,
+        ]);
+    }
     /**
      * Reverse the migrations.
      *

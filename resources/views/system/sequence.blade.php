@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
-                <h1><i class="fas fa-hashtag fa-fw"></i> Secuenciador Serie</h1>
+                <h1><i class="fas fa-hashtag fa-fw"></i> Serie & Secuenciador</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -18,37 +18,61 @@
     </div>
 </section>
 
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
+                        <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                        <span class="d-none d-sm-inline-block">Actualizar</span>
+                    </a>
+                </div>
+
+                <a class="btn btn-sm btn-success" href="{{ route('sequence.create') }}"
+                    title="Marcar como página de inicio">
+                    <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                    <span class="d-none d-sm-inline-block">Agregar Secuenciador</span>
+                </a>
+                 
+
+            </div>
+            <div class="col-sm-6">
+                <form action="{{ route('sequence.index') }}" method="GET">
+                    @csrf
+                    <div class="input-group input-group-sm">                    
+                        <select name="og" class="form-control">
+                            <option disabled {{ ($og) ? '' : 'selected' }}>-- TODAS LOS GRUPOS --</option>
+                            @foreach ($group as $item)
+                                <option value="{{ $item->id }}" {{ ($item->id == $og) ? 'selected' : '' }}>{{ $item->groupname }}</option>
+                            @endforeach
+                        </select>
+                        @if($og == 2 || $og == 3 )
+                            <select name="od" class="form-control">                        
+                                <option value="">-- TODOS LOS DOCUMENTOS --</option>
+                                @foreach ($doctype as $item)
+                                    <option value="{{ $item->id }}" {{ ($item->id == $od) ? 'selected' : '' }}>{{ $item->doctypename }}</option>
+                                @endforeach
+                            </select>
+                        @endif
+                        <div class="input-group-append">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-search fa-fw"></i>
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
  
 @endsection
 
 @section('container')
-    <div class="card">
-        <div class="card-header pt-2 pb-2">
-            <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
-                    <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Actualizar</span>
-                </a>
-            </div>
-
-            <a class="btn btn-sm btn-success" href="{{ route('sequence.create') }}"
-                title="Marcar como página de inicio">
-                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                <span class="d-none d-sm-inline-block">Añadir</span>
-            </a>
-            <div class="btn-group">
-                <div class="input-group input-group-sm">
-                    <input class="form-control" type="text" name="query" value="" autocomplete="off"
-                        placeholder="Buscar">
-                    <span class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                            <span class="d-none d-sm-inline-block">Buscar</span>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
+    <div class="card">        
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
@@ -63,7 +87,10 @@
                 <tbody>
                     @forelse ($result as $item)
                         <tr>
-                            <td>{{ $item->doctype->doctypename }}</td>
+                            <td>
+                                <strong>{{ $item->doctype->group->shortname }}</strong> - 
+                                {{ $item->doctype->doctypename }}
+                            </td>
                             <td>{{ $item->serial }}</td>
                             <td class="text-right pr-3">{{ $item->lastnumber }}</td>
                             <td>{{ $item->warehouse->shortname }}</td>

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhSequence;
 use App\Models\WhTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WhTeamGrant;
+use App\Models\WhTeamGrantSerial;
+use App\Models\WhTeamGrantWarehouse;
+use App\Models\WhWarehouse;
 use Illuminate\Support\Facades\DB;
 
 class TeamGrantController extends Controller{
@@ -35,8 +39,59 @@ class TeamGrantController extends Controller{
     }
 
     public function create(){}
-    public function store(Request $request){}
-    public function destroy($id){}
+    public function store(Request $request){
+        switch($request->mode){
+            case 'serial-add': 
+                $row = new WhTeamGrantSerial();
+                $row->create([
+                    'team_id' => $request->team_id,
+                    'sequence_id' => $request->sequence_id,
+                ]);
+                return back()->with('message','Se agrego SERIE');
+                break;
+            case 'warehouse-add': 
+                $row = new WhTeamGrantWarehouse();
+                $row->create([
+                    'team_id' => $request->team_id,
+                    'warehouse_id' => $request->warehouse_id,
+                ]);
+                return back()->with('message','Se agrego ALMACEN');
+                break;
+
+        }
+    }
+    public function destroy($id){
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        #if(auth()->user()->grant($this->module)->isdelete == 'N'){
+        #    $data['status'] = 102;
+        #    $data['message'] = 'No tienes privilegio para eliminar';
+        #}
+        $p = explode('|',$id);
+        switch($p[0]){
+            case 'serial':
+                    $row = WhTeamGrantSerial::find($p[1]);
+                    if($row){
+                        $row->delete();
+                    }else{
+                        $data['status'] = 101;
+                        $data['message'] = 'El registro no existe o fue eliminado';
+                    }                     
+                    break;
+            case 'warehouse':
+                    $row = WhTeamGrantWarehouse::find($p[1]);
+                    if($row){
+                        $row->delete();
+                    }else{
+                        $data['status'] = 101;
+                        $data['message'] = 'El registro no existe o fue eliminado';
+                    }                     
+                    break;
+        }
+        return response()->json($data);
+    }
+
     public function show($id){
         session(['select_team_token' => $id]);
         $row = WhTeam::where('token',$id)->first();
@@ -97,5 +152,41 @@ class TeamGrantController extends Controller{
             }
         }      
     }
+
+    public function schedule($t){
+        for ($i = 0; $i <= 23; $i++) {$horas[$i] = $i;}
+        for ($i = 0; $i <= 6; $i++) {$semanas[$i] = $i;}
+        $weekname = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
+        $row = WhTeam::where('token',$t)->first();
+        return view('system.teamgrant_schedule',[
+            'row' => $row,
+            'semanas' => $semanas,
+            'weekname' => $weekname,
+            'horas' => $horas,
+        ]);
+    }
+
+    public function serial($t){
+        $row = WhTeam::where('token',$t)->first();        
+        $sid = WhTeamGrantSerial::where('team_id',$row->id)->pluck('sequence_id')->toArray();
+        $seq = WhSequence::whereNotIn('id',$sid)->get();
+        return view('system.teamgrant_serial',[
+            'row' => $row,
+            'seq' => $seq,
+        ]);
+    }
+
+    public function warehouse($t){
+        $row = WhTeam::where('token',$t)->first();
+        $sid = WhTeamGrantWarehouse::where('team_id',$row->id)->pluck('warehouse_id')->toArray();
+        $wah = WhWarehouse::whereNotIn('id',$sid)
+            ->orderBy('isactive','asc')
+            ->get();
+        return view('system.teamgrant_warehouse',[
+            'row' => $row,
+            'wah' => $wah,
+        ]);
+    }
+    
 
 }

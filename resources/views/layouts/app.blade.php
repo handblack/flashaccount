@@ -73,6 +73,10 @@
         dd {
             margin-bottom: 0.1rem;
         }
+
+        .dropdown-divider {
+            margin: 0.15rem 0;
+        }
     </style>
     @yield('style')
 </head>

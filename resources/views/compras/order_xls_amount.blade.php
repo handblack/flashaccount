@@ -9,27 +9,35 @@
         <thead>
             <tr>
                 <th>O.Compra</th>
-                <th>Proveedor</th>
                 <th>Codigo</th>
-                <th>Producto</th>
-                <th>Qty-Ordenado</th>
-                <th>Qty-Recibido</th>
-                <th>Qty-Pendiente</th>
+                <th>Proveedor</th>
+                <th>Divisa</th>
+                <th>Importe</th>
+                <th>Facturas</th>
+                <th>Guias</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($result as $line)
-                @if($line->quantity <> $line->quantityopen)
-                    <tr>
-                        <td>{{ $line->order->serial }}-{{ $line->order->documentno }}</td>
-                        <td>{{ $line->order->bpartner->bpartnername }}</td>
-                        <td>{{ $line->product->productcode }}</td>
-                        <td>{{ $line->product->productname }}</td>
-                        <td class="text-right">{{ $line->quantity }}</td>
-                        <td>{{ $line->quantityopen }}</td>
-                        <td>{{ $line->quantity - $line->quantityopen }}</td>
-                    </tr>
-                @endif
+            @forelse($result as $order)                
+                <tr>
+                    <td>{{ $order->serial }}-{{ $order->documentno }}</td>
+                    <td>{{ $order->bpartner->bpartnercode }}</td>
+                    <td>{{ $order->bpartner->bpartnername }}</td>
+                    <td>{{ $order->currency->currencyiso }}</td>
+                    <td class="text-right">{{ $order->amountgrand }}</td>
+                    <td>
+                        <ul>
+                            @foreach($order->invoices as $line)
+                                <li>{{ $line->serial }}_{{ $line->documentno }}_{{ $line->amountgrand }};</li>
+                            @endforeach
+                        </ul>
+                    </td>
+                    <td>
+                        @foreach($order->inputs as $line)
+                        {{ $line->serial }}-{{ $line->documentno }};
+                        @endforeach                    
+                    </td>
+                </tr>                
             @empty
                 <tr>
                     <td colspan="3">No hay informacion disponible</td>

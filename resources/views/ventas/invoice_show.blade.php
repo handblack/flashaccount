@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
 @section('breadcrumb')
 <section class="content-header pb-2">

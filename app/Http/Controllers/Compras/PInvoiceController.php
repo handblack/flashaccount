@@ -175,7 +175,10 @@ class PInvoiceController extends Controller
             #    'retencion' => WhParam::where('group_id',6)->get(),
             #    'invoice' => $invoice,
             #]);
-            return view('compras.invoice_show');
+            $row = WhPInvoice::where('token',$id)->first();
+            return view('compras.invoice_show',[
+                'row' => $row
+            ]);
         }
     }
 

@@ -17,4 +17,9 @@ class WhDocType extends Model
         'orden',
         'isactive',
     ];
+
+    public function group(){
+        return $this->hasOne(WhDocTypeGroup::class,'id','group_id');
+    }
+
 }

@@ -52,7 +52,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalCreateOrder"><i class="far fa-copy fa-fw"></i> Copiar a nueva Orden de Compra</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar documento</a>
+                                <a class="dropdown-item" href="#"><i class="far fa-window-close fa-fw"></i> Cerrar Orden de Compra</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('porder.show','pdf') }}"><i class="fas fa-download fa-fw"></i> Descargar PDF</a>
                                 <!-- 

@@ -67,8 +67,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::get('/building',[DashboardController::class,'building'])->name('building');
     
     Route::resource('/system/user',UserController::class, ['names' => 'user']);
-    Route::resource('/system/team',TeamController::class, ['names' => 'team']);
+    Route::resource('/system/team/main',TeamController::class, ['names' => 'team']);
     Route::resource('/system/teamgrant',TeamGrantController::class, ['names' => 'teamgrant']);
+    Route::get('/system/teams/chedule/{t}',[TeamGrantController::class, 'schedule'])->name('teamgrant.schedule');
+    Route::get('/system/teams/serial/{t}',[TeamGrantController::class, 'serial'])->name('teamgrant.serial');
+    Route::get('/system/teams/warehouse/{t}',[TeamGrantController::class, 'warehouse'])->name('teamgrant.warehouse');    
     Route::resource('/system/currency',CurrencyController::class, ['names' => 'currency']);
     Route::resource('/system/warehouse',WarehouseController::class, ['names' => 'warehouse']);
     Route::resource('/system/sequence',SequenceController::class, ['names' => 'sequence']);
