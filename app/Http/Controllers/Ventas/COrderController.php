@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Ventas;
 
+use App\Exports\COrderLineOpenExport;
+use App\Exports\COrderOpenExport;
 use App\Http\Controllers\Controller;
 use App\Models\TempCInvoice;
 use App\Models\TempCInvoiceLine;
@@ -27,6 +29,7 @@ use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class COrderController extends Controller
@@ -37,7 +40,7 @@ class COrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $module = 'ventas.order';
-    public function index()
+    public function index(Request $request)
     {
         $grant = auth()->user()->grant($this->module); 
         if($grant->isgrant == 'N'){
@@ -46,7 +49,12 @@ class COrderController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhCOrder::orderBy('documentno','DESC')
+        $result = WhCOrder::where(function($query) use($request){
+            if($request->q){
+                $query->where('documentno',$request->q);
+            }
+        })
+            ->orderBy('documentno','DESC')
             ->paginate(env('PAGINATE_CORDER',30));
         return view('ventas.order',[
             'result' => $result,
@@ -391,4 +399,46 @@ class COrderController extends Controller
         ]);
         return $pdf->download($filename);
     }
+
+    public function download_open_quantity(){
+        return Excel::download(new COrderLineOpenExport, 'ov_detalle_pendientes_'.date("Y_m_d_His").'.xlsx');
+    }
+
+    public function download_open_amount(){
+        return Excel::download(new COrderOpenExport, 'ov_pendientes_facturacion_'.date("Y_m_d_His").'.xlsx');
+    }
+
+    public function copy_to_order(Request $request){
+        /*
+            Este proceso hace una copia de Order=>Temp para el invoice
+        */
+        $hash = new Hashids(env('APP_HASH'));
+        if($request->token != $hash->encode($request->order_id)){
+            abort(403,'Token no valido para copiar');
+        }
+        $source = WhCOrder::where('id',$request->order_id)->first();
+        if(!$source){
+            abort(403,'No hay registro');
+        }
+        DB::transaction(function () use($request,$source) {    
+            //Cabecera #########################################################      
+            $target = new TempCOrder();
+            $target->fill($source->toArray());
+            $target->fill($request->all());
+            $target->save();
+            $target->doctype_id = $target->sequence->doctype_id;
+            $target->serial = $target->sequence->serial;
+            $target->save();
+            foreach($source->lines as $line){
+                $tline = new TempCOrderLine();
+                $tline->fill($line->toArray());
+                $tline->order_id = $target->id;
+                $tline->save();
+            }
+            session(['session_ventas_order_id' => $target->id]);
+        });
+        //return redirect()->route('porder.show',$source->token);
+        return redirect()->route('corder.create');
+    }
+
 }

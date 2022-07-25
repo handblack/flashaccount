@@ -21,6 +21,7 @@
         </div>
     </div>
 </section>
+
 <section class="content-header pt-1 pb-2">
     <div class="container-fluid">
         <div class="row mb-0">
@@ -33,21 +34,40 @@
                 </div>
         
                 <div class="btn-group" width="50">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                                <span class="d-none d-sm-inline-block">Buscar</span>
-                            </button>
-                        </span>
-                    </div>
+                    <form action="{{ route('corder.index') }}" method="GET">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="text" name="q" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <span class="d-none d-sm-inline-block">Buscar</span>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
                 
                 <a href="#" class="btn btn-secondary btn-sm" onclick="$('.filtro').toggle();">
                     <i class="fas fa-filter fa-fw"></i>
                     <span class="d-none d-sm-inline-block">Filtrar</span>
                 </a>
+
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"> 
+                            <i class="fas fa-th-large fa-fw"></i>
+                              Accion 
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('corder_download_open_amount') }}"><i class="fas fa-download fa-fw"></i> Descargar XLS - OV Importes (Abiertos/Pendientes)</a>
+                            <a class="dropdown-item" href="{{ route('corder_download_open_quantity') }}"><i class="fas fa-download fa-fw"></i> Descargar XLS - Cantidades (Abiertos/Pendientes)</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="col-4 col-md-6">
                 <div class="float-right">
@@ -78,7 +98,7 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Numero</th>
+                        <th width="100">Documento</th>
                         <th class="d-none d-sm-table-cell">CodigoSN</th>
                         <th class="d-none d-sm-table-cell">Socio de Negocio</th>
                         <th class="text-right pr-2">Importe</th>
@@ -96,9 +116,9 @@
                                 </a>                                 
                             </td>
                             <td class="d-none d-sm-table-cell" width="115">{{ $item->bpartner->bpartnercode }}</td>
-                            <td class="d-none d-sm-table-cell" width="110">{{ $item->bpartner->bpartnername }}</td>
-                            <td class="text-right pr-2 border-left border-right">
-                                {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
+                            <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnername }}</td>
+                            <td class="text-right pr-2 border-left border-right" width="120">
+                                {{ number_format($item->amountgrand, 2) }} <small>{{ $item->currency->currencyiso }}</small>
                             </td>
                             <td class="d-none d-sm-table-cell">{{ $item->warehouse->shortname }}</td>
 

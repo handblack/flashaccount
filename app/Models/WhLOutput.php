@@ -27,6 +27,10 @@ class WhLOutput extends Model
         return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
     }
 
+    public function sequence(){
+        return $this->hasOne(WhSequence::class,'id','sequence_id');
+    }
+
     public function order(){
         return $this->hasOne(WhCOrder::class,'id','order_id');
     }

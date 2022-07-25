@@ -23,34 +23,26 @@ class CreateWhWarehousesTable extends Migration
             $table->string('token',60);
             $table->timestamps();
         });
+
+        $this->CreateWarehouse('ALPR','ALMACEN PRINCIPAL');
+        $this->CreateWarehouse('W01TR','TIENDA LIMA / TRANSFERENCIA');
+        $this->CreateWarehouse('W01LI','TIENDA LIMA');
+        $this->CreateWarehouse('W02TR','TIENDA PROVINCIA / TRANSFERENCIA');
+        $this->CreateWarehouse('W02PR','TIENDA PROVINCIA');
+
+      
+    }
+
+    public function CreateWarehouse($sn,$na){
         $hash = new Hashids(env('APP_HASH'));
         $row = new WhWarehouse();
         $row->create([
-            'warehousename' => 'ALMACEN LIMA',
-            'shortname' => 'APL01',
-            'isactive' => 'Y',
-            'token' => $hash->encode(WhWarehouse::all()->count('id') + 1),
-        ]);
-        $row->create([
-            'warehousename' => 'ALMACEN OLIVOS',
-            'shortname' => 'APL02',
-            'isactive' => 'Y',
-            'token' => $hash->encode(WhWarehouse::all()->count('id') + 1),
-        ]);
-        $row->create([
-            'warehousename' => 'TIENDA LIMA',
-            'shortname' => 'TDA01',
-            'isactive' => 'Y',
-            'token' => $hash->encode(WhWarehouse::all()->count('id') + 1),
-        ]);
-        $row->create([
-            'warehousename' => 'TIENDA PROVINCIA',
-            'shortname' => 'TDA02',
+            'warehousename' => $na,
+            'shortname' => $sn,
             'isactive' => 'Y',
             'token' => $hash->encode(WhWarehouse::all()->count('id') + 1),
         ]);
     }
-
     /**
      * Reverse the migrations.
      *

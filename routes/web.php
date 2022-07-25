@@ -114,6 +114,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::resource('/ventas/order/manager/line',COrderLineController::class, ['names' => 'corderline']);
     Route::post('ventas/order/manager/copy_to_output',[COrderController::class,'copy_to_output'])->name('corder_copy_to_output');
     Route::post('ventas/order/manager/copy_to_invoice',[COrderController::class,'copy_to_invoice'])->name('corder_copy_to_invoice');
+    Route::post('ventas/order/manager/copy_to_order',[COrderController::class,'copy_to_order'])->name('corder_copy_to_order');
+    Route::get('ventas/order/manager/download/excel-quantity',[COrderController::class,'download_open_quantity'])->name('corder_download_open_quantity');
+    Route::get('ventas/order/manager/download/excel-amount',[COrderController::class,'download_open_amount'])->name('corder_download_open_amount');
     //Route::get('ventas/order/manager/pdf',[COrderController::class,'report_pdf'])->name('corder_rpt_pdf');
     //INVOICE
     Route::resource('/ventas/invoice/manager',CInvoiceController::class, ['names' => 'cinvoice']);
