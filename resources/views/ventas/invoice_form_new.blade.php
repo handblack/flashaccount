@@ -86,25 +86,39 @@
         </div>
         <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ $row->bpartner->bpartnername }}
+                <div class="col-12 col-md-6 invoice-col">
+                    <strong>Cliente:</strong>
+                    <p class="text-muted">
+                        {{ $row->bpartner->bpartnername }}
+                        <br>{{ $row->bpartner->bpartnercode }}
+                    </p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row mb-2">
+                        <dt class="col-sm-5">Serie</dt>
+                        <dd class="col-sm-7">{{ $row->serial }}&nbsp;</dd>
+                        <dt class="col-sm-5">Moneda</dt>
+                        <dd class="col-sm-7">{{ $row->currencyiso }}</dd>
+                        <dt class="col-sm-5">Condicion</dt>
+                        <dd class="col-sm-7">CONTADO/CREDITO</dd>
                     </dl>
                 </div>
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row mb-2">
+                        <dt class="col-sm-5">Orden Ventas</dt>
+                        <dd class="col-sm-7">
+                            @if($row->order_id)
+                            {{ $row->order->serial }}-{{ $row->order->documentno }}
+                            @endif
+                        </dd>
+                        <dt class="col-sm-5">Emision</dt>
+                        <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateinvoice)->format('d/m/Y') }}</dd>
+                        <dt class="col-sm-5">Vencimiento</dt>
+                        <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateinvoice)->format('d/m/Y') }}</dd>
                     </dl>
                 </div>
-                
             </div>
         </div>
-         
         <div class="card-body border-bottom" id="doc-header-form" style="display: none;">
             <div class="row">
                 <div class="col-md-6">

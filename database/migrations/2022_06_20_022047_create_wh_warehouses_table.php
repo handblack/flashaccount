@@ -24,10 +24,10 @@ class CreateWhWarehousesTable extends Migration
             $table->timestamps();
         });
 
-        $this->CreateWarehouse('ALPR','ALMACEN PRINCIPAL');
-        $this->CreateWarehouse('W01TR','TIENDA LIMA / TRANSFERENCIA');
+        $this->CreateWarehouse('W00AL','ALMACEN PRINCIPAL');
+        $this->CreateWarehouse('W01TR','TIENDA LIMA - TRANSFERENCIA');
         $this->CreateWarehouse('W01LI','TIENDA LIMA');
-        $this->CreateWarehouse('W02TR','TIENDA PROVINCIA / TRANSFERENCIA');
+        $this->CreateWarehouse('W02TR','TIENDA PROVINCIA - TRANSFERENCIA');
         $this->CreateWarehouse('W02PR','TIENDA PROVINCIA');
 
       

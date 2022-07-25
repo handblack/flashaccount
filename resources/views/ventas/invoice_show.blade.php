@@ -29,14 +29,15 @@
                         </a>
                         <a href="#" class="btn btn-sm btn-default" onclick="location.reload();">
                             <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
 
                     <div class="btn-group">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-icon"
-                                data-toggle="dropdown">
-                                Opciones&nbsp;&nbsp;
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"> 
+                                <i class="fas fa-th-large fa-fw"></i>
+                                  Accion 
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
@@ -44,9 +45,9 @@
                                 <a class="dropdown-item" href="#">Elminar Comprobante</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#modal-create-credit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Credito</a>
+                                    data-target="#modal-create-credit"><i class="fas fa-copy fa-fw"></i> Emitir Nota de Credito</a>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#modal-create-debit"><i class="fas fa-copy fa-fw"></i> Copiar Nota de Debito</a>
+                                    data-target="#modal-create-debit"><i class="fas fa-copy fa-fw"></i> Emitir Nota de Debito</a>
                             </div>
                         </div>
                     </div>
@@ -73,11 +74,35 @@
 @section('container')
     <div class="invoice p-3 mb-3">
         <div class="row invoice-info">
-            <div class="col-md-8 invoice-col">
-                {{ $row->bpartner->bpartnername }}
-                <br>{{ $row->bpartner->bpartnercode }}
+            <div class="col-12 col-md-6 invoice-col">
+                <strong>Cliente:</strong>
+                <p class="text-muted">
+                    {{ $row->bpartner->bpartnername }}
+                    <br>{{ $row->bpartner->bpartnercode }}
+                </p>
+            </div>
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Serie</dt>
+                    <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
+                    <dt class="col-sm-5">Moneda</dt>
+                    <dd class="col-sm-7">{{ $row->currency->currencyiso }}</dd>
+                    <dt class="col-sm-5">Condicion</dt>
+                    <dd class="col-sm-7">CONTADO/CREDITO</dd>
+                </dl>
+            </div>
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Orden Ventas</dt>
+                    <dd class="col-sm-7">{{ $row->order->serial }}-{{ $row->order->documentno }}</dd>
+                    <dt class="col-sm-5">Emision</dt>
+                    <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateinvoice)->format('d/m/Y') }}</dd>
+                    <dt class="col-sm-5">Vencimiento</dt>
+                    <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateinvoice)->format('d/m/Y') }}</dd>
+                </dl>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12 table-responsive">
                 <table class="table table-striped table-sm table-borderless mb-0">

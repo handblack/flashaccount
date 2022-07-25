@@ -21,43 +21,76 @@
         </div>
     </div>
 </section>
-@endsection
 
-@section('container')
-    <div class="card mb-0">
-        <form action="">
-            <div class="card-header pt-2 pb-2">
+<section class="content-header pt-1 pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-8 col-sm-6">
                 <div class="btn-group">
                     <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
                         <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">Actualizar</span>
                     </a>
                 </div>
-
-                <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
-                    title="Marcar como página de inicio">
-                    <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Nuevo Comprobante</span>
-                </a>
-
+        
                 <div class="btn-group" width="50">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                                <span class="d-none d-sm-inline-block">Buscar</span>
-                            </button>
-                        </span>
-                    </div>
+                    <form action="{{ route('cinvoice.index') }}" method="GET">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="text" name="q" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <span class="d-none d-sm-inline-block">Buscar</span>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
                 
-                <a href="#" class="btn btn-secondary btn-sm">
+                <a href="#" class="btn btn-secondary btn-sm" onclick="$('.filtro').toggle();">
                     <i class="fas fa-filter fa-fw"></i>
                     <span class="d-none d-sm-inline-block">Filtrar</span>
                 </a>
+
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"> 
+                            <i class="fas fa-th-large fa-fw"></i>
+                              Accion 
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('corder_download_open_amount') }}"><i class="fas fa-download fa-fw"></i> Descargar XLS - OV Importes (Abiertos/Pendientes)</a>
+                            <a class="dropdown-item" href="{{ route('corder_download_open_quantity') }}"><i class="fas fa-download fa-fw"></i> Descargar XLS - Cantidades (Abiertos/Pendientes)</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </form>
+            <div class="col-4 col-md-6">
+                <div class="float-right">
+
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
+                        title="Marcar como página de inicio">
+                            <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Nueva CPE</span>
+                        </a>
+                    </div>
+                                        
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@endsection
+
+@section('container')
+    <div class="card mb-0">
+        <div class="card-header filtro" style="display:none;"></div>
         
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">

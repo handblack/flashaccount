@@ -54,7 +54,9 @@ class COrderController extends Controller
                 $query->where('documentno',$request->q);
             }
         })
-            ->orderBy('documentno','DESC')
+            ->orderBy('dateorder','DESC')
+            ->orderBy('serial','ASC')
+            ->orderBy('id','DESC')
             ->paginate(env('PAGINATE_CORDER',30));
         return view('ventas.order',[
             'result' => $result,

@@ -47,6 +47,10 @@ class WhCInvoice extends Model
         return $this->hasOne(WhDocType::class,'id','doctype_id');
     }
 
+    public function order(){
+        return $this->hasOne(WhCOrder::class,'id','order_id');
+    }
+
     public function lines(){
         return $this->hasMany(WhCInvoiceLine::class,'invoice_id','id');
     }

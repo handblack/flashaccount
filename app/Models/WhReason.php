@@ -11,5 +11,7 @@ class WhReason extends Model
     protected $fillable = [
         'reasonname',
         'shortname',
+        'typereason',
+        'token',
     ];
 }

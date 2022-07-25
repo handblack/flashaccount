@@ -19,6 +19,14 @@ class TempCInvoice extends Model
         'warehouse_id',
     ];
     
+    public function order(){
+        return $this->hasOne(WhCOrder::class,'id','order_id');
+    }
+
+    public function currency(){
+        return $this->hasOne(WhCurrency::class,'id','currency_id');
+    }
+
     public function bpartner(){
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
