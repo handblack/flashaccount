@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link rel="stylesheet" href="{{ public_path('assets/pdf.css') }}">
     <style>
         @page {
             margin: 0cm 0cm;

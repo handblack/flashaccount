@@ -12,4 +12,8 @@ class WhTeamGrantWarehouse extends Model
         'team_id',
         'warehouse_id',
     ];
+
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
 }

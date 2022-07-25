@@ -52,9 +52,8 @@
         <table class="table table-sm">
             @foreach ($row->warehouses as $item)
                 <tr id="tr-{{ $item->id }}">
-                    <td>{{ $item->warehouse_id }}</td>
-                    <td>{{ $item->warehouse->warehousecode }}</td>
                     <td>{{ $item->warehouse->warehousename }}</td>
+                    <td>{{ $item->warehouse->warehousecode }}</td>
                     <td class="text-right">
                         <a class="delete-record" data-url="{{ route('teamgrant.destroy', 'warehouse|'.$item->id) }}"
                             data-id="{{ $item->id }}"><i class="fas fa-trash-alt"></i></a>
