@@ -21,25 +21,17 @@
         </div>
     </div>
 </section>
-@endsection
-
-@section('container')
-    <div class="card">
-        <form action="">
-            <div class="card-header pt-2 pb-2">
+<section class="content-header pt-1 pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-8 col-sm-6">
                 <div class="btn-group">
                     <a class="btn btn-sm btn-secondary" href="#" onclick="location.reload();" title="Recargar">
                         <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">Actualizar</span>
                     </a>
                 </div>
-
-                <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
-                    title="Marcar como página de inicio">
-                    <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline-block">Nueva Orden</span>
-                </a>
-
+        
                 <div class="btn-group" width="50">
                     <div class="input-group input-group-sm">
                         <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 130px;">
@@ -52,12 +44,35 @@
                     </div>
                 </div>
                 
-                <a href="#" class="btn btn-secondary btn-sm">
+                <a href="#" class="btn btn-secondary btn-sm" onclick="$('.filtro').toggle();">
                     <i class="fas fa-filter fa-fw"></i>
                     <span class="d-none d-sm-inline-block">Filtrar</span>
                 </a>
             </div>
-        </form>
+            <div class="col-4 col-md-6">
+                <div class="float-right">
+
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
+                        title="Marcar como página de inicio">
+                            <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Nueva Orden</span>
+                        </a>
+                    </div>
+                                        
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+ 
+@endsection
+
+@section('container')
+    <div class="card">
+        <div class="card-header filtro" style="display:none;">
+
+        </div>
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
@@ -78,8 +93,7 @@
                             <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}">
                                 <a href="{{ route('corder.show',$item->token) }}">
                                     {{ $item->serial }}-{{ $item->documentno }} 
-                                </a>
-                                {{ $item->docstatus }}
+                                </a>                                 
                             </td>
                             <td class="d-none d-sm-table-cell" width="115">{{ $item->bpartner->bpartnercode }}</td>
                             <td class="d-none d-sm-table-cell" width="110">{{ $item->bpartner->bpartnername }}</td>

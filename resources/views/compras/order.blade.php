@@ -35,18 +35,21 @@
                 </div>
 
                 <div class="btn-group" width="50">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control" type="text" name="query" value="" autocomplete="off" placeholder="Nro Orden Venta" style="max-width: 100px;">
-                        <span class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                                <span class="d-none d-sm-inline-block">Buscar</span>
-                            </button>
-                        </span>
-                    </div>
+                    <form action="{{ route('porder.index') }}" method="GET">
+                        @csrf
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="text" name="q" value="{{ $q }}" autocomplete="off" placeholder="Nro Orden" style="max-width: 130px;">
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-search" aria-hidden="true"></i>
+                                    <span class="d-none d-sm-inline-block">Buscar</span>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
 
-                <a href="#" class="btn btn-secondary btn-sm">
+                <a href="#" class="btn btn-secondary btn-sm" onclick="$('.filtro').toggle();">
                     <i class="fas fa-filter fa-fw"></i>
                     <span class="d-none d-sm-inline-block">Filtrar</span>
                 </a>
@@ -71,8 +74,6 @@
             <div class="col-4 col-md-6">
                 <div class="float-right">
 
-                    
-
                     <div class="btn-group">
                         <a class="btn btn-sm btn-success" href="#" data-toggle="modal" data-target="#ModalCreate"
                         title="Marcar como página de inicio">
@@ -92,10 +93,11 @@
 
 @section('container')
     <div class="card">
-        <form action="">
-            <div class="card-header pt-2 pb-2">
-            </div>
-        </form>
+        <div class="card-header pt-2 pb-2 filtro" style="display:none;">
+            <form action="">
+                A
+            </form>
+        </div>
         <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap table-sm table-borderless mb-0">
                 <thead>
@@ -121,8 +123,8 @@
                             </td>
                             <td class="d-none d-sm-table-cell" width="115">{{ $item->bpartner->bpartnercode }}</td>
                             <td class="d-none d-sm-table-cell" width="110">{{ $item->bpartner->bpartnername }}</td>
-                            <td class="text-right pr-2 border-left border-right">
-                                {{ number_format($item->amountgrand, 2) }} {{ $item->currency->currencyiso }}
+                            <td class="text-right pr-2 border-left border-right" width="100">
+                                {{ number_format($item->amountgrand, 2) }} <small>{{ $item->currency->currencyiso }}</small>
                             </td>
                             <td class="d-none d-sm-table-cell">{{ $item->warehouse->shortname }}</td>
 

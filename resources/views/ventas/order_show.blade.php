@@ -81,34 +81,35 @@
 
 @section('container')
     <div class="invoice p-3 mb-3">
-
-     
-
-        <div class="row invoice-info">
-            <!--
-            <div class="col-sm-4 invoice-col">
-                {{ auth()->user()->get_param('system.entity.bpartnername','EMPRESA_PRUEBA') }}
-                <br>{{ auth()->user()->get_param('system.entity.ruc','10123456780') }}                
+        <div class="row invoice-info">          
+            <div class="col-12 col-md-6 invoice-col">
+                <strong>Cliente:</strong>
+                <p class="text-muted">
+                    {{ $row->bpartner->bpartnername }}
+                    <br>{{ $row->bpartner->bpartnercode }}
+                </p>
             </div>
-            -->
-            <div class="col-md-8 invoice-col">
-                {{ $row->bpartner->bpartnername }}
-                <br>{{ $row->bpartner->bpartnercode }}
-            </div>
-
-            <div class="col-12 col-md-4">
-                <dl class="row">
-                    <dt class="col-xs-6">Orden de Venta</dt>
-                    <dd class="col-xs-6">{{ $row->serial }}-{{ $row->documentno }}</dd>
-                    <dt class="col-sm-6">Fecha</dt>
-                    <dd class="col-sm-6">{{ $row->dateorder }}</dd>
-                    <dt class="col-sm-6">Almacen</dt>
-                    <dd class="col-sm-6">{{ $row->warehouse->warehousename }}</dd>
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Orden Ventas</dt>
+                    <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
+                    <dt class="col-sm-5">Fecha</dt>
+                    <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
+                    <dt class="col-sm-5">Almacen</dt>
+                    <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
                 </dl>
             </div>
-
+            <div class="col-6 col-md-3">
+                <dl class="row mb-2">
+                    <dt class="col-sm-5">Solicitado</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dt class="col-sm-5">Recibido</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dt class="col-sm-5">Suspendido</dt>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                </dl>
+            </div>
         </div>
-
 
         <div class="row">
             <div class="col-12 table-responsive">
@@ -121,8 +122,8 @@
                             <th class="d-none d-sm-inline-block">UM</th>
                             <th class="text-right">Precio</th>
                             <th class="text-right">Total</th>
-                            <th class="text-right border-left">Qty-Abierto</th>
-                            <th class="text-right">Qty-Suspendido</th>
+                            <th width="100" class="text-right"><small>Entregado</small></th>
+                            <th width="100" class="text-right"><small>Suspendido</small></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,52 +135,57 @@
                                 <td class="d-none d-sm-inline-block">{{ $item->um->shortname }}</td>
                                 <td class="text-right">{{ number_format($item->priceunit,env('DECIMAL_AMOUNT',2)) }}</td>
                                 <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
-                                <td class="text-right border-left">
-                                    {{ $item->quantityopen }}
+                                <td class="text-right border-left" width="100">
+                                    {{ number_format($item->quantityopen,env('DECIMAL_QUANTITY',5)) }}
                                 </td>
-                                <td class="text-right">
-                                    {{ $item->quantityopen }}
+                                <td class="text-right" width="100">
+                                    {{ number_format($item->quantitysuspended,env('DECIMAL_QUANTITY',5)) }}
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr class="border-top">
+                            <th>{{ count($row->lines) }} - Item(s)</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right">TOTAL: </th>
+                            <th class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</th>
+                            <th></th>
+                            <th></th>
+
+                            <!--
+                            <th class="text-right">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</th>
+                            <th class="text-right">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</th>
+                            -->
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
-
-        <div class="row border-top">
-            <div class="col-6 col-md-8"></div>
-            <div class="col-6 col-md-4">
-                <div class="table-responsive">
-                    <table class="table-sm" width="100%">
-                        <tbody>
-                            <tr>
-                                <th>Total:</th>
-                                <td class="text-right">{{ $row->currency->prefix }} {{ number_format($row->amountgrand,2) }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Documentos Vinculados</strong>
+                    <ul>
+                        @foreach ($row->invoices as $item)
+                            <li>{{ $item->doctype->doctypename }} {{ $item->serial }}-{{ $item->documentno }} - {{ $item->currency->prefix }} {{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <strong>Salidas de Almacen</strong>
+                    <ul class="mb-0">
+                        @foreach ($row->outputs as $item)
+                          <li>{{ $item->sequence->doctype->doctypename }} #{{ $item->serial }}-{{ $item->documentno }}  <i class="fas fa-calendar-alt fa-fw"></i> {{ \Carbon\Carbon::parse($item->datetrx)->format('d/m/Y')}}</li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                Documentos Vinculados
-                @foreach ($row->invoice as $inv)
-                    <br><span class="console">{{ $inv->serial }}-{{ $inv->documentno }} {{ $inv->currency->currencyiso }} {{ $inv->amountgrand }}</span>
-                @endforeach
-            </div>
-            <div class="col-md-6">
-                Movimiento Almacen
-                @foreach ($row->output as $line)
-                    <br><span class="console">{{ $line->serial }}-{{ $line->documentno }}</span>
-                @endforeach
-            </div>
-        </div>
-
-
-         
     </div>
 
 

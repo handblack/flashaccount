@@ -36,7 +36,7 @@ class POrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $module = 'compras.order';
-    public function index()
+    public function index(Request $request)
     {
         $grant = auth()->user()->grant($this->module); 
         if($grant->isgrant == 'N'){
@@ -45,13 +45,19 @@ class POrderController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhPOrder::orderBy('dateorder','DESC')
+        $result = WhPOrder::where(function($query) use($request){
+            if($request->q){
+                $query->where('documentno',$request->q);
+            }
+        })
+            ->orderBy('dateorder','DESC')
             ->orderBy('serial','desc')
             ->orderBy('documentno','desc')
             ->paginate(env('PAGINATE_CORDER',40));
         return view('compras.order',[
             'result' => $result,
             'grant'  => $grant,
+            'q' => $request->q
         ]);
     }
 

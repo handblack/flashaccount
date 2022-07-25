@@ -5,34 +5,67 @@
     <link rel="stylesheet" href="{{ asset('assets/pdf.css') }}">
 </head>
 <body>
-    ORDEN DE VENTA
+    <strong>ORDEN DE VENTA</strong>
+    <table width="100%">
+        <tr class="border-top">
+            <td width="60%">
+                <strong>Cliente</strong>
+                <br>{{ $row->bpartner->bpartnername }}
+                <br>{{ $row->bpartner->bpartnercode }}
+            </td>
+            <td width="40%">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>Orden Venta</td>
+                        <td>{{ $row->serial }}-{{ $row->documentno }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha</td>
+                        <td>{{ $row->dateorder }}</td>
+                    </tr>
+                    <tr>
+                        <td>Almacen</td>
+                        <td>{{ $row->warehouse->warehousename }}</td>
+                    </tr>
+                </table>
+            </td>
+    
+        </tr>
+    </table>
 <table width="100%">
-    <tr>
-        <td>
-            {{ $row->bpartner->bpartnername }}
-            <br>{{ $row->bpartner->bpartnercode }}
-        </td>
-    </tr>
-</table>
-<table width="100%">
+    <thead>
+        <tr class="border-top border-bottom">
+            <th class="text-left">Codigo</th>
+            <th class="text-left">Producto/Descripcion</th>
+            <th class="text-right">Cantidad</th>
+            <th class="text-right"></th>
+            <th class="text-right">PU</th>
+            <th class="text-right">Total</th>
+        </tr>
+    </thead>
     <tbody>
         @foreach ($row->lines as $item)
-            <tr>
-                <td>{{ ($item->typeproduct == 'P') ? $item->product->productcode : '' }}</td>
-                <td>{{ $item->description }}</td>
-                <td class="text-right">{{ number_format($item->quantity,env('DECIMAL_QUANTITY',5)) }}</td>
-                <td>{{ $item->um->shortname }}</td>
-                <td>{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
-            </tr>
+        <tr>
+            <td>{{ ($item->typeproduct == 'P') ? $item->product->productcode : '' }}</td>
+            <td>{{ $item->description }}</td>
+            <td class="text-right">{{ number_format($item->quantity,env('DECIMAL_QUANTITY',5)) }}</td>
+            <td>{{ $item->um->shortname }}</td>
+            <td class="text-right">{{ number_format($item->priceunittax,env('DECIMAL_QUANTITY',5)) }}</td>
+            <td class="text-right">{{ number_format($item->amountgrand,env('DECIMAL_AMOUNT',2)) }}</td>
+        </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr>
             <td></td>
             <td></td>
-            <td>{{ number_format($item->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</td>
+            <th class="text-right">{{ number_format($item->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</th>
             <td></td>
-            <td>{{ number_format($item->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}</td>
+            <td></td>
+            <th class="text-right">
+                {{ $row->currency->prefix }}
+                {{ number_format($row->lines->sum('amountgrand'),env('DECIMAL_AMOUNT',2)) }}
+            </th>
         </tr>
     </tfoot>
 </table>

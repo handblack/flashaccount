@@ -106,11 +106,11 @@
             <div class="col-6 col-md-3">
                 <dl class="row mb-2">
                     <dt class="col-sm-5">Solicitado</dt>
-                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantity'),env('DECIMAL_QUANTITY',2)) }}</dd>
                     <dt class="col-sm-5">Recibido</dt>
-                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',2)) }}</dd>
                     <dt class="col-sm-5">Suspendido</dt>
-                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                    <dd class="col-sm-7">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',2)) }}</dd>
                 </dl>
             </div>
         </div>
