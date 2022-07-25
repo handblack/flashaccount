@@ -34,7 +34,7 @@
             <input type="hidden" name="mode" value="serial-add">
             <div class="btn-group">
 
-                <select name="sequence_id" class="form-control" required>
+                <select name="sequence_id" class="form-control console" required>
                     <option value="" selected disabled>-- SELECCIONA SECUENCIADOR --</option>
                     @foreach ($seq as $item)
                         <option value="{{ $item->id }}">{{ $item->serial }} - {{ $item->doctype->group->shortname }} {{ $item->doctype->doctypename }}</option>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="btn-group">
-                <button type="submit" class="btn btn-default">Agregar</button>
+                <button type="submit" class="btn btn-primary">Agregar</button>
             </div>
         </form>
     </div>    

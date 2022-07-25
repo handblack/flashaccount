@@ -36,7 +36,7 @@
             <input type="hidden" name="mode" value="warehouse-add">
             <div class="btn-group">
 
-                <select name="warehouse_id" class="form-control" required>
+                <select name="warehouse_id" class="form-control console" required>
                     <option value="" selected disabled>-- SELECCIONA SECUENCIADOR --</option>                    
                     @foreach ($wah as $item)
                         <option value="{{ $item->id }}" class="{{ ($item->isactive == 'N') ? 'tachado' : '' }}">{{ $item->shortname }} - {{ $item->warehousename }} {{ ($item->isactive == 'N') ? '[DESACTIVADO]' : '' }}</option>
@@ -44,7 +44,7 @@
                 </select>
             </div>
             <div class="btn-group">
-                <button type="submit" class="btn btn-default">Agregar</button>
+                <button type="submit" class="btn btn-primary">Agregar</button>
             </div>
         </form>
     </div>    

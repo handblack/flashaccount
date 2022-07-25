@@ -5,12 +5,13 @@
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-users-cog fa-fw"></i> Grupos &amp; Accesos</h1>
+                    <h1><i class="fas fa-users-cog fa-fw"></i> Resumen de Accesos</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">Sistema</li>
-                        <li class="breadcrumb-item">Grupos &amp; Accesos</li>
+                        <li class="breadcrumb-item"><a href="{{ route('team.index') }}">Grupos &amp; Accesos</a></li>
+                        <li class="breadcrumb-item">Resumen de Accesos</li>
                     </ol>
                 </div>
             </div>
