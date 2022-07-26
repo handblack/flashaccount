@@ -348,6 +348,7 @@ class COrderController extends Controller
                 $templ->save();                
             }        
             session(['session_ventas_invoice_id' => $target->id]);
+            session(['session_ventas_invoice_url_callback' => route('corder.show',$source->token)]);
         });
         return redirect()->route('cinvoice.create');
         

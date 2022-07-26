@@ -17,7 +17,7 @@
     </div>
 </section>
 
-    <section class="content-header">
+    <section class="content-header pt-1 pb-1">
         <div class="container-fluid">
             <div class="d-flex justify-content-between">
                 <div>
@@ -33,12 +33,14 @@
                     </div>
                 </div>
                 <div>
+                <!--
                     <div class="btn-group">
                         <a href="#" class="btn btn-success btn-sm btn-add-product" onclick="edit_form_header();">
                             <i class="fas fa-plus-square fa-fw"></i>
                             <span class="d-none d-lg-inline-block">Agregar</span>   
                         </a>    
                     </div>
+                -->
                     <a href="#" class="btn btn-success btn-sm btn-add-product" data-toggle="modal" data-target="#ModalAddItem">
                         <i class="fas fa-plus-square fa-fw"></i>
                         <span class="d-none d-lg-inline-block">Agregar</span>    
@@ -70,22 +72,35 @@
     <div class="card">
         <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ $row->bpartner->bpartnername }}
+                <div class="col-12 col-md-6 invoice-col">
+                    <strong>Cliente:</strong>
+                    <p class="text-muted">
+                        {{ $row->bpartner->bpartnername }}
+                        <br>{{ $row->bpartner->bpartnercode }}
+                    </p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row mb-2">
+                        <dt class="col-sm-5">Orden Ventas</dt>
+                        <dd class="col-sm-7">{{ $row->serial }}-{{ $row->documentno }}</dd>
+                        <dt class="col-sm-5">Fecha</dt>
+                        <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
+                        <dt class="col-sm-5">Almacen</dt>
+                        <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
                     </dl>
                 </div>
+                <!--
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row mb-2">
+                        <dt class="col-sm-5">Solicitado</dt>
+                        <dd class="col-sm-7">{{ number_format($row->lines->sum('quantity'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                        <dt class="col-sm-5">Recibido</dt>
+                        <dd class="col-sm-7">{{ number_format($row->lines->sum('quantityopen'),env('DECIMAL_QUANTITY',5)) }}</dd>
+                        <dt class="col-sm-5">Suspendido</dt>
+                        <dd class="col-sm-7">{{ number_format($row->lines->sum('quantitysuspended'),env('DECIMAL_QUANTITY',5)) }}</dd>
                     </dl>
                 </div>
-                
+                -->
             </div>
         </div>
         <div class="card-body border-bottom" id="doc-header-form" style="display: none;">

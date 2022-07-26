@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use PDF;
 
 class CInvoiceController extends Controller
@@ -178,7 +179,13 @@ class CInvoiceController extends Controller
                                 $temp->delete();
                             }
                         });
-                        return redirect()->route('cinvoice.index')->with('message','Documento creado');
+                        if(session('session_ventas_invoice_url_callback')){
+                            $r = session('session_ventas_invoice_url_callback');
+                            Session::forget('session_ventas_invoice_url_callback');
+                        }else{
+                            $r = route('cinvoice.index');
+                        }
+                        return redirect($r)->with('message','Documento creado');
                         break;            
         }
     }

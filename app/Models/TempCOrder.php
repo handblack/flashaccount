@@ -29,4 +29,9 @@ class TempCOrder extends Model
     public function lines(){
         return $this->hasMany(TempCOrderLine::class,'order_id','id');
     }
+
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
 }

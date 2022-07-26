@@ -248,37 +248,117 @@
 </div>  
 
 
-<div class="modal fade" id="ModalCreateInvoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action="{{ route('corder_copy_to_invoice') }}" method="POST">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="order_id" value="{{ $row->id }}">
+   
+
+<div class="modal fade" id="ModalCreateInvoice" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form action="{{ route('corder_copy_to_invoice') }}" method="POST" id="form-logistic-input">
+                @csrf
+                <input type="hidden" name="mode" value="temp">
                 <input type="hidden" name="token" value="{{ $row->token }}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Emitir Comprobante</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <select name="sequence_id" id="" class="form-control" required>
-                        <option value="" selected disabled>-- SELECCIONE --</option>
-                        @foreach ($sequence_invoice as $item)
-                            <option value="{{ $item->id }}">{{ $item->serial }} - {{ $item->doctype->doctypename }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
+                <input type="hidden" name="order_id" value="{{ $row->id }}">
+                <input type="hidden" name="bpartner_id" value="{{ $row->bpartner_id }}">
+                <input type="hidden" name="currency_id" value="{{ $row->currency_id }}">
+                <div class="modal-content">
+                    <div class="modal-header pt-2 pb-2">
+                        <h5 class="modal-title" id="exampleModalLabel">Nuevo Comprobante de Venta</h5>
+                        
+                    </div>
+                    <div class="modal-body bg-light">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <label class="mb-0">Cliente</label>
+                                <input type="text" class="form-control" value="{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}" disabled>
+                            </div>                           
+                            <div class="col-md-3">
+                                <label class="mb-0">Orden Venta</label>
+                                <input type="text" class="form-control" value="{{ $row->serial }}-{{ $row->documentno }}" disabled>
+                            </div>                           
+                                                     
+                        </div>
+                        <div class="row">                                                    
+                            <div class="col-md-4 mt-2">
+                                <label class="mb-0">Serie</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend pr-1">
+                                        <select name="sequence_id" class="form-control console" required style="width:80px;">
+                                            <option value="" selected disabled>----</option>
+                                            @foreach ($sequence_invoice as $item)
+                                                <option value="{{ $item->id }}">{{ $item->serial .'-'.$item->doctype->doctypename }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <input type="text" class="form-control console" placeholder="<automatico>" aria-describedby="basic-addon1">
+                                </div>                                
+                            </div>    
+                                                   
+                                                     
+                            <div class="col-8 col-md-4 mt-2">
+                                <label class="mb-0">Moneda</label>
+                                <input type="text" class="form-control console" value="{{ $row->currency->currencyiso }} - {{ $row->currency->currencyname }}" disabled>
+                            </div>                           
+                            <div class="col-4 col-md-3 mt-2">
+                                <label class="mb-0">Tipo Cambio</label>
+                                <input type="text" name="rate" class="form-control text-right console" value="1.000" maxlength="5">
+                            </div>                         
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mt-2">
+                                <label class="mb-0">Tipo de Pago</label>
+                                <select name="typepayment" class="form-control console" required>
+                                    <option value="" selected disabled>----</option>
+                                    <option value="C">CONTADO</option>
+                                    <option value="R">CREDITO</option>
+                                </select>
+                            </div>  
+                            <div class="col-md-4 col-6 mt-2">
+                                <label class="mb-0">Emision</label>
+                                <input type="date" name="dateinvoiced" value="{{ date("Y-m-d") }}" class="form-control" required>
+                            </div>  
+                            <div class="col-md-4 col-6 mt-2">
+                                <label class="mb-0">Vencimiento</label>
+                                <input type="date" name="datedue" value="{{ date("Y-m-d") }}" class="form-control">
+                            </div>  
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer p-1">
+                        <div class="row w-100">
+                            <div class="col-md-4">
+                                <div class="float-left">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Almacen</span>
+                                        </div>
+                                        <select name="warehouse_id" class="form-control console" required>
+                                            <option value="" selected disabled>-- SELECCION --</option>
+                                            @foreach (auth()->user()->warehouse() as $item)
+                                                <option value="{{ $item->id }}" {{ ($item->id == $row->warehouse_id) ? 'selected' : '' }}>{{ $item->warehousename }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4  ">
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Iniciar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                        
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-</div>    
-
 
 <div class="modal fade" id="ModalCreateOutput"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-lg" role="document">

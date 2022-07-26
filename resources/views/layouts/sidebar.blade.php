@@ -192,6 +192,13 @@
                         <p>Emitir CP desde GRR</p>
                     </a>
                 </li>
+                <li class="nav-item  {{ !auth()->user()->menu('m_ventas_debit')? 'd-none': '' }}">
+                    <a href="#"
+                        class="nav-link  {{ request()->is('ventas/debit/manager*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>FEX Monitor</p>
+                    </a>
+                </li>
             </ul>
         </li>
         {{-- COMPRAS / PROVEEDORES --}}
