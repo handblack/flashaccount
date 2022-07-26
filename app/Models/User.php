@@ -144,17 +144,18 @@ class User extends Authenticatable
         return WhCurrency::all();
     }
 
-    public function warehouse(){
-        $whi = WhTeamGrantWarehouse::where('warehouse_id',$this->current_team_id)
-            ->pluck('id')
-            ->get();
+    public function warehouse(){        
+        $warehouse = WhWarehouse::where('isactive','Y')
+                    ->where(function ($query) {
+                        $whi = WhTeamGrantWarehouse::where('team_id',$this->current_team_id)
+                                ->pluck('warehouse_id')
+                                ->toArray();        
+                        if($whi || $this->isadmin == 'N'){
+                            $warehouse = $query->whereIn('id',$whi);
+                        }
+                    });
         
-        if($whi || $this->isadmin == 'Y'){
-            $warehouse = WhWarehouse::whereIn('id',$whi->toArray())->get();
-        }else{
-            $warehouse = WhWarehouse::where('isactive','Y')->get();
-        }
-        return $warehouse;
+        return $warehouse->get();
     }
 
     public function sequence($doctype){
@@ -165,7 +166,9 @@ class User extends Authenticatable
             PIN -> Parte de Ingreso
             BAL -> Bank Allocate
         */
-        $dt = WhDocType::where('shortname',$doctype)->first();
+        $dt = WhDocType::where('shortname',$doctype)
+            ->whereIn('group_id',[2,3])
+            ->first();
         return WhSequence::where('doctype_id',$dt->id)->get();
     }
 

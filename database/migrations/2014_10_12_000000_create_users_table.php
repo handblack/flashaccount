@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Hashids\Hashids;
 
 class CreateUsersTable extends Migration
 {
@@ -28,13 +29,25 @@ class CreateUsersTable extends Migration
             $table->string('token',60)->nullable();
             $table->timestamps();
         });
+
+        $hash = new Hashids(env('APP_HASH','miasoftware'));
         $row = new User();
         $row->name     = 'elias.fuentes';
         $row->email    = 'soporte@miasoftware.net';
-        $row->password =  Hash::make('x5w93kra');
-        $row->token    = md5(1);
+        $row->password = Hash::make('x5w93kra');
+        $row->token    = $hash->encode(User::all()->count('id') + 1);
         $row->isadmin  = 'Y';
-        $row->isactive   = 'Y';
+        $row->isactive = 'Y';
+        $row->current_team_id = 1;
+        $row->save();
+
+        $row = new User();
+        $row->name     = 'miriam.villaorduna';
+        $row->email    = 'miriam@miasoftware.net';
+        $row->password =  Hash::make('x5w93kra');
+        $row->token    = $hash->encode(User::all()->count('id') + 1);
+        $row->isadmin  = 'N';
+        $row->isactive = 'Y';
         $row->current_team_id = 1;
         $row->save();
         /*
