@@ -83,7 +83,7 @@
         <div class="row p-3">
             <div class="col-md-6">
                 <label class="mb-0">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Identificador del Equipo" value="{{ old('password') }}" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Identificador del Equipo" value="{{ old('password') }}" {{ ($mode == 'new') ? 'required' : '' }}>
             </div>
             <div class="col-md-6">
                 <label class="mb-0">Grupo</label>                

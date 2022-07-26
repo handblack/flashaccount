@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\WhTeam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -24,10 +25,12 @@ class UserController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $q = str_replace(' ','%',$request->q);
-        $result = User::where('name','LIKE',"{$q}%")
-            ->whereOr('email','LIKE',"{$q}%")
-            ->paginate(env('PAGINATE_USER',10));
+        
+        $result = User::where(function ($query) use ($request){
+            $q = str_replace(' ','%',$request->q);
+            $query->where('name','LIKE',"{$q}%");
+            $query->orWhere('email','LIKE',"{$q}%");
+        })->paginate(env('PAGINATE_USER',22));
         return view('system.user',[
             'result' => $result,
             'q' => $request->q,

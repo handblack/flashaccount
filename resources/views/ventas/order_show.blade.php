@@ -41,8 +41,8 @@
                     <div class="btn-group">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"> 
-                                <i class="fas fa-map-signs fa-fw"></i>
-                                  Accion 
+                                <i class="fas fa-th-large fa-fw"></i>
+                                    Accion 
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">

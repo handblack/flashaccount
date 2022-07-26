@@ -145,7 +145,16 @@ class User extends Authenticatable
     }
 
     public function warehouse(){
-        return WhWarehouse::where('isactive','Y')->get();
+        $whi = WhTeamGrantWarehouse::where('warehouse_id',$this->current_team_id)
+            ->pluck('id')
+            ->get();
+        
+        if($whi || $this->isadmin == 'Y'){
+            $warehouse = WhWarehouse::whereIn('id',$whi->toArray())->get();
+        }else{
+            $warehouse = WhWarehouse::where('isactive','Y')->get();
+        }
+        return $warehouse;
     }
 
     public function sequence($doctype){
