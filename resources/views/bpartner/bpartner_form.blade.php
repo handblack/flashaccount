@@ -38,26 +38,48 @@
     <input type="hidden" name="token" value="{{ $row->token }}">
 <div class="card">
     <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" >
-            <li class="nav-item">
-                <span class="nav-link active">
-                    @if($mode =='new')
-                        <i class="far fa-edit fa-fw"></i>
-                    @else
-                        <i class="fas fa-edit fa-fw"></i>
-                    @endif
-                    <span class="d-sm-inline-block">
-                        Socio de Negocio [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
-                    </span>                
-                </span>
-                 
-            </li>
-            
-        </ul>
+        <div class="card-title">
+            <ul class="nav nav-tabs card-header-tabs" >
+                <li class="nav-item">
+                    <span class="nav-link active">
+                        @if($mode =='new')
+                            <i class="far fa-edit fa-fw"></i>
+                        @else
+                            <i class="fas fa-edit fa-fw"></i>
+                        @endif
+                        <span class="d-sm-inline-block">
+                            Socio de Negocio [<strong>{{ ($mode == 'new') ? 'NUEVO' : 'MODIFICANDO' }}]</strong>
+                        </span>                
+                    </span>                 
+                </li>            
+            </ul>
+        </div>
+        <div class="card-tools">
+            <form action="{{ route('linput.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="mode" value="create">
+                <ul class="nav">
+                    <li>                        
+                        <div class="card-tools pull-right">
+                            <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiSunat">
+                                <i class="fab fa-searchengin fa-fw"></i>
+                                &nbsp;<strong>SUNAT</strong>    
+                            </a>
+
+
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <i class="fab fa-searchengin fa-fw"></i>
+                                &nbsp;Reniec
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 mt-2">
                 <label class="mb-0">Tipo de Registro</label>
                 <div class="input-group mb-0">                    
                     <select name="typeperson" id="typeperson" class="form-control console" required="" style="width:80px;" {{ ($mode == 'edit') ? 'disabled' : '' }}>
@@ -69,7 +91,7 @@
                     </select>
                 </div>                
             </div>
-            <div class="col-md-3 pt-2">
+            <div class="col-md-3 mt-2">
                 <label class="mb-0">Tipo de Persona</label>
                 <div class="input-group mb-0">                    
                     <select name="legalperson" id="legalperson" class="form-control console" required="" style="width:80px;">
@@ -81,8 +103,8 @@
                     </select>
                 </div>                
             </div>
-            <div class="col-md-3 pt-2">
-                <label class="mb-0">Tipo y Nro de Documento @if($mode=='new') <small class="badge badge-secondary"><i class="far fa-clock"></i> <span  class="font-weight-normal" id="contador">0</span></small> @endif </label>
+            <div class="col-md-3 mt-2">
+                <label class="mb-0">Tipo y Nro de Doc @if($mode=='new') <small class="badge badge-secondary"><i class="far fa-clock"></i> <span  class="font-weight-normal" id="contador">0</span></small> @endif </label>
                 <div class="input-group mb-0">
                     <div class="input-group-prepend pr-1">
                         <select name="doctype_id" class="form-control console" required="" style="width:80px;">
@@ -150,8 +172,49 @@
         </div>
     </div>
 </div>
-</form>    
-    
+</form>
+<!-- ------------------------------------------------
+    MODAL
+-->
+
+<div class="modal fade" id="ModalApiSunat"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{{ route('corder_copy_to_output') }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="order_id" value="{{ $row->id }}">
+                <input type="hidden" name="token" value="{{ $row->token }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Parte SALIDA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light">
+                   
+                    <div class="row">
+
+                        <div class="col-6 col-md-3 mt-2">
+                            <label class="mb-0">Fecha</label>
+                            <input type="date" name="datetrx" class="form-control" value="{{ date("Y-m-d") }}"> 
+                        </div>
+                         
+                        <div class="col-md-6 mt-2">
+                            <label class="mb-0">Almacen Salida</label>
+                            <select name="warehouse_id" id="" class="form-control select2-warehouse" required></select>
+                        </div>
+                    </div>
+                     
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
 @endsection
 
 @section('script')

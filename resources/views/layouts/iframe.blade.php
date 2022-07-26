@@ -83,7 +83,13 @@
             </div>
             <div class="tab-content">
                 <div class="tab-empty">
-                    <h2 class="display-4">Aqui</h2>
+                    <h2 class="display-4">
+                        @if(env('APP_ENV','local') == 'production')
+                            -
+                        @else
+                            
+                        @endif
+                    </h2>
                 </div>
                 <div class="tab-loading">
                     <div>
