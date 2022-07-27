@@ -96,8 +96,8 @@
                         @if($mode=='new')
                         <option value="" selected="" disabled="">----</option>
                         @endif
-                        <option value="N" {{ ($row->legalperson == 'N') ? 'selected' : '' }}>PERSONA NATURAL</option>
                         <option value="J" {{ ($row->legalperson == 'J') ? 'selected' : '' }}>PERSONA JURIDICA</option>
+                        <option value="N" {{ ($row->legalperson == 'N') ? 'selected' : '' }}>PERSONA NATURAL</option>
                     </select>
                 </div>                
             </div>
@@ -105,7 +105,7 @@
                 <label class="mb-0">Tipo y Nro de Doc @if($mode=='new') <small class="badge badge-secondary"><i class="far fa-clock"></i> <span  class="font-weight-normal" id="contador">0</span></small> @endif </label>
                 <div class="input-group mb-0">
                     <div class="input-group-prepend pr-1">
-                        <select name="doctype_id" class="form-control console" required="" style="width:80px;">
+                        <select name="doctype_id" id="doctypeid" class="form-control console" required="" style="width:80px;">
                             @if($mode=='new')
                         <option value="" selected="" disabled="">----</option>
                         @endif
@@ -130,7 +130,7 @@
         <div class="row" id="jur">
             <div class="col-md-12 pt-2">
                 <label class="mb-0">Razon Social / Denominacion</label>
-                <input type="text" name="bpartnername" class="form-control" value="{{ $row->bpartnername }}" placeholder="Descripcion" maxlength="150">
+                <input type="text" name="bpartnername" id="bpartnername" class="form-control" value="{{ $row->bpartnername }}" placeholder="Descripcion" maxlength="150">
             </div>
         </div>
         <div class="row" id="nat">
@@ -175,46 +175,36 @@
     MODAL
 -->
 
-<div class="modal fade" id="ModalApiSunat"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content">
-            <form action="{{ route('corder_copy_to_output') }}" method="POST">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="order_id" value="{{ $row->id }}">
-                <input type="hidden" name="token" value="{{ $row->token }}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Buscar en SUNAT</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body bg-light">
-                   
-                    <div class="row">
-                        <div class="col-md-5 mt-2">                            
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">RUC</span>
-                                </div>
-                                <input type="text" class="form-control api_sunat_ruc" placeholder="" aria-label="" aria-describedby="basic-addon2" maxlength="11">
-                                <div class="input-group-append">
-                                    <a href="#" class="btn btn-primary api_sunat_ruc_submit">Buscar</a>
-                                </div>
+<div class="modal fade rounded-2" id="ModalApiSunat"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 400px">
+        <div class="modal-content" id="api-ruc-modal-content">
+            <div class="modal-body bg-light">
+                 
+                <div class="row">
+                    <div class="col-md-12">                            
+                        <div class="input-group mb-0">
+                            <div class="input-group-prepend mr-1">
+                                <select name="" id="xxtp" class="form-control console ">
+                                    <option value="C">CLIENTE</option>
+                                    <option value="P">PROVEEDOR</option>
+                                </select>
                             </div>
-                        </div>                         
-                        <div class="col-md-6 mt-2"></div>
-                    </div>
-                    <hr>
-                     
+                            <input type="text" class="form-control api_sunat_ruc console" placeholder="" aria-label="" aria-describedby="basic-addon2" maxlength="11">
+                            <div class="input-group-append">
+                                <a href="#" class="btn btn-primary api_sunat_ruc_submit">
+                                    <i class="fas fa-search fa-fw"></i>
+                                    Buscar
+                                </a>
+                            </div>
+                        </div>
+                    </div>                         
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times fa-fw"></i> Cancelar</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Continuar</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div> 
+</div>
+
+
 
 @endsection
 
@@ -242,20 +232,40 @@ $(function(){
     $('#legalperson').trigger("change");
 
     $('.api_sunat_ruc_submit').click(function (){
-        $.getJSON('{{ route('bpartner_api_sunat') }}',{ruc:'20292391189'})
-        .done(function(json){
-            console.log('JSON'+json);
-        });
-        /*
-        $.ajax({
-            method: 'GET',
-            url: '{{ route('bpartner_api_sunat') }}',
-            data: { ruc: $('.api_sunat_ruc') }
-        })
-        .done(function( msg ) {
-            alert( "Data Saved: " + msg );
-        });
-        */
+        let lRUC = $('.api_sunat_ruc').val();
+        if( lRUC.trim() == '' ){
+            toastr.error('Debes ingresar el nro de RUC')
+        }else{
+            $('.api_sunat_ruc').prop( "disabled", true );
+            $('.api_sunat_ruc_submit').prop( "disabled", true );
+            $('#api-ruc-modal-content').append('<div class="overlay"><i class="fas fa-2x fa-sync fa-spin"></i></div>');
+            $.getJSON('{{ route('bpartner_api_sunat') }}',{ ruc:lRUC })
+            .done(function(data){
+                if(data.status == 100){
+                    toastr.success('RUC Correcto');
+                    $('#bpartnername').val(data.ficha.n1_alias);
+                    $('#typeperson').val($('#xxtp').val());
+                    $('#legalperson').val('J');
+                    $('#doctypeid').val(1);
+                    $('#documentno').val(data.ficha.n1_ruc);
+                    // trigger -------------------------
+                    $('#legalperson').trigger('change');
+                    $('#documentno').trigger('keyup');
+                    $('#ModalApiSunat').modal('toggle');
+                    console.log(data.ficha);
+                }else{
+                    toastr.error(data.message);
+                }
+                $(".overlay").remove();
+            })
+            .fail(function(){
+                $(".overlay").remove();
+                toastr.error('Se genero un error al hacer la consulta, intente nuevamente');
+                console.log('fail');
+            });            
+            $('.api_sunat_ruc').prop( "disabled", false );
+            $('.api_sunat_ruc_submit').prop( "disabled", false );
+        }
     });
     
 });

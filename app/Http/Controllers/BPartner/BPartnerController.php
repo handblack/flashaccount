@@ -50,7 +50,7 @@ class BPartnerController extends Controller
         }
         $row = new WhBpartner();
         $row->token = old('token',date("His"));
-        $row->typeperson = old('typeperson');
+        $row->typeperson = old('typeperson','J');
         $row->legalperson = old('legalperson');
         $row->bpartnercode = old('bpartnercode');
         $row->bpartnername = old('bpartnername');
@@ -266,16 +266,23 @@ class BPartnerController extends Controller
         /*
         $ficha = file_get_contents($url);
         */
-        $url = 'http://ws.miasoftware.net/sunat/ruc.php?u=soporte@miasoftware.net&l=ABC-ABC-ABC-ABC&f=json&b='. $request->ruc;
-        echo $url;
+        $url = 'http://ws.miasoftware.net/sunat/ruc.php?u=soporte@miasoftware.net&l=ABC-ABC-ABC-ABC&f=plain&b='. $request->ruc;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
         $ficha = curl_exec($ch);
         curl_close($ch);
-        var_dump($ficha);
-        die();
-        return response()->json($ficha);
+        $ficha = explode('|',$ficha);
+        foreach($ficha as $line){
+            $field = explode('=',$line);
+            if(count($field)==2){
+                $ff[$field[0]] = $field[1];
+            }else{
+                $ff[$field[0]] = '';
+            }
+        }
+        $data['ficha'] = $ff;
+        return response()->json($data);
     }
 
     public function api_reniec(Request $request){
