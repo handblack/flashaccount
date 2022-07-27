@@ -103,7 +103,7 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th>Numero</th>
+                        <th>Documento</th>
                         <th class="d-none d-sm-table-cell">CodigoSN</th>
                         <th class="d-none d-sm-table-cell">Socio de Negocio</th>
                         <th class="text-right pr-2">Importe</th>
@@ -115,14 +115,14 @@
                     @forelse ($result as $item)
                         <tr>
                             <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}" width="110">{{ $item->dateorder }}</td>
-                            <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}">
+                            <td class="{{ ($item->docstatus == 'C') ? 'tachado2' : '' }}" width="100">
                                 <a href="{{ route('porder.show',$item->token) }}">
                                     {{ $item->serial }}-{{ $item->documentno }} 
                                 </a>
                                  
                             </td>
                             <td class="d-none d-sm-table-cell" width="115">{{ $item->bpartner->bpartnercode }}</td>
-                            <td class="d-none d-sm-table-cell" width="110">{{ $item->bpartner->bpartnername }}</td>
+                            <td class="d-none d-sm-table-cell">{{ $item->bpartner->bpartnername }}</td>
                             <td class="text-right pr-2 border-left border-right" width="100">
                                 {{ number_format($item->amountgrand, 2) }} <small>{{ $item->currency->currencyiso }}</small>
                             </td>
