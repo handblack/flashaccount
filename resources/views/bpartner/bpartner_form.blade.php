@@ -60,11 +60,11 @@
                 <li>                        
                     <div class="card-tools pull-right">
 
-                        <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiSunat">
+                        <a href="#" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#ModalApiSunat">
                             <i class="fab fa-searchengin fa-fw"></i>
                             &nbsp;<strong>SUNAT</strong>    
                         </a>
-                        <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiReniec">
+                        <a href="#" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#ModalApiReniec">
                             <i class="fab fa-searchengin fa-fw"></i>
                             &nbsp;<strong>RENIEC</strong>    
                         </a>
@@ -174,7 +174,7 @@
 <!-- ------------------------------------------------
     MODAL
 -->
-
+<!-- SUNAT -->
 <div class="modal fade rounded-2" id="ModalApiSunat"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 400px">
         <div class="modal-content" id="api-ruc-modal-content">
@@ -189,11 +189,40 @@
                                     <option value="P">PROVEEDOR</option>
                                 </select>
                             </div>
-                            <input type="text" class="form-control api_sunat_ruc console" placeholder="" aria-label="" aria-describedby="basic-addon2" maxlength="11">
+                            <input type="text" class="form-control api_sunat_ruc console" placeholder="RUC" aria-label="" aria-describedby="basic-addon2" maxlength="11">
                             <div class="input-group-append">
                                 <a href="#" class="btn btn-primary api_sunat_ruc_submit">
                                     <i class="fas fa-search fa-fw"></i>
-                                    Buscar
+                                    Sunat
+                                </a>
+                            </div>
+                        </div>
+                    </div>                         
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- RENIEC -->
+<div class="modal fade rounded-2" id="ModalApiReniec"   role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 400px">
+        <div class="modal-content" id="api-ruc-modal-content">
+            <div class="modal-body bg-light">
+                 
+                <div class="row">
+                    <div class="col-md-12">                            
+                        <div class="input-group mb-0">
+                            <div class="input-group-prepend mr-1">
+                                <select name="" id="xxtp" class="form-control console ">
+                                    <option value="C">CLIENTE</option>
+                                    <option value="P">PROVEEDOR</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control api_sunat_ruc console" placeholder="DNI" aria-label="" aria-describedby="basic-addon2" maxlength="8">
+                            <div class="input-group-append">
+                                <a href="#" class="btn btn-primary api_sunat_ruc_submit">
+                                    <i class="fas fa-search fa-fw"></i>
+                                    Reniec
                                 </a>
                             </div>
                         </div>
@@ -216,7 +245,7 @@ $(function(){
         $('#contador').html(currentString.length);
         let code = '000000000000' + $("#documentno").val();
         @if($mode=='new')
-        $('#bpartnercode').val($('#typeperson').val() + code.substr(code.length - 11));        
+            $('#bpartnercode').val($('#typeperson').val() + code.substr(code.length - 11));        
         @endif
     });
     $('#legalperson').on('change',function(){
@@ -229,6 +258,11 @@ $(function(){
             $('#nat').show();
         }
     });
+
+    $('#typeperson').change(function(){
+        $('#documentno').trigger("keyup");    
+    });
+
     $('#legalperson').trigger("change");
 
     $('.api_sunat_ruc_submit').click(function (){

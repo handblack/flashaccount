@@ -24,7 +24,7 @@ class BPartnerController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $module = 'bpartner.manager';
-    public function index()
+    public function index(Request $request)
     {
         if(auth()->user()->grant($this->module)->isgrant == 'N'){
             return view('error',[
@@ -32,9 +32,17 @@ class BPartnerController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhBpartner::paginate(env('PAGINATE_BPARTNER',30));
+        $result = WhBpartner::where(function($query) use($request){
+            if(is_numeric($request->q)){
+                $query->where('documentno',$request->q);
+            }else{
+                $q = str_replace(' ','%',$request->q).'%';
+                $query->where('bpartnername','LIKE',$q);
+            }
+        })->paginate(env('PAGINATE_BPARTNER',30));
         return view('bpartner.bpartner',[
-            'result' => $result, 
+            'result' => $result,
+            'q' => $request->q,
         ]);
     }
 
