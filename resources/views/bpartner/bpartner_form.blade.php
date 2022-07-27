@@ -12,7 +12,8 @@
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
                         <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
-                            <i class="fas fa-redo" aria-hidden="true"></i>
+                            <i class="fas fa-redo fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
                 </div>
@@ -55,26 +56,23 @@
             </ul>
         </div>
         <div class="card-tools">
-            <form action="{{ route('linput.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="mode" value="create">
-                <ul class="nav">
-                    <li>                        
-                        <div class="card-tools pull-right">
-                            <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiSunat">
-                                <i class="fab fa-searchengin fa-fw"></i>
-                                &nbsp;<strong>SUNAT</strong>    
-                            </a>
+            <ul class="nav">
+                <li>                        
+                    <div class="card-tools pull-right">
 
+                        <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiSunat">
+                            <i class="fab fa-searchengin fa-fw"></i>
+                            &nbsp;<strong>SUNAT</strong>    
+                        </a>
+                        <a href="#" class="btn btn-outline-dark btn-sm btn-add-product" data-toggle="modal" data-target="#ModalApiReniec">
+                            <i class="fab fa-searchengin fa-fw"></i>
+                            &nbsp;<strong>RENIEC</strong>    
+                        </a>
 
-                            <button type="submit" class="btn btn-default btn-sm">
-                                <i class="fab fa-searchengin fa-fw"></i>
-                                &nbsp;Reniec
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </form>
+                    </div>
+                </li>
+            </ul>
+            
         </div>
     </div>
     <div class="card-body">
@@ -185,7 +183,7 @@
                 <input type="hidden" name="order_id" value="{{ $row->id }}">
                 <input type="hidden" name="token" value="{{ $row->token }}">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Crear Parte SALIDA</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Buscar en SUNAT</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -193,17 +191,20 @@
                 <div class="modal-body bg-light">
                    
                     <div class="row">
-
-                        <div class="col-6 col-md-3 mt-2">
-                            <label class="mb-0">Fecha</label>
-                            <input type="date" name="datetrx" class="form-control" value="{{ date("Y-m-d") }}"> 
-                        </div>
-                         
-                        <div class="col-md-6 mt-2">
-                            <label class="mb-0">Almacen Salida</label>
-                            <select name="warehouse_id" id="" class="form-control select2-warehouse" required></select>
-                        </div>
+                        <div class="col-md-5 mt-2">                            
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">RUC</span>
+                                </div>
+                                <input type="text" class="form-control api_sunat_ruc" placeholder="" aria-label="" aria-describedby="basic-addon2" maxlength="11">
+                                <div class="input-group-append">
+                                    <a href="#" class="btn btn-primary api_sunat_ruc_submit">Buscar</a>
+                                </div>
+                            </div>
+                        </div>                         
+                        <div class="col-md-6 mt-2"></div>
                     </div>
+                    <hr>
                      
                 </div>
                 <div class="modal-footer">
@@ -239,6 +240,23 @@ $(function(){
         }
     });
     $('#legalperson').trigger("change");
+
+    $('.api_sunat_ruc_submit').click(function (){
+        $.getJSON('{{ route('bpartner_api_sunat') }}',{ruc:'20292391189'})
+        .done(function(json){
+            console.log('JSON'+json);
+        });
+        /*
+        $.ajax({
+            method: 'GET',
+            url: '{{ route('bpartner_api_sunat') }}',
+            data: { ruc: $('.api_sunat_ruc') }
+        })
+        .done(function( msg ) {
+            alert( "Data Saved: " + msg );
+        });
+        */
+    });
     
 });
 </script>

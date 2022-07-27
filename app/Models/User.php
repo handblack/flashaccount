@@ -151,7 +151,7 @@ class User extends Authenticatable
                                 ->pluck('warehouse_id')
                                 ->toArray();        
                         if($whi || $this->isadmin == 'N'){
-                            $warehouse = $query->whereIn('id',$whi);
+                            $query->whereIn('id',$whi);
                         }
                     });
         

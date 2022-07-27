@@ -93,6 +93,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::match(array('GET','POST'),'/bpartner/report/move/result',[BPartnerController::class,'rpt_move_form'])->name('bpartner_rpt_move_form');
     Route::get('/bpartner/report/move/pdf',[BPartnerController::class,'rpt_move_pdf'])->name('bpartner_rpt_move_pdf');
     Route::get('/bpartner/report/move/csv',[BPartnerController::class,'rpt_move_csv'])->name('bpartner_rpt_move_csv');
+    // API - Buscaqueda de RUC y DNI
+    Route::get('/bpartner/api/sunat',[BPartnerController::class,'api_sunat'])->name('bpartner_api_sunat');
+    Route::get('/bpartner/api/reniec',[BPartnerController::class,'api_reniec'])->name('bpartner_api_reniec');
+
+
 
     Route::get('/bpartner/report/receivable/form',[BPartnerController::class,'rpt_receivable'])->name('bpartner_rpt_receivable');    
     Route::match(array('GET','POST'),'/bpartner/report/receivable/result',[BPartnerController::class,'rpt_receivable_form'])->name('bpartner_rpt_receivable_form');

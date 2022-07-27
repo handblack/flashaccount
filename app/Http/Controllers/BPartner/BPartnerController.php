@@ -216,7 +216,71 @@ class BPartnerController extends Controller
             'results' => $result->toArray(),
         ]);
     }
+    /*
+        ---------------------------------------------------------------------------------------------------
+        API - SUNAT - RENIEC
+        ---------------------------------------------------------------------------------------------------
+    */
 
+    public function api_sunat_validate_ruc($data=""){
+        $Factores = [5,4,3,2,7,6,5,4,3,2];
+        $NroDocumento=trim($data);
+        $NroIdentificador=substr($NroDocumento, -1);
+        $Productos = 0;
+        $response = '';
+        for($i = 0; $i < 10; $i++){
+            $Valor = substr($NroDocumento, (int)$i,(int)1);
+            $Productos += $Valor * $Factores[$i];
+        }
+        $Resultado = 11 - ($Productos % 11);
+        switch ($Resultado){
+            case 10: $Resultado=0;break;
+            case 11:$Resultado=1;break;
+        }
+        if ($Resultado > 11){ $Resultado=substr($Resultado, -1);}
+        if($NroDocumento==''){
+            $response = false;
+        }else{
+            if ($Resultado == $NroIdentificador){
+                $response = true;
+            }else{
+                $response = false;
+            }
+        }
+        return $response;
+    }
+
+    public function api_sunat(Request $request){
+        $data['message'] = 'OK';
+        $data['status'] = 100;
+        // validacion ---------------------------------------------
+        //$va = substr($request->ruc,0,2);
+        if(!$this->api_sunat_validate_ruc($request->ruc)){
+            $data['message'] = 'El RUC ingresado no es validao';
+            $data['status'] = 101;            
+        }
+        if($data['status'] <> 100){            
+            return response()->json($data); //respondemos porque hay error
+        }
+        // procesamos ---------------------------------------------
+        /*
+        $ficha = file_get_contents($url);
+        */
+        $url = 'http://ws.miasoftware.net/sunat/ruc.php?u=soporte@miasoftware.net&l=ABC-ABC-ABC-ABC&f=json&b='. $request->ruc;
+        echo $url;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $ficha = curl_exec($ch);
+        curl_close($ch);
+        var_dump($ficha);
+        die();
+        return response()->json($ficha);
+    }
+
+    public function api_reniec(Request $request){
+
+    }
 
     /*
         ---------------------------------------------------------------------------------------------------
@@ -396,9 +460,11 @@ class BPartnerController extends Controller
         Cuentas por PAGAR
         ---------------------------------------------------------------------------------------------------
     */
+
     public function rpt_payable(Request $request){
         return view('bpartner.rpt_payable');
     }
+
     public function rpt_payable_form(Request $request){
         if ($request->method() == 'POST'){
             $request->validate([
@@ -424,6 +490,7 @@ class BPartnerController extends Controller
             'result' => $result,
         ]);
     }
+
     public function rpt_payable_pdf(Request $request){
         $filename = 'cta_x_pagar_'.date("Y_m_d_His").'.pdf';
         $result = TempInvoiceOpen::where('session',session('session_rpt_invoice_open'))->get();
@@ -432,6 +499,7 @@ class BPartnerController extends Controller
         ]);
         return $pdf->download($filename);
     }
+
     public function rpt_payable_csv(Request $request){
         $filename = 'cta_x_pagar_'.date("Y_m_d_His").'.csv';
         $headers = array(
