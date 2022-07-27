@@ -175,6 +175,7 @@ class ProductController extends Controller
                 $query->where('productname','LIKE',"{$qq}%");
             }
         })
+        ->limit(40)
         ->get(['id',DB::raw('CONCAT(productcode,\' - \',productname) as text')]);
         return response()->json([
             'results' => $result->toArray()
