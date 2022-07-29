@@ -3,6 +3,8 @@
 use App\Http\Controllers\Bank\BankAllocateController;
 use App\Http\Controllers\Bank\BankExpensesController;
 use App\Http\Controllers\Bank\BankIncomeController;
+use App\Http\Controllers\BPartner\BPartnerAddressController;
+use App\Http\Controllers\BPartner\BPartnerContactController;
 use App\Http\Controllers\BPartner\BPartnerController;
 use App\Http\Controllers\Compras\PInvoiceController;
 use App\Http\Controllers\Compras\POrderController;
@@ -88,6 +90,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         ---------------------------------------------------------------------------------------------------------------
     */
     Route::resource('/bpartner/manager',BPartnerController::class, ['names' => 'bpartner']);
+    Route::resource('/bpartner/address',BPartnerAddressController::class, ['names' => 'bpartneraddress']);
+    Route::resource('/bpartner/contact',BPartnerContactController::class, ['names' => 'bpartnercontact']);
 
     Route::get('/bpartner/report/move/form',[BPartnerController::class,'rpt_move'])->name('bpartner_rpt_move');
     Route::match(array('GET','POST'),'/bpartner/report/move/result',[BPartnerController::class,'rpt_move_form'])->name('bpartner_rpt_move_form');

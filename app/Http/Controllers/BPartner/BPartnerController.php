@@ -8,6 +8,7 @@ use App\Models\TempInvoiceOpen;
 use App\Models\VRptBpartnerMove;
 use App\Models\WhBExpense;
 use App\Models\WhBIncome;
+use App\Models\WhBpAddress;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
 use App\Models\WhDocType;
@@ -90,7 +91,12 @@ class BPartnerController extends Controller
             'doctype_id' => 'required',
             'documentno' => 'required',
             'typeperson' => 'required',
-            'legalperson' => 'required',         
+            'legalperson' => 'required',
+            'address' => 'required',
+            'bpartner_country_id' => 'required',
+            'bpartner_state_id' => 'required',
+            'bpartner_county_id' => 'required',
+            'bpartner_city_id' => 'required',
         ]);
         if($request->legalperson == 'N'){
             if(!$request->lastname){
@@ -109,6 +115,17 @@ class BPartnerController extends Controller
         $row->bpartnername = ($request->legalperson == 'J') ? strtoupper($row->bpartnername) : trim($row->lastname) .' '. trim($row->firstname) .', '. trim($request->prename);
         $row->save();
         $row->token = $hash->encode($row->id);
+        $row->save();
+        // Agregando direcciones fiscal
+        $add = new WhBpAddress();
+        $add->fill($request->all());
+        $add->bpartner_id = $row->id;
+        $add->save();
+        $add->token = $hash->encode($add->id);
+        $add->save();
+        //Actualizamos las direcciones
+        $row->address_fiscal_id   = $add->id;
+        $row->address_delivery_id = $add->id;
         $row->save();
         return redirect()->route('bpartner.index')->with('message','Registro creado');
     }
@@ -137,6 +154,7 @@ class BPartnerController extends Controller
         }
         $row = WhBpartner::where('token',$id)->first();
         $dt = WhDocType::where('group_id',1)->get();
+        session(['current_profile_bpartner_id' => $row->id]);
         return view('bpartner.bpartner_form',[
             'mode' => 'edit',
             'row'  => $row,

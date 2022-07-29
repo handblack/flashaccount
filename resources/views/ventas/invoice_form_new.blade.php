@@ -17,7 +17,7 @@
     </div>
 </section>
 
-<section class="content-header">
+<section class="content-header pt-1 pb-2">
     <div class="container-fluid">
         <div class="d-flex justify-content-between">
             <div>

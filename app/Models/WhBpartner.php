@@ -18,6 +18,12 @@ class WhBpartner extends Model
         'lastname',
         'firstname',
         'prename',
+        'adrress_fiscal_id',
+        'adrress_delivery_id',
         'token',
     ];
+
+    public function addresses(){
+        return $this->hasMany(WhBpAddress::class,'bpartner_id','id');
+    }
 }
