@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\BPartner;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhBpartner;
+use App\Models\WhBpContact;
+use App\Models\WhTypeContact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BPartnerContactController extends Controller
 {
@@ -14,7 +18,13 @@ class BPartnerContactController extends Controller
      */
     public function index()
     {
-        //
+        if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
+        $row    = WhBpartner::find(session('current_profile_bpartner_id'));
+        $result = WhBpContact::where('bpartner_id',$row->id)->get();       
+        return view('bpartner.contact',[
+            'row'    => $row,            
+            'result' => $result,
+        ]);
     }
 
     /**
@@ -24,7 +34,13 @@ class BPartnerContactController extends Controller
      */
     public function create()
     {
-        //
+        $row = new WhBpContact();
+        $header = WhBpartner::find(session('current_profile_bpartner_id'));
+        return view('bpartner.contact_form',[
+            'row' => $row,
+            'header' => $header,
+            'mode' => 'new',
+        ]);
     }
 
     /**
@@ -35,7 +51,14 @@ class BPartnerContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
+        $row = new WhBpContact();
+        $row->fill($request->all());
+        $row->bpartner_id = session('current_profile_bpartner_id');
+        $row->token = md5(date("YmdHis"));
+        $row->save();
+        //dd($row);
+        return redirect()->route('bpartnercontact.index')->with('message','Registro agregado');
     }
 
     /**

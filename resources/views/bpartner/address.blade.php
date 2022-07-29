@@ -1,10 +1,5 @@
 @extends('layouts.app')
-
-@section('header')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
-
+ 
 @section('breadcrumb')
     <section class="content-header pb-2">
         <div class="container-fluid">
@@ -92,7 +87,6 @@
                 
             </ul>
         </div>
-         
     </div>
     <div class="card-header" style="background-color: #fff;">
         <h3 class="card-title">{{ $row->bpartnercode }} - {{ $row->bpartnername }}</h3>
@@ -149,46 +143,4 @@
 @endsection
 
 
-@section('script')
-<script>
-$(function(){
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    $('.delete-record').click(function(e){
-        e.preventDefault()
-        if (confirm('Estas seguro en eliminar?')) {
-            let id = $(this).data('id');
-            let url = $(this).data('url');
-            $.post(url,{_method:'delete'})
-            .done(function(data){
-                if(data.status == 100){
-                    $('#tr-'+id).remove();
-                    toastr.success('Elemento eliminado');
-                }else{
-                    toastr.error(data.message);
-                }
-            });
-        }
-    });
-});
-
-@if (\Session::has('error'))
-    toastr.error('{{ session('error') }}');
-@endif
-
-@if (\Session::has('message'))
-    toastr.success('{{ session('message') }}');
-@endif
-
-@if ($errors->any())
-    @foreach ($errors->all() as $error)
-        toastr.error('{{ $error }}');
-    @endforeach
-@endif
-</script>
-@endsection
-
+ 
