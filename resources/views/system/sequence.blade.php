@@ -85,8 +85,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($result as $item)
-                        <tr>
+                    @forelse ($result as $item)                        
+                        <tr id="tr-{{ $item->id }}">
                             <td>
                                 <strong>{{ $item->doctype->group->shortname }}</strong> - 
                                 {{ $item->doctype->doctypename }}

@@ -16,6 +16,7 @@ class BPartnerContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'bpartner.contact';
     public function index()
     {
         if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
@@ -53,9 +54,24 @@ class BPartnerContactController extends Controller
     {
         if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
         $row = new WhBpContact();
-        $row->fill($request->all());
         $row->bpartner_id = session('current_profile_bpartner_id');
-        $row->token = md5(date("YmdHis"));
+        $row->token       = md5(date("YmdHis"));
+        $row->contactname = $request->contactname;
+        $row->workplace   = $request->workplace;
+        $email =  [];
+        foreach($request->email as $item){
+            if($item){
+                $email[] = $item;
+            }
+        }
+        $row->email = $email;
+        $phone =  [];
+        foreach($request->phone as $item){
+            if($item){
+                $phone[] = $item;
+            }
+        }
+        $row->phone = $phone;
         $row->save();
         //dd($row);
         return redirect()->route('bpartnercontact.index')->with('message','Registro agregado');
@@ -80,7 +96,13 @@ class BPartnerContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row = WhBpContact::where('token',$id)->first();
+        $header = WhBpartner::find(session('current_profile_bpartner_id'));
+        return view('bpartner.contact_form',[
+            'row'    => $row,
+            'header' => $header,
+            'mode'   => 'edit',
+        ]);
     }
 
     /**
@@ -92,7 +114,30 @@ class BPartnerContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
+        $row = WhBpContact::where('token',$id)->first();
+        $row->contactname = $request->contactname;
+        $row->workplace   = $request->workplace;
+        $email =  [];
+        if($request->has('email')){
+            foreach($request->email as $item){
+                if($item){
+                    $email[] = $item;
+                }
+            }
+        }
+        $row->email = $email;
+        $phone =  [];
+        if($request->has('phone')){
+            foreach($request->phone as $item){
+                if($item){
+                    $phone[] = $item;
+                }
+            }
+        }
+        $row->phone = $phone;
+        $row->save();
+        return redirect()->route('bpartnercontact.index');
     }
 
     /**
@@ -103,6 +148,21 @@ class BPartnerContactController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data['status'] = 100;
+        $data['message'] = 'Registro eliminado';
+
+        if(auth()->user()->grant($this->module)->isdelete == 'N'){
+            $data['status'] = 102;
+            $data['message'] = 'No tienes privilegio para eliminar';
+        }
+        
+        $row = WhBpContact::where('token',$id)->first();
+        if($row){
+            $row->delete();
+        }else{
+            $data['status'] = 101;
+            $data['message'] = 'El registro no existe o fue eliminado';
+        }
+        return response()->json($data);
     }
 }

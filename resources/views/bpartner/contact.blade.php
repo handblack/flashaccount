@@ -102,10 +102,26 @@
     <div class="card-body">
         <div class="row">
             @forelse($result as $item)
-                <div class="col-md-3">
-                    <div class="">
-                        <strong>{{ $item->contactname }}</strong>
-                        <br>{{ $item->workplace }}
+                <div class="col-md-3" id="tr-{{ $item->id }}">
+                    <div class="p-2" style="border:1px solid #dcdcdc;border-radius:4px;">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="mb-0">{{ $item->contactname }}</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="mb-0 float-right">
+                                    <a href="{{ route('bpartnercontact.edit',[$item->token]) }}">
+                                        <i class="fas fa-edit fa-fw"></i>
+                                    </a>
+                                    <a class="delete-record" 
+                                        data-url="{{ route('bpartnercontact.destroy', $item->token) }}"
+                                        data-id="{{ $item->id }}">
+                                        <i class="far fa-trash-alt fa-fw"></i>
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+                        {{ $item->workplace }}
                         <ul class="list-unstyled">
                             @foreach ($item->email as $email)
                                 <li><i class="fas fa-envelope-open-text fa-fw"></i> {{ $email }}</li>

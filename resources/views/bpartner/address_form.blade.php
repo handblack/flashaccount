@@ -29,7 +29,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('bpartner.edit',[$header->token]) }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('bpartner.index') }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -60,10 +60,45 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="{{ ($mode == 'edit') ? 'PUT' : '' }}">
     <input type="hidden" name="master" value="{{ $row->token }}">
-    <div class="card shadow">
-        <div class="card-header card-header2">
-            <h3 class="card-title"><i class="fas fa-map-marked-alt fa-fw"></i> Direcciones [<strong>{{ ($mode=='new') ? 'NUEVO' : 'MODIFICAR' }}</strong>]</h3>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <a href="{{ route('bpartner.edit',[$header->token]) }}">
+                                <i class="far fa-address-card fa-fw"></i>
+                                <span class="d-none d-sm-inline-block">
+                                    Socio de Negocio </strong>
+                                </span>
+                            </a>
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <span class="nav-link active">
+                            <i class="fas fa-map-marked fa-fw"></i>
+                            <span class="d-none d-sm-inline-block">
+                                Direcciones
+                            </span>
+                        </span>
+                    </li>
+    
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <a href="{{ route('bpartnercontact.index') }}">
+                                <i class="far fa-address-book fa-fw"></i>
+                                <span class="d-none d-sm-inline-block">
+                                    Contactos
+                                </span>
+                            </a>
+                        </span>
+                    </li>
+                    
+                </ul>
+            </div>
         </div>
+       
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">                    
@@ -84,7 +119,7 @@
                 </div>
                 <div class="col-md-3 mt-2">
                     <label class="mb-0"><a href="http://codigopostal.gob.pe/pages/invitado/consulta.jsf" target="_blank">Codigo Postal <i class="fas fa-external-link-alt fa-fw"></i></a></label>
-                    <input type="text" name="zipcode" id="zipcode" value="{{ $row->zipcode }}" class="form-control" required>
+                    <input type="text" name="zipcode" id="zipcode" value="{{ $row->zipcode }}" class="form-control">
                 </div>
             </div>
             <div class="row">

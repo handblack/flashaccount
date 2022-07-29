@@ -21,6 +21,7 @@ class BPartnerAddressController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $module = 'bpartner.address';
     public function index()
     {
         if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
@@ -67,6 +68,13 @@ class BPartnerAddressController extends Controller
         $row->save();
         $row->token = $hash->encode($row->id);
         $row->save();
+        $chk = WhBpAddress::where('bpartner_id',session('current_profile_bpartner_id'))->get();
+        if(count($chk) == 1){
+            $bp =  WhBpartner::where('bpartner_id',session('current_profile_bpartner_id'))->first();
+            $bp->address_fiscal_id = $row->id;
+            $bp->address_delivery_id = $row->id;
+            $bp->save();
+        }
         return redirect()->route('bpartneraddress.index');
     }
 
@@ -111,6 +119,13 @@ class BPartnerAddressController extends Controller
         $row->fill($request->all());
         $row->address = strtoupper($row->address);
         $row->save();
+        $chk = WhBpAddress::where('bpartner_id',session('current_profile_bpartner_id'))->get();
+        if(count($chk) == 1){
+            $bp =  WhBpartner::where('bpartner_id',session('current_profile_bpartner_id'))->first();
+            $bp->address_fiscal_id = $row->id;
+            $bp->address_delivery_id = $row->id;
+            $bp->save();
+        }
         return redirect()->route('bpartneraddress.index');
     }
 

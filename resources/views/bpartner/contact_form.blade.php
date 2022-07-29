@@ -1,17 +1,11 @@
 @extends('layouts.app')
 
-@section('header')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-@endsection
-
 @section('breadcrumb')
     <section class="content-header pb-2">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-map-marked fa-fw"></i> Direcciones</h1>
+                    <h1><i class="far fa-address-book fa-fw"></i> Contactos</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -29,7 +23,7 @@
                 <div class="col-sm-6">
 
                     <div class="btn-group">
-                        <a class="btn btn-sm btn-secondary" href="{{ route('bpartner.edit',[$header->token]) }}" title="Recargar">
+                        <a class="btn btn-sm btn-secondary" href="{{ route('bpartner.edit',[$row->token]) }}" title="Recargar">
                             <i class="fas fa-list fa-fw" aria-hidden="true"></i>
                             <span class="d-none d-lg-inline-block">Todos</span>
                         </a>
@@ -56,7 +50,7 @@
  
 
 @section('container')
-<form class="" action="{{ ($mode == 'edit') ? route('bpartneraddress.update',$row->token) : route('bpartneraddress.store') }}" method="POST">
+<form class="" action="{{ ($mode == 'edit') ? route('bpartnercontact.update',$row->token) : route('bpartneraddress.store') }}" method="POST">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input type="hidden" name="_method" value="{{ ($mode == 'edit') ? 'PUT' : '' }}">
     <input type="hidden" name="master" value="{{ $row->token }}">
@@ -66,7 +60,7 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
                         <span class="nav-link">
-                            <a href="{{ route('bpartner.edit',[$header->token]) }}">
+                            <a href="{{ route('bpartner.edit',[$row->token]) }}">
                                 <i class="far fa-address-card fa-fw"></i>
                                 <span class="d-none d-sm-inline-block">
                                     Socio de Negocio </strong>
@@ -76,7 +70,7 @@
                     </li>
                     
                     <li class="nav-item">
-                        <span class="nav-link ">
+                        <span class="nav-link">
                             <a href="{{ route('bpartneraddress.index') }}">
                                 <i class="fas fa-map-marked fa-fw"></i>
                                 <span class="d-none d-sm-inline-block">
@@ -87,7 +81,7 @@
                     </li>
     
                     <li class="nav-item">
-                        <span class="nav-link active">                            
+                        <span class="nav-link active">
                             <i class="far fa-address-book fa-fw"></i>
                             <span class="d-none d-sm-inline-block">
                                 Contactos
@@ -98,42 +92,96 @@
                 </ul>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-header" style="background-color: #fff;">
+            {{ $header->bpartnercode }} - {{ $header->bpartnername }}
+        </div>
+ 
+        <div class="card-body pt-1 bg-light">
+             
             <div class="row">
-                <div class="col-md-12">                    
-                    <input type="text" value="{{ $header->bpartnercode }} - {{ $header->bpartnername }}" class="form-control" disabled>
+                <div class="col-md-6 mt-2">
+                    <label class="mb-0">Contacto </label>
+                    <input type="text" name="contactname" value="{{ $row->contactname }}" class="form-control" maxlength="100">
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="mb-0">Cargo / Referencia</label>
+                    <input type="text" name="workplace" value="{{ $row->workplace }}" class="form-control" maxlength="100">
                 </div>
             </div>
-
+        </div>
+        <div class="card-body pt-1">
+            
             <div class="row">
-                <div class="col-md-5">
-                    <label class="mb-1">Contacto</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <select name="typecontact_id" id="typecontact_id" class="form-control">
-                                @foreach ($typec as $item)
-                                    <option value="{{ $item->id }}" {{ ($item->id == $row->typecontact_id) ? 'selected' : '' }}>{{ $item->typecontactname }}</option>
-                                @endforeach
-                            </select>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="mb-0">Email</label>
+                            <label class="float-right mb-0"><a href="#" class="font-weight-light add-email"><i class="far fa-plus-square fa-fw"></i> Agregar</a></label>
                         </div>
-                        <input type="text" class="form-control" name="contactvalue" required>
                     </div>
+                    <div class="row" id="form_email"></div>
+                    <!-- EMAIL -->
+                    @foreach ($row->email as $item)
+                        <div class="row">
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group mb-0">
+                                    <div class="input-group-prepend" >
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope-open-text fa-fw"></i></span>
+                                    </div>
+                                    <input type="email" name="email[]" value="{{ $item }}" class="form-control " placeholder="E-mail" aria-label="E-mail" aria-describedby="basic-addon1" required>
+                                    <div class="input-group-append">
+                                        <a href="#" class="btn btn-outline-danger del-email" onclick="del_email(this);">
+                                            <i class="far fa-times-circle"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="col-md-3">
-                    <label class="mb-1">Referencia</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" name="reference" value="{{ $item->reference }}">
+                <div class="col-md-6">  
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="mb-0">Telefono</label>
+                            <label class="float-right mb-0"><a href="#" class="font-weight-light add-phone"><i class="far fa-plus-square fa-fw"></i> Agregar</a></label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <label class="mb-1">Estado</label>
-                    <select name="isactive" id="isactive" class="form-control">
-                        <option value="Y" {{ ($row->isactive == 'Y') ? 'selected' : '' }}>ACTIVO</option>
-                        <option value="N" {{ ($row->isactive == 'N') ? 'selected' : '' }}>DESACTIVADO</option>
-                    </select>
+                    <div class="row" id="form_phone"></div>
+                    <!-- TELEFONO -->
+                    @foreach ($row->phone as $item)
+                        <div class="row">                        
+                            <div class="col-md-12 mt-1">
+                                <div class="input-group mb-0">
+                                    <div class="input-group-prepend" >
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-mobile-alt fa-fw"></i></span>
+                                    </div>
+                                    <input type="text" 
+                                        required 
+                                        name="phone[]" 
+                                        value="{{ $item }}" 
+                                        class="form-control console" 
+                                        placeholder="Telefono" aria-label="Telefono" 
+                                        aria-describedby="basic-addon1" 
+                                        data-inputmask="'mask': ['999-999-9999 [x99999]', '+099 99 99 9999[9]-9999']" 
+                                        data-mask="" inputmode="text">
+                                    
+                                    <div class="input-group-append">
+                                        <a href="#" class="btn btn-outline-danger del-email" onclick="del_email(this);">
+                                            <i class="far fa-times-circle"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                  
                 </div>
             </div>
+            
+            
 
+           
 
       
            
@@ -142,7 +190,7 @@
             <div class="row">
                 <div class="col text-center"></div>
                 <div class="col text-right">
-                    <a href="{{ route('bpartneraddress.index') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('bpartnercontact.index') }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">Cancelar</span>
                     </a>
@@ -156,115 +204,65 @@
 
     </div>
 </form>
+
+
+
+<div style="display:none">
+    <!-- muestra email -->
+    <div id="new_form_email">
+        <div class="row">
+            <div class="col-md-12 mt-1">
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend" >
+                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope-open-text fa-fw"></i></span>
+                    </div>
+                    <input type="email" name="email[]" class="form-control " placeholder="E-mail" aria-label="E-mail" aria-describedby="basic-addon1" required>
+                    <div class="input-group-append">
+                        <a href="#" class="btn btn-outline-danger del-email" onclick="del_email(this);">
+                            <i class="far fa-times-circle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- muestra phone -->
+    <div id="new_form_phone">
+        <div class="row">
+            <div class="col-md-12 mt-1">
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend" >
+                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-mobile-alt fa-fw"></i></span>
+                    </div>
+                    <input type="text" name="phone[]" class="form-control " placeholder="Telefono" aria-label="Telefono" aria-describedby="basic-addon1" required>
+                    <div class="input-group-append">
+                        <a href="#" class="btn btn-outline-danger del-email" onclick="del_email(this);">
+                            <i class="far fa-times-circle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 
 @section('script')
-<script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
-<script src="{{ asset('plugins/jquery-number/jquery.number.min.js') }}"></script>
-<script>
- $(function(){
-    //Servicio de AJAX
-    $.ajaxSetup({
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+<script>    
+$(function(){
+    $('.add-email').click(function(){
+        $('#form_email').after($('#new_form_email').html());
     });
-
-    $('.select2-country').select2({
-        ajax: {
-            url: '{{ route('api.bpartnercountry') }}',
-            type:'post',
-            dataType: 'json',
-            delay: 150,
-            data: function (params) {
-                return {
-                    q: params.term, // search term
-                    // id: $('.select2-country').val(),
-                    page: params.page
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        theme:'bootstrap4'
+    $('.add-phone').click(function(){
+        $('#form_phone').after($('#new_form_phone').html());
     });
-    $('.select2-country').on('select2:select', function (e) {
-        $('.select2-state').val(null).trigger('change');
-        $('.select2-county').val(null).trigger('change');
-        $('.select2-city').val(null).trigger('change');
-    });
+});
 
-
-    $('.select2-state').select2({
-        ajax: {
-            url: '{{ route('api.bpartnerstate') }}',
-            type:'post',
-            dataType: 'json',
-            delay: 150,
-            data: function (params) {
-                return {
-                    q: params.term, // search term
-                    id: $('.select2-country').val(),
-                    page: params.page
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        theme:'bootstrap4'
-    });
-    $('.select2-state').on('select2:select', function (e) {
-        //$('.select2-state').val(null).trigger('change');
-        $('.select2-county').val(null).trigger('change');
-        $('.select2-city').val(null).trigger('change');
-    });
-
-    $('.select2-county').select2({
-        ajax: {
-            url: '{{ route('api.bpartnercounty') }}',
-            type:'post',
-            dataType: 'json',
-            delay: 150,
-            data: function (params) {
-                return {
-                    q: params.term, // search term
-                    id: $('.select2-state').val(),
-                    page: params.page
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        theme:'bootstrap4'
-    });
-    $('.select2-county').on('select2:select', function (e) {
-        //$('.select2-state').val(null).trigger('change');
-        //$('.select2-county').val(null).trigger('change');
-        $('.select2-city').val(null).trigger('change');
-    });
-
-    $('.select2-city').select2({
-        ajax: {
-            url: '{{ route('api.bpartnercity') }}',
-            type:'post',
-            dataType: 'json',
-            delay: 150,
-            data: function (params) {
-                return {
-                    q: params.term, // search term
-                    id: $('.select2-county').val(),
-                    page: params.page
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 0,
-        theme:'bootstrap4'
-    });
-
-
-
-}); 
-</script>
+function del_email(t){
+    console.log('clic-del');
+    $(t).parent().parent().parent().parent().remove();
+}
+</script>    
 @endsection
