@@ -133,7 +133,9 @@
                     </div>
                 </div>
             @empty
-                <p class="lead">Sin informacion</p>
+                <div class="col-md-12">
+                    <p class="lead">Sin informacion</p>
+                </div>
             @endforelse
         </div>
     </div>

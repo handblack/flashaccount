@@ -208,6 +208,41 @@
                             placeholder="" maxlength="60">
                     </div>
                 </div>
+                <!-- Parametros -->
+                <legend  class="text-info mt-3 mb-0"><i class="fas fa-cogs fa-fw"></i> Ventas - Emision de CPE</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="mb-0">Lista de Precios</label>
+                        <select class="form-control" name="pricelist_id" required>
+                            @if($mode=='new')
+                                <option value="">-- SELECCIONE --</option>
+                            @endif
+                            @foreach ($pl as $item)
+                                <option value="{{ $item->id }}" {{ ($item->id == $row->pricelist_id) ? 'selected' : '' }}>{{ $item->pricelistname }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="mb-0">Comprobante a emitir</label>
+                        <select class="form-control" name="sales_doctype_id" required>
+                            @if($mode=='new')
+                                <option value="">-- SELECCIONE --</option>
+                            @endif
+                            @foreach ($cp as $item)
+                                <option value="{{ $item->id }}" {{ ($item->id == $row->sales_doctype_id) ? 'selected' : '' }}>{{ $item->doctypename }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="mb-0">Afectacion PU</label>
+                        <select class="form-control" name="istaxpriceunit" required> 
+                            <option value="Y" {{ ($row->istaxpriceunit == 'Y') ? 'selected' : '' }}>Precio Unitario CON IGV</option>
+                            <option value="N" {{ ($row->istaxpriceunit == 'N') ? 'selected' : '' }}>Precio Unitario SIN IGV</option>
+                        </select>
+                    </div>
+                </div>
+
+
                 @if ($mode == 'new')
                     <legend  class="text-info mt-3 mb-0"><i class="fas fa-map-marked-alt fa-fw"></i> Direccion (Fiscal y Entrega)</legend>
                     <input type="hidden" name="ubigeo" id="ubigeo" value="">

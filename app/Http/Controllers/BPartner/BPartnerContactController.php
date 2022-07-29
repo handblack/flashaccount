@@ -56,19 +56,19 @@ class BPartnerContactController extends Controller
         $row = new WhBpContact();
         $row->bpartner_id = session('current_profile_bpartner_id');
         $row->token       = md5(date("YmdHis"));
-        $row->contactname = $request->contactname;
-        $row->workplace   = $request->workplace;
+        $row->contactname = strtoupper(trim($request->contactname));
+        $row->workplace   = strtoupper(trim($request->workplace));
         $email =  [];
         foreach($request->email as $item){
             if($item){
-                $email[] = $item;
+                $email[] = strtolower(trim($item));
             }
         }
         $row->email = $email;
         $phone =  [];
         foreach($request->phone as $item){
             if($item){
-                $phone[] = $item;
+                $phone[] = trim($item);
             }
         }
         $row->phone = $phone;
@@ -116,13 +116,13 @@ class BPartnerContactController extends Controller
     {
         if(!Session::has('current_profile_bpartner_id')){ return redirect()->route('bpartner.index'); }
         $row = WhBpContact::where('token',$id)->first();
-        $row->contactname = $request->contactname;
-        $row->workplace   = $request->workplace;
+        $row->contactname = strtoupper(trim($request->contactname));
+        $row->workplace   = strtoupper(trim($request->workplace));
         $email =  [];
         if($request->has('email')){
             foreach($request->email as $item){
                 if($item){
-                    $email[] = $item;
+                    $email[] = strtolower(trim($item));
                 }
             }
         }
@@ -131,7 +131,7 @@ class BPartnerContactController extends Controller
         if($request->has('phone')){
             foreach($request->phone as $item){
                 if($item){
-                    $phone[] = $item;
+                    $phone[] = trim($item);
                 }
             }
         }

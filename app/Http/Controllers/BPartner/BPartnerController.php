@@ -12,6 +12,7 @@ use App\Models\WhBpAddress;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
 use App\Models\WhDocType;
+use App\Models\WhPriceList;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -67,11 +68,15 @@ class BPartnerController extends Controller
         $row->documentno = old('documentno');
         $row->lastname = old('lastname');
         $dt = WhDocType::where('group_id',1)->get();
+        $pl = WhPriceList::all();
+        $cp = WhDocType::where('group_id',2)->whereIn('shortname',['FAC','BVE'])->get();
         return view('bpartner.bpartner_form',[
             'mode' => 'new',
             'row'  => $row,
             'url'  => route('bpartner.store'),
-            'doctype' => $dt, 
+            'doctype' => $dt,
+            'pl' => $pl,
+            'cp' => $cp,
         ]);
     }
 
@@ -154,12 +159,16 @@ class BPartnerController extends Controller
         }
         $row = WhBpartner::where('token',$id)->first();
         $dt = WhDocType::where('group_id',1)->get();
+        $pl = WhPriceList::all();
+        $cp = WhDocType::where('group_id',2)->whereIn('shortname',['FAC','BVE'])->get();
         session(['current_profile_bpartner_id' => $row->id]);
         return view('bpartner.bpartner_form',[
             'mode' => 'edit',
             'row'  => $row,
             'url'  => route('bpartner.update',$row->token),
             'doctype' => $dt, 
+            'pl' => $pl,
+            'cp' => $cp,
         ]);
     }
 
