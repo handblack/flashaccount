@@ -61,16 +61,25 @@
         </div>
         <div class="card-body">
             <div class="row">
-
-                <div class="col-md-8">
+                <div class="col-md-8 mt-2">
                     <label class="mb-0">Identificador</label>
                     <input type="text" class="form-control" id="warehousename" name="warehousename" placeholder="Nombre del almacen" value="{{ $row->warehousename }}" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mt-2">
                     <label class="mb-0">Nombre Corto</label>
                     <input type="text" class="form-control" id="shortname" name="shortname" placeholder="Nombre Abreviado" value="{{ $row->shortname }}">
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 mt-2">
+                    <label class="mb-0">Direccion del Almacen</label>
+                    <select name="address_id" class="form-control">
+                        @foreach ($adr as $item)
+                            <option value="{{ $item->id }}">{{ $item->address }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>            
         </div>
         <div class="card-footer pt-1">
             <div class="row">

@@ -12,6 +12,11 @@ class WhWarehouse extends Model
         'warehousename',
         'shortname',
         'isactive',
+        'address_id',
         'token',
     ];
+
+    public function address(){
+        return $this->hasOne(WhBpAddress::class,'id','address_id');
+    }
 }

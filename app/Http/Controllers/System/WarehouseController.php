@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\WhBpAddress;
 use App\Models\WhWarehouse;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
@@ -43,11 +44,12 @@ class WarehouseController extends Controller
         $row = new WhWarehouse();
         $row->token = old('token',date("YmdHis"));
         $row->warehousename = old('warehousename');
-        $row->shortname = old('shortname');
+        $row->shortname = old('shortname');    
         return view('system.warehouse_form',[
             'mode' => 'new',
             'row'  => $row,
             'url'  => route('warehouse.store'),
+            'adr' => $adr = WhBpAddress::where('bpartner_id',1)->get(),
         ]);
     }
 
@@ -101,6 +103,7 @@ class WarehouseController extends Controller
             'mode' => 'edit',
             'row'  => $row,
             'url'  => route('warehouse.update',$row->token),
+            'adr' => $adr = WhBpAddress::where('bpartner_id',1)->get(),
         ]);
     }
 

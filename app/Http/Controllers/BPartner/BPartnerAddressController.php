@@ -70,7 +70,7 @@ class BPartnerAddressController extends Controller
         $row->save();
         $chk = WhBpAddress::where('bpartner_id',session('current_profile_bpartner_id'))->get();
         if(count($chk) == 1){
-            $bp =  WhBpartner::where('bpartner_id',session('current_profile_bpartner_id'))->first();
+            $bp =  WhBpartner::where('id',session('current_profile_bpartner_id'))->first();
             $bp->address_fiscal_id = $row->id;
             $bp->address_delivery_id = $row->id;
             $bp->save();
@@ -121,7 +121,7 @@ class BPartnerAddressController extends Controller
         $row->save();
         $chk = WhBpAddress::where('bpartner_id',session('current_profile_bpartner_id'))->get();
         if(count($chk) == 1){
-            $bp =  WhBpartner::where('bpartner_id',session('current_profile_bpartner_id'))->first();
+            $bp =  WhBpartner::where('id',session('current_profile_bpartner_id'))->first();
             $bp->address_fiscal_id = $row->id;
             $bp->address_delivery_id = $row->id;
             $bp->save();

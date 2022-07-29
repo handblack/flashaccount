@@ -10,7 +10,10 @@
     font-style: normal;
 }
 
-
+@page {
+    margin: 0cm 0cm;
+    font-family: Arial;
+}
 
 body{
     font-family: 'Arial Narrow';

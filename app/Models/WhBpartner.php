@@ -26,4 +26,12 @@ class WhBpartner extends Model
     public function addresses(){
         return $this->hasMany(WhBpAddress::class,'bpartner_id','id');
     }
+
+    public function address_fiscal(){
+        return $this->hasOne(WhBpAddress::class,'id','adrress_fiscal_id');
+    }
+
+    public function address_delivery(){
+        return $this->hasOne(WhBpAddress::class,'id','adrress_delivery_id');
+    }
 }

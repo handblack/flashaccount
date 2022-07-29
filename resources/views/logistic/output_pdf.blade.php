@@ -1,6 +1,19 @@
 <html>
 <head>
+    <link rel="stylesheet" href="{{ asset('assets/pdf.css') }}">
     <style>
+        @font-face {
+            font-family: 'Arial Narrow';
+            src: url('{{ storage_path('fonts\ARIALN.TTF') }}') format("truetype");
+            /*
+                url('{{ storage_path('fonts\ARIALNB.TTF') }}') format("truetype"),
+                url('{{ storage_path('fonts\ARIALNBI.TTF') }}') format("truetype"),
+                url('{{ storage_path('fonts\ARIALNI.TTF') }}') format("truetype");
+            */
+            font-weight: 400;
+            font-style: normal;
+        }
+
         @page {
             margin: 0cm 0cm;
             font-family: Arial;
@@ -9,7 +22,7 @@
         body {
             margin: 3cm 2cm 2cm;
         }
-
+        /*
         header {
             position: fixed;
             top: 0cm;
@@ -33,6 +46,7 @@
             text-align: center;
             line-height: 35px;
         }
+        */
     </style>
 </head>
 <body>
