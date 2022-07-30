@@ -201,13 +201,23 @@ class BPartnerController extends Controller
                 return back()->with('error','Falta nombre del socio de negocio')->withInput();
             }
         }
+        //dd($request);
         $row = WhBpartner::where('token',$id)->first();
         $row->fill($request->all());
         $row->lastname = strtoupper($row->lastname);
         $row->firstname = strtoupper($row->firstname);
         $row->prename = strtoupper($row->prename);
         $row->bpartnername = ($request->legalperson == 'J') ? strtoupper($row->bpartnername) : trim($row->lastname) .' '. trim($row->firstname) .', '. trim($request->prename);
+        /*
+        $email =  [];
+        foreach($request->fex_email as $item){
+            if($item){
+                $email[] = strtolower(trim($item));
+            }
+        }*/
+        $row->fex_email = $request->fex_email;
         $row->save();
+
         return redirect()->route('bpartner.index')->with('message','Registro actualizado');
     }
 

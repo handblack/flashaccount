@@ -34,16 +34,18 @@
                 <span class="d-none d-sm-inline-block">Añadir</span>
             </a>
             <div class="btn-group">
-                <div class="input-group input-group-sm">
-                    <input class="form-control" type="text" name="query" value="" autocomplete="off"
+                <form action="{{ route('warehouse.index') }}">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" type="text" name="q" value="{{ $q }}" autocomplete="off"
                         placeholder="Buscar">
-                    <span class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fas fa-search" aria-hidden="true"></i>
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-search" aria-hidden="true"></i>
                             <span class="d-none d-sm-inline-block">Buscar</span>
-                        </button>
-                    </span>
-                </div>
+                            </button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="card-body table-responsive p-0">

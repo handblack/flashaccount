@@ -23,6 +23,10 @@ class WhBpartner extends Model
         'token',
     ];
 
+    protected $casts = [
+        'fex_email' => 'array',
+    ];
+
     public function addresses(){
         return $this->hasMany(WhBpAddress::class,'bpartner_id','id');
     }
@@ -34,4 +38,9 @@ class WhBpartner extends Model
     public function address_delivery(){
         return $this->hasOne(WhBpAddress::class,'id','adrress_delivery_id');
     }
+
+    public function contacts(){
+        return $this->hasMany(WhBpContact::class,'bpartner_id','id');
+    }
+
 }

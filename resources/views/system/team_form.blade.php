@@ -1,8 +1,24 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    <section class="content-header">
-        <div class="container-fluid">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-users-cog fa-fw"></i> Grupos &amp; Accesos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Sistema</li>
+                    <li class="breadcrumb-item">Grupos &amp; Accesos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-header pt-1 pb-2">
+        <div class="container-fluid"> 
             <div class="row mb-0">
                 <div class="col-sm-6">
 
@@ -13,6 +29,7 @@
                         </a>
                         <a href="#" class="btn btn-sm btn-secondary" onclick="location.reload();">
                             <i class="fas fa-redo" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">Actualizar</span>
                         </a>
                     </div>
 

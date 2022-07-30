@@ -25,9 +25,15 @@ class WarehouseController extends Controller
                 'action' => 'isgrand',
             ]);
         }
-        $result = WhWarehouse::paginate(env('PAGINATE_WAREHOUSE',40));
+        $result = WhWarehouse::where(function ($query) use ($request){
+            $q = str_replace(' ','%',$request->q);
+            $query->where('warehousename','LIKE',"%{$q}%");
+            $query->orWhere('shortname','LIKE',"%{$q}%");
+        })
+            ->paginate(env('PAGINATE_WAREHOUSE',40));
         return view('system.warehouse',[
             'result' => $result, 
+            'q' => $request->q,
         ]);
     }
 

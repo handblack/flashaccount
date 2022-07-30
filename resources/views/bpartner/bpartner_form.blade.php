@@ -241,6 +241,18 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="mb-0">Envio de FEX</label>
+                        <select class="form-control select2-email" name="fex_email[]" multiple="multiple">
+                            @foreach ($row->contacts as $contact )
+                                @foreach ($contact->email as $email)                                    
+                                    <option value="{{ $email }}" {{ (in_array($email,$row->fex_email) ? 'selected' : '' ) }}>{{ $email }}</option>
+                                @endforeach
+                            @endforeach                           
+                        </select>
+                    </div>
+                </div>
 
 
                 @if ($mode == 'new')
@@ -517,6 +529,7 @@
             }
         });
 
+        $('.select2-email').select2();
 
         $('.select2-country').select2({
             ajax: {

@@ -22,7 +22,7 @@ class TeamController extends Controller
             ]);
         }
         $q = str_replace(' ','%',$request->q);
-        $result = WhTeam::where('teamname','LIKE',"{$q}%")
+        $result = WhTeam::where('teamname','LIKE',"%{$q}%")
             ->paginate(env('PAGINATE_TEAM',20));
         return view('system.team',[
             'result' => $result,

@@ -27,6 +27,7 @@ class CreateWhBpartnersTable extends Migration
             $table->string('lastname',60)->nullable(); // Apellido paterno
             $table->string('firstname',60)->nullable(); // Apellido materno
             $table->string('prename',60)->nullable(); // nombre
+            $table->text('fex_email')->nullable(); // Enviod e coreo
             $table->enum('istaxpriceunit',['Y','N'])->default('Y');
             $table->foreignId('pricelist_id')->nullable();
             $table->foreignId('sales_doctype_id')->nullable();
