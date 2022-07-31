@@ -59,13 +59,23 @@
                     <label class="mb-0">Socio de Negocio</label>
                     <select name="bpartner_id" class="form-control select2-bpartner" required></select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="mb-0">Inicio</label>
-                    <input type="date" class="form-control" name="dateinit" value="{{ date("Y-m-d") }}">
+                    <input type="date" class="form-control" name="dateinit" value="{{ $op_dateinit }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="mb-0">Final</label>
-                    <input type="date" class="form-control" name="dateend" value="{{ date("Y-m-d") }}">
+                    <input type="date" class="form-control" name="dateend" value="{{ $op_dateend }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="mb-0">Divisa</label>
+                    <select class="form-control" name="currency_id" required>
+                        <option value="" disabled selected>SELECCCIONA</option>
+                        <option value="A">-- TODAS --</option>
+                        @foreach ($currency as $item)
+                            <option value="{{ $item->id }}">{{ $item->currencyiso }} - {{ $item->currencyname }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>

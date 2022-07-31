@@ -11,6 +11,7 @@ use App\Models\WhBIncome;
 use App\Models\WhBpAddress;
 use App\Models\WhBpartner;
 use App\Models\WhCInvoice;
+use App\Models\WhCurrency;
 use App\Models\WhDocType;
 use App\Models\WhPriceList;
 use Hashids\Hashids;
@@ -353,13 +354,27 @@ class BPartnerController extends Controller
         return view('bpartner.rpt_move',[
             'op_dateinit' => $finit,
             'op_dateend' => $fend,
-            //'result' => $result,
+            'currency' => WhCurrency::all(),
         ]);
     }
+
     public function rpt_move_form(Request $request){
-        $result = VRptBpartnerMove::paginate(40);
+        $result = VRptBpartnerMove::where('bpartner_id',$request->bpartner_id)
+            ->whereBetween('datetrx',[$request->dateinit, $request->dateend])
+            ->where(function ($query) use ($request){
+                if(!$request->currency_id == 'A'){
+                    $query->where('currency_id',$request->currency_id);
+                }
+            })
+            ->get();
+        $bp = WhBpartner::find($request->bpartner_id);
+ 
         return view('bpartner.rpt_move_result',[
             'result' => $result,
+            'bp' => $bp,
+            'dateinit' => $request->dateinit,
+            'dateend' => $request->dateend,
+            'currency_id' => $request->currency_id
         ]);
     }
 

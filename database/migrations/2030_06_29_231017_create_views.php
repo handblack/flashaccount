@@ -18,9 +18,11 @@ $sql = "
 DROP VIEW IF EXISTS v_rpt_bpartner_move;
 CREATE VIEW `v_rpt_bpartner_move` AS (
 SELECT
+  a.bpartner_id,
 	a.dateinvoiced AS datetrx,
   'cinvoice' AS typemove,
   a.id AS record_id,
+  a.currency_id,
   a.amountgrand AS cargo,
   0 AS abono
 FROM `wh_c_invoices` a
@@ -28,12 +30,14 @@ FROM `wh_c_invoices` a
 UNION ALL
 
 SELECT
-a.datetrx,
+b.bpartner_id,
+b.datetrx,
 'income' AS typemove,
-a.id AS record_id,
+b.id AS record_id,
+b.currency_id,
 0 AS cargo,
-a.amount AS abono
-FROM `wh_b_incomes` a
+b.amount AS abono
+FROM `wh_b_incomes` b
 );";
 DB::unprepared($sql);
 // ------------------------------------------------------------------------------------------------------------------------------------
