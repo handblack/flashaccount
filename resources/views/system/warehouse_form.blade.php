@@ -75,7 +75,7 @@
                     <label class="mb-0">Direccion del Almacen</label>
                     <select name="address_id" class="form-control">
                         @foreach ($adr as $item)
-                            <option value="{{ $item->id }}">{{ $item->address }}</option>
+                            <option value="{{ $item->id }}" {{ ($item->id == $row->address_id) ? 'selected' : '' }}>{{ $item->address }}</option>
                         @endforeach
                     </select>
                 </div>

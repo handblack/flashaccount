@@ -8,6 +8,7 @@ use App\Models\WhTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WhTeamGrant;
+use App\Models\WhTeamGrantSchedule;
 use App\Models\WhTeamGrantSerial;
 use App\Models\WhTeamGrantWarehouse;
 use App\Models\WhWarehouse;
@@ -57,7 +58,23 @@ class TeamGrantController extends Controller{
                 ]);
                 return back()->with('message','Se agrego ALMACEN');
                 break;
-
+            case 'schedule-add':                 
+                $row = WhTeamGrantSchedule::where('team_id',$request->team_id)->first();                
+                $nr = $request->all();                
+                $nv = [];
+                foreach($row->toArray() as $k => $v){
+                    if(substr($k,0,8) == 'schedule'){
+                        if(array_key_exists($k,$nr)){
+                            $nv[$k] = ($nr[$k] == 'on') ? 'Y' : 'N' ;    
+                        }else{
+                            $nv[$k] = 'N';
+                        }
+                    }   
+                }
+                $row->fill($nv);
+                $row->save();
+                return back()->with('message','los datos fueron guardados');
+                break; 
         }
     }
     public function destroy($id){
@@ -157,9 +174,15 @@ class TeamGrantController extends Controller{
         for ($i = 0; $i <= 23; $i++) {$horas[$i] = $i;}
         for ($i = 0; $i <= 6; $i++) {$semanas[$i] = $i;}
         $weekname = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
-        $row = WhTeam::where('token',$t)->first();
+        $team = WhTeam::where('token',$t)->first();
+        $row = WhTeamGrantSchedule::where('team_id',$team->id)->get();
+        if($row->isEmpty()){
+            $row = new WhTeamGrantSchedule();
+            $row->create(['team_id' => $team->id]);
+        }
         return view('system.teamgrant_schedule',[
             'row' => $row,
+            'team' => $team,
             'semanas' => $semanas,
             'weekname' => $weekname,
             'horas' => $horas,
@@ -187,6 +210,4 @@ class TeamGrantController extends Controller{
             'wah' => $wah,
         ]);
     }
-    
-
 }
