@@ -25,12 +25,14 @@ BEGIN
 /* 
 Reporte de CUENTAS POR COBRAR 
 */
-INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amount,amountopen) 
+INSERT INTO `temp_invoice_opens`(`session`,glosa,datetrx,cinvoice_id,bpartner_id,currency_id,amount,amountopen) 
                                             SELECT 
                                                 p_session
+                                                ,'DOCUMENTO DE VENTA'
                                                 ,i.dateinvoiced
                                                 ,i.id
                                                 ,i.bpartner_id
+                                                ,i.currency_id
                                                 ,i.amountgrand
                                                 ,fn_cinvoice_open(i.id,p_datetrx)
                                             FROM
@@ -38,6 +40,21 @@ INSERT INTO `temp_invoice_opens`(`session`,datetrx,cinvoice_id,bpartner_id,amoun
                                             WHERE
                                                 i.dateinvoiced <= p_datetrx
                                                 AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;
+INSERT INTO `temp_invoice_opens`(`session`,glosa,datetrx,income_id,bpartner_id,currency_id,amount,amountopen) 
+                                            SELECT 
+                                                p_session
+                                                ,'INGRESO A BANCO'
+                                                ,i.datetrx
+                                                ,i.id
+                                                ,i.bpartner_id
+                                                ,i.currency_id
+                                                ,i.amount
+                                                ,IFNULL(fn_income_open(i.id,p_datetrx),0)
+                                            FROM
+                                                `wh_b_incomes` i
+                                            WHERE
+                                                i.datetrx <= p_datetrx
+                                                AND bpartner_id LIKE CASE WHEN p_bpartner_id = 0 THEN '%' ELSE p_bpartner_id END;                                                
 END;              
 ";
 DB::unprepared($sql);

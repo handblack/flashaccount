@@ -29,6 +29,7 @@ class CreateTempInvoiceOpensTable extends Migration
             $table->foreignId('sequence_id')->nullable();
             $table->string('sequenceserial',4)->nullable();
             $table->string('sequencenro',15)->nullable();
+            $table->text('glosa')->nullable();
             $table->float('amount',12,5);
             $table->float('amountopen',12,5);
             $table->timestamps();

@@ -20,4 +20,9 @@ class TempInvoiceOpen extends Model
     public function pinvoice(){
         return $this->hasOne(WhPInvoice::class,'id','pinvoice_id');
     }
+
+    public function income(){
+        return $this->hasOne(WhBIncome::class,'id','income_id');
+    }
+
 }
