@@ -6,7 +6,23 @@
 @endsection
 
 @section('breadcrumb')
-    <section class="content-header">
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="far fa-file-alt fa-fw"></i> Reporte de Movimiento</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Sistema</li>
+                    <li class="breadcrumb-item">Almacenes</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section class="content-header pt-1 pb-2">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-6">
@@ -14,25 +30,12 @@
                     <div class="btn-group">
                         <a class="btn btn-sm btn-secondary" href="{{ route('bpartner_rpt_move') }}" title="Recargar">
                             <i class="fas fa-redo" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline-block">Actualizar</span>
                         </a>
                     </div>
-
-                    <a class="btn btn-sm btn-primary" href="#" data-toggle="modal" data-target="#ModalCreate">
-                        <i class="fas fa-search fa-fw"></i>
-                        <span class="d-none d-sm-inline-block">Criterio de Busqueda</span>
-                    </a>
-
-
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-sm-right">
-                        <h1 class="h4 mb-0 d-none d-md-inline-block">
-                            Reporte de Movimientos
-                            &nbsp;
-                            <i class="far fa-file-alt fa-fw"></i>
-
-                        </h1>
-                    </div>
+                     
                 </div>
             </div>
         </div>
@@ -40,11 +43,41 @@
 @endsection
 
 @section('container')
-    <div class="bd-callout bd-callout-info bg-white">
-        <h4>Reporte de Movimientos</h4>
-        Este proceso hace la consulta por Socio de Negocio ordenados en orden cronologico por fechas, y arrastra el saldo acumulado.
-        <br>Esta funcionalidad aplica por independiente a <strong>clientes / proveedore</strong>
-    </div>
+
+<div class="bd-callout bd-callout-info bg-white mt-0">
+    <h4>Reporte de Movimientos</h4>
+    Este proceso hace la consulta por Socio de Negocio ordenados en orden cronologico por fechas, y arrastra el saldo acumulado.
+    <br>Esta funcionalidad aplica por independiente a <strong>clientes / proveedore</strong>
+</div>
+
+<div class="card">
+    <form action="{{ route('bpartner_rpt_move_form') }}" method="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="mb-0">Socio de Negocio</label>
+                    <select name="bpartner_id" class="form-control select2-bpartner" required></select>
+                </div>
+                <div class="col-md-3">
+                    <label class="mb-0">Inicio</label>
+                    <input type="date" class="form-control" name="dateinit" value="{{ date("Y-m-d") }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="mb-0">Final</label>
+                    <input type="date" class="form-control" name="dateend" value="{{ date("Y-m-d") }}">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="float-right">
+                <a href="#" class="btn btn-default"><i class="fas fa-times fa-fw"></i> Cancelar</a>        
+                <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i> Buscar</button>
+            </div>
+        </div>
+    </form>
+</div>
+    
 
 
 

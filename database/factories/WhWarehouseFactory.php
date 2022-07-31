@@ -20,6 +20,7 @@ class WhWarehouseFactory extends Factory
             'warehousename' => strtoupper($this->faker->streetName),
             'shortname' => strtoupper($whco),
             'isactive' => $this->faker->randomElement(['Y','N']),
+            'address_id' => 1,
             'token' => Str::random(10),
         ];
     }
