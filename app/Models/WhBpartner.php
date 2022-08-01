@@ -18,6 +18,7 @@ class WhBpartner extends Model
         'lastname',
         'firstname',
         'prename',
+        'sales_doctype_id',
         'adrress_fiscal_id',
         'adrress_delivery_id',
         'token',
@@ -43,4 +44,7 @@ class WhBpartner extends Model
         return $this->hasMany(WhBpContact::class,'bpartner_id','id');
     }
 
+    public function salesDocType(){
+        return $this->hasOne(WhDocType::class,'id','sales_doctype_id');
+    }
 }

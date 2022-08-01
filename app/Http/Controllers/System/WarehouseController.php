@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\WhBpAddress;
+use App\Models\WhSequence;
 use App\Models\WhWarehouse;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
@@ -105,11 +106,13 @@ class WarehouseController extends Controller
             return back()->with('error','No tienes privilegio para modificar');
         }
         $row = WhWarehouse::where('token',$id)->first();
+        $ser = WhSequence::where('warehouse_id',$row->id)->get();
         return view('system.warehouse_form',[
             'mode' => 'edit',
             'row'  => $row,
             'url'  => route('warehouse.update',$row->token),
             'adr' => $adr = WhBpAddress::where('bpartner_id',1)->get(),
+            'ser' => $ser,
         ]);
     }
 

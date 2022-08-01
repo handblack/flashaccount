@@ -105,9 +105,22 @@
             </div>
         </div>
     </div>
-
-
-
- 
 </form>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <ul>
+                    @foreach ($ser as $item)
+                    <li><span class="console">{{ $item->serial }}</span>
+                     <strong>{{ $item->doctype->group->shortname }}</strong>
+                        {{ $item->doctype->doctypename }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection

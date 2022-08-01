@@ -78,8 +78,8 @@
                 <thead>
                     <tr>
                         <th>Tipo Documento</th>
-                        <th>Serie</th>
-                        <th class="text-right pr-3">Ultimo</th>
+                        <th width="60">Serie</th>
+                        <th width="60" class="text-right pr-3">Ultimo</th>
                         <th>Almacen</th>
                         <th></th>
                     </tr>
@@ -91,9 +91,9 @@
                                 <strong>{{ $item->doctype->group->shortname }}</strong> - 
                                 {{ $item->doctype->doctypename }}
                             </td>
-                            <td>{{ $item->serial }}</td>
+                            <td class="border-left border-right">{{ $item->serial }}</td>
                             <td class="text-right pr-3">{{ $item->lastnumber }}</td>
-                            <td>{{ $item->warehouse->shortname }}</td>
+                            <td>{{ $item->warehouse->warehousename }}</td>
                             <td class="text-right">
                                 <a href="{{ route('sequence.edit', [$item->token]) }}"> <i class="fas fa-edit"></i>
                                     <span class="d-none d-md-inline-block">Modificar</span></a> |
