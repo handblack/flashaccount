@@ -46,7 +46,19 @@ class CreateWhSequencesTable extends Migration
         $this->CreateSequence('FAC','F003'); // Factura3
         $this->CreateSequence('BVE','B001'); // Boleta de Venta1
         $this->CreateSequence('BVE','B002'); // Boleta de Venta2
-        $this->CreateSequence('BVE','B003'); // Boleta de Venta3
+        $this->CreateSequence('BVE','B003'); // Boleta de Venta3        
+        $this->CreateSequence('NCR','F001'); // Nota de Credito
+        $this->CreateSequence('NCR','F002'); // Nota de Credito
+        $this->CreateSequence('NCR','F003'); // Nota de Credito
+        $this->CreateSequence('NCR','B001'); // Nota de Credito
+        $this->CreateSequence('NCR','B002'); // Nota de Credito
+        $this->CreateSequence('NCR','B003'); // Nota de Credito
+        $this->CreateSequence('NDB','F001'); // Nota de Debito
+        $this->CreateSequence('NDB','F002'); // Nota de Debito
+        $this->CreateSequence('NDB','F003'); // Nota de Debito
+        $this->CreateSequence('NDB','B001'); // Nota de Debito
+        $this->CreateSequence('NDB','B002'); // Nota de Debito
+        $this->CreateSequence('NDB','B003'); // Nota de Debito
         // Transaccionales
         $this->group_id = 3;
         $this->CreateSequence('OVE','OV01'); // Orden Venta1

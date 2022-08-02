@@ -233,10 +233,14 @@ class COrderController extends Controller
                 return back()->with('error','No tienes privilegio para ver');
             }
             session(['session_ventas_order_id' => $id]);
-            $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
-            $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
-            $reason = WhReason::all();
             $row = WhCOrder::where('token',$id)->first();
+            if($row->bpartner->sales_doctype_id){
+                $sequence_invoice = WhSequence::where('doctype_id',$row->bpartner->sales_doctype_id)->get();
+            }else{
+                $dti = WhDocType::whereIn('shortname',['BVE','FAC'])->get('id')->toArray();
+                $sequence_invoice = WhSequence::whereIn('doctype_id',$dti)->get();
+            }
+            $reason = WhReason::all();
             $output = WhLOutput::where('order_id',$row->id)->get();
             return view('ventas.order_show',[
                 'row' => $row,

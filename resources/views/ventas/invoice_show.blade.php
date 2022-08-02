@@ -94,7 +94,7 @@
             <div class="col-6 col-md-3">
                 <dl class="row mb-2">
                     <dt class="col-sm-5">Orden Ventas</dt>
-                    <dd class="col-sm-7">{{ $row->order->serial }}-{{ $row->order->documentno }}</dd>
+                    <dd class="col-sm-7"><a href="{{ route('corder.show',$row->order->token) }}" target="_blank">{{ $row->order->serial }}-{{ $row->order->documentno }}</a></dd>
                     <dt class="col-sm-5">Emision</dt>
                     <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateinvoice)->format('d/m/Y') }}</dd>
                     <dt class="col-sm-5">Vencimiento</dt>
