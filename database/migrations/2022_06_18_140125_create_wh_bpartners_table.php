@@ -3,6 +3,7 @@
 use App\Models\WhBpartner;
 use App\Models\WhDocType;
 use Hashids\Hashids;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -36,6 +37,14 @@ class CreateWhBpartnersTable extends Migration
             $table->string('token',60);
             $table->timestamps();
         });
+
+        // Informacion de SISTEMA
+        #$x = Auth::user()->get_param('system.bpartner.name','GRUPO SBF PERU S.A.C.');
+        #$x = auth()->user()->get_param('system.bpartner.addres','CALLE 13A NRO 180 INT A-18 (C.C HIPER)');
+        #$x = auth()->user()->get_param('system.bpartner.phone','997752822');
+        #$x = auth()->user()->get_param('system.bpartner.email','bruno.fuentes@gruposbf.pe');
+        #$x = auth()->user()->get_param('system.bpartner.web','www.gruposbf.pe');
+
         $hash = new Hashids(env('APP_HASH'));
         $row = new WhBpartner();
         $filter = [
@@ -90,6 +99,7 @@ class CreateWhBpartnersTable extends Migration
             'token' => $hash->encode(WhBpartner::all()->count('id') + 1),
         ]);
         
+    
         
     }
 

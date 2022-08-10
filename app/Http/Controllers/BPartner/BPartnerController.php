@@ -218,6 +218,7 @@ class BPartnerController extends Controller
         }*/
         $row->fex_email = $request->fex_email;
         $row->save();
+        //dd($row);
 
         return redirect()->route('bpartner.index')->with('message','Registro actualizado');
     }

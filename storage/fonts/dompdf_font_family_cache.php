@@ -80,6 +80,10 @@ return array (
   ),
   'arial narrow' => array(
     'normal' => $fontDir . '/arial_narrow_normal_036b0f040170a69f3f437c37802e5431',
+    '300' => $fontDir . '/arial_narrow_300_036b0f040170a69f3f437c37802e5431',
+    'bold' => $fontDir . '/arial_narrow_bold_ed0e6155c785df2b98bf75e555785212',
+    'italic' => $fontDir . '/arial_narrow_italic_6bf9fdc16d5bd8348bd88ade88529922',
+    'bold_italic' => $fontDir . '/arial_narrow_bold_italic_31e172f6064a2bddba18908000d0120e',
   ),
 );
 }; ?>

@@ -7,6 +7,7 @@ use App\Models\TempLogisticInput;
 use App\Models\TempLogisticInputLine;
 use App\Models\WhLInput;
 use App\Models\WhLInputLine;
+use App\Models\WhReason;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,11 @@ class LogisticInputController extends Controller
             ]);
         }
         $result = WhLInput::orderBy('id','desc')
-            ->paginate(env('PAGINATE_LOGISTIC',5));
+            ->paginate(env('PAGINATE_LOGISTIC',30));
+        $reason  = WhReason::where('typereason','INP')->get();
         return view('logistic.input',[
             'result' => $result,
+            'reason' => $reason,
         ]);
     }
 

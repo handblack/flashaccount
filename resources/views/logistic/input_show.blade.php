@@ -48,13 +48,32 @@
 <div class="invoice p-3 mb-3">
     <div class="row invoice-info">
                 
-            <div class="col-12 col-md-9 invoice-col">
-                <strong>Proveedor:</strong>
-                <p class="text-muted">
-                    {{ $row->bpartner->bpartnername }}
-                    <br>{{ $row->bpartner->bpartnercode }}
-                    <br>{{ $row->glosa }}
-                </p>
+            <div class="col-12 col-md-5 invoice-col">
+                <dl class="mb-0">
+                    <dt>Proveedor</dt>
+                    <dd>{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</dd>
+                    <dd>
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->address : '_FALTA_ESPECIFICAR_DIRECCION_' }}
+                    </dd>
+                    <dd>
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->state->statename : '' }} - 
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->county->countyname : '' }} - 
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->city->cityname : '' }}
+                    </dd>
+                    <dd>
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->country->countryname : '' }}
+                    </dd>
+                    <dd>{{ $row->glosa }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="mb-0">
+                    <dt>Almacen INGRESO</dt>
+                    <dd>{{ $row->warehouse->warehousename }}</dd>
+                    <dd>{{ $row->warehouse->address->address }}</dd>                        
+                    <dt>Motivo</dt>
+                    <dd>{{ $row->reason->reasonname }}</dd>
+                </dl>
             </div>
             <div class="col-6 col-md-3">
                 <dl class="row mb-2">
@@ -68,8 +87,6 @@
                     </dd>
                     <dt class="col-sm-5">Fecha</dt>
                     <dd class="col-sm-7">{{ \Carbon\Carbon::parse($row->dateorder)->format('d/m/Y')}}</dd>
-                    <dt class="col-sm-5">Almacen</dt>
-                    <dd class="col-sm-7">{{ $row->warehouse->warehousename }}</dd>
                 </dl>
             </div>
             

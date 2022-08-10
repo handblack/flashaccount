@@ -73,19 +73,30 @@
         <div class="card-body pt-2 pb-2" id="doc-header">
             <div class="row">
                 <div class="col-12 col-md-6">
-                    {{ $row->bpartner->bpartnername }}
+                    <strong>Proveedor</strong>
+                    <br>{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}
+                    <br>{{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->address : '_FALTA_ESPECIFICAR_DIRECCION_' }}
+                    <br>{{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->state->statename : '' }} - 
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->county->countyname : '' }} - 
+                        {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->city->cityname : '' }}
+                    <br>{{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->country->countryname : '' }}
                 </div>
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row">
+                        <dt class="col-sm-4">Moneda</dt>
+                        <dd class="col-sm-8">{{ $row->currency->currencyiso }}</dd>
                     </dl>
                 </div>
                 <div class="col-6 col-md-3">
-                    <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                    <dl class="row">
+                        <dt class="col-sm-4">Fecha</dt>
+                        <dd class="col-sm-8">{{ $row->dateorder }}</dd>
+                        <dt class="col-sm-4">Serie</dt>
+                        <dd class="col-sm-8">{{ $row->sequence->serial }}</dd>
+                        <dt class="col-sm-4">Ingreso</dt>
+                        <dd class="col-sm-8">{{ $row->warehouse->warehousename }}</dd>
                     </dl>
+                    
                 </div>
                 
             </div>

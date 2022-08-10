@@ -30,4 +30,13 @@ class TempPOrder extends Model
     public function lines(){
         return $this->hasMany(TempPOrderLine::class,'order_id','id');
     }
+
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
+    public function currency(){
+        return $this->hasOne(WhCurrency::class,'id','currency_id');
+    }
+
 }

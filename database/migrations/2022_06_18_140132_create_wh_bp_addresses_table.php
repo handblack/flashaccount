@@ -42,7 +42,7 @@ class CreateWhBpAddressesTable extends Migration
         $pai = WhBpCountry::where('id',$dep->bpartner_country_id)->first();
         $row = new WhBpAddress();
         $row->bpartner_id = 1;
-        $row->address = 'CALLE 13A NRO 180 Int. A-18 (C.C HIPER)';
+        $row->address = 'CALLE 13A NRO 180 INT A-18 (C.C HIPER)';
         $row->bpartner_city_id    = $dis->id;
         $row->bpartner_county_id  = $pro->id; 
         $row->bpartner_state_id   = $dep->id; 

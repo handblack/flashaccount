@@ -22,18 +22,22 @@ class WhBpAddress extends Model
     ];
 
     public function country(){
+        //Pais
         return $this->hasOne(WhBpCountry::class,'id','bpartner_country_id');
     }
 
     public function state(){
+        //Provincia
         return $this->hasOne(WhBpState::class,'id','bpartner_state_id');
     }
 
     public function county(){
+        //Departamento
         return $this->hasOne(WhBpCounty::class,'id','bpartner_county_id');
     }
 
     public function city(){
+        //Distrito
         return $this->hasOne(WhBpCity::class,'id','bpartner_city_id');
     }
 }

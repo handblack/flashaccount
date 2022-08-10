@@ -33,6 +33,10 @@ class WhLInput extends Model
     public function order(){
         return $this->hasOne(WhPOrder::class,'id','order_id');
     }
+
+    public function reason(){
+        return $this->hasOne(WhReason::class,'id','reason_id');
+    }
     
     public function lines(){
         return $this->hasMany(WhLInputLine::class,'input_id','id');

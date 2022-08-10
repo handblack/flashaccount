@@ -19,8 +19,8 @@ class WhBpartner extends Model
         'firstname',
         'prename',
         'sales_doctype_id',
-        'adrress_fiscal_id',
-        'adrress_delivery_id',
+        'address_fiscal_id',
+        'address_delivery_id',
         'token',
     ];
 
@@ -33,11 +33,11 @@ class WhBpartner extends Model
     }
 
     public function address_fiscal(){
-        return $this->hasOne(WhBpAddress::class,'id','adrress_fiscal_id');
+        return $this->hasOne(WhBpAddress::class,'id','address_fiscal_id');
     }
 
     public function address_delivery(){
-        return $this->hasOne(WhBpAddress::class,'id','adrress_delivery_id');
+        return $this->hasOne(WhBpAddress::class,'id','address_delivery_id');
     }
 
     public function contacts(){

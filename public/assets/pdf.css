@@ -1,23 +1,39 @@
 @font-face {
     font-family: 'Arial Narrow';
-    src: url('{{ storage_path('fonts\ARIALN.TTF') }}') format("truetype");
-    /*
-         url('{{ storage_path('fonts\ARIALNB.TTF') }}') format("truetype"),
-         url('{{ storage_path('fonts\ARIALNBI.TTF') }}') format("truetype"),
-         url('{{ storage_path('fonts\ARIALNI.TTF') }}') format("truetype");
-    */
-    font-weight: 400;
+    src: url('{{ storage_path('fonts\ARIALN.TTF') }}') format('truetype');
     font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Arial Narrow';
+    src: url('{{ storage_path('fonts\ARIALNI.TTF') }}') format('truetype');
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Arial Narrow';
+    src: url('{{ storage_path('fonts\ARIALNB.TTF') }}') format('truetype');
+    font-style: bold;
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Arial Narrow';
+    src: url('{{ storage_path('fonts\ARIALNBI.TTF') }}') format('truetype');
+    font-style: italic;
+    font-weight: 700;
 }
 
 @page {
     margin: 0cm 0cm;
-    font-family: Arial;
+    padding:  0cm;
+    font-family: 'Arial Narrow';
 }
 
 body{
     font-family: 'Arial Narrow';
     font-size: 12px;
+    line-height: 1;
 }
 
 hr{
@@ -49,3 +65,23 @@ BORDES
 */
 .border-top{ border-top:1px solid #222; }
 .border-bottom{ border-bottom:1px solid #222; }
+
+/* 
+-------------------------------------------------------------------------------------
+DL 
+-------------------------------------------------------------------------------------
+*/
+
+dl {
+    font-family: 'Arial Narrow';
+    font-style: bold;
+    margin: 0;
+    padding:0;
+}
+dd {
+    font-style: normal;
+    margin-bottom: 0;
+    margin-left: 0;
+    display: block;
+    margin-inline-start: 40px;
+}

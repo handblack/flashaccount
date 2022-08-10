@@ -339,9 +339,10 @@
                                         <i class="fas fa-map-marker-alt fa-fw"></i>
                                     </span>
                                 </div>
-                                <select name="address_fiscal_id" class="form-control">
+                                <select name="address_fiscal_id" class="form-control" required>
+                                    <option value="">-- SELECCIONA --</option>
                                     @foreach($row->addresses as $item)
-                                        <option value="{{ $item->id }}" {{ ($item->id == $row->address_fiscal_id) }}>{{ $item->address }} - {{ $item->city->cityname }}</option>
+                                        <option value="{{ $item->id }}" {{ ($item->id == $row->address_fiscal_id) ? 'selected' : '' }}>{{ $item->address }} - {{ $item->city->cityname }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -354,9 +355,10 @@
                                         <i class="fas fa-truck fa-fw"></i>
                                     </span>
                                 </div>
-                                <select name="address_delivery_id" class="form-control">
+                                <select name="address_delivery_id" class="form-control" required>
+                                    <option value="">-- SELECCIONA --</option>
                                     @foreach($row->addresses as $item)
-                                        <option value="{{ $item->id }}" {{ ($item->id == $row->adrress_delivery_id) }}>{{ $item->address }} - {{ $item->city->cityname }}</option>
+                                        <option value="{{ $item->id }}" {{ ($item->id == $row->address_delivery_id) ? 'selected' : ''  }}>{{ $item->address }} - {{ $item->city->cityname }}</option>
                                     @endforeach
                                 </select>
                             </div>

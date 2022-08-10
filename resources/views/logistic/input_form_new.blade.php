@@ -16,7 +16,7 @@
         </div>
     </div>
 </section>
-<section class="content-header pt-1 pb-1">
+<section class="content-header pt-1 pb-2">
         <div class="container-fluid">
             <div class="row mb-0">
                 <div class="col-sm-4">
@@ -85,30 +85,42 @@
         </div>
         <div class="card-body border-bottom">
             <div class="row">
-                <div class="col-6">
-                    <strong>Proveedor:</strong>
-                    <p class="text-muted">
-                        {{ $row->bpartner->bpartnername }}
-                        <br>{{ $row->bpartner->bpartnercode }}
-                        <br>{{ $row->glosa }}
-                    </p>
-                </div>
-                <div class="col-2">
+                <div class="col-md-5">
                     <dl class="mb-0">
-                        <dt>Fecha</dt>
-                        <dd>{{ $row->datetrx }}</dd>
+                        <dt>Proveedor</dt>
+                        <dd>{{ $row->bpartner->bpartnercode }} - {{ $row->bpartner->bpartnername }}</dd>
+                        <dd>
+                            {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->address : '_FALTA_ESPECIFICAR_DIRECCION_' }}
+                        </dd>
+                        <dd>
+                            {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->state->statename : '' }} - 
+                            {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->county->countyname : '' }} - 
+                            {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->city->cityname : '' }}
+                        </dd>
+                        <dd>
+                            {{ ($row->bpartner->address_fiscal) ? $row->bpartner->address_fiscal->country->countryname : '' }}
+                        </dd>
+                        <dd>{{ $row->glosa }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
+                
+                <div class="col-4">
                     <dl class="mb-0">
-                        <dt>Almacen</dt>
-                        
+                        <dt>Almacen INGRESO</dt>
+                        <dd>{{ $row->warehouse->warehousename }}</dd>
+                        <dd>{{ $row->warehouse->address->address }}</dd>                        
+                        <dt>Motivo</dt>
+                        <dd>{{ $row->reason->reasonname }}</dd>
                     </dl>
                 </div>
-                <div class="col-2">
-                    <dl class="mb-0">
-                        <dt>Serie</dt>
-                        <dd>{{ $row->serial }}</dd>
+                <div class="col-md-3">
+                    <dl class="row">
+                        <dt class="col-sm-4">OC</dt>
+                        <dd class="col-sm-8">{{ ($row->order_id) ? $row->order->serial .'-'.$row->order->documentno : '_SIN_OC_' }}</dd>
+                        <dt class="col-sm-4">Serie</dt>
+                        <dd class="col-sm-8">{{ $row->sequence->serial }}</dd>
+                        <dt class="col-sm-4">Fecha</dt>
+                        <dd class="col-sm-8">{{ $row->datetrx }}</dd>
                     </dl>
                 </div>
             </div>
@@ -133,7 +145,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="border-top">
-                        <th coslpan="2">3 - Items</th>
+                        <th coslpan="2">{{ count($row->lines) }} - Items</th>
                         <td class="text-right"></td>
                         <td></td>
                         <td class="text-right"></td>

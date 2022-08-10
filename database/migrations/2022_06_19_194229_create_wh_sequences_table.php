@@ -70,6 +70,10 @@ class CreateWhSequencesTable extends Migration
             ----------------------------------------------------------------------
         */
         $this->CreateSequence('OCO','OC01'); // Orden Compra
+        $this->CreateSequence('OCO','OC02'); // Orden Compra
+        $this->CreateSequence('OCO','OC03'); // Orden Compra
+        $this->CreateSequence('OCO','OC04'); // Orden Compra
+        // solo trabajan 1 serie
         $this->CreateSequence('CCP','0001'); // Comprobante de Compra
         $this->CreateSequence('CNC','0001'); // Nota de Credito
         $this->CreateSequence('CND','F002'); // Nota de Debito    
