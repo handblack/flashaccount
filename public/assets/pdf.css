@@ -40,23 +40,31 @@ hr{
     border-top: 1px solid #222;
 }
 
-.text-right{
-    text-align: right;
-}
-.text-left{
-    text-align: left;
-}
+.text-right{text-align: right;}
+.text-left{text-align: left;}
+.text-center{text-align: center;}
+
 /* 
 -------------------------------------------------------------------------------------
 TABLA 
 -------------------------------------------------------------------------------------
 */
+.align-top{
+    vertical-align: top;
+} 
+.align-middle{}
+.align-bottom{
+    vertical-align: bottom;
+}
+
+
 table{
     border-collapse: collapse;
 }
 td{
     padding-left:2px;
     padding-right:2px;
+    line-height: 1;
 }
 /* 
 -------------------------------------------------------------------------------------
@@ -65,7 +73,14 @@ BORDES
 */
 .border-top{ border-top:1px solid #222; }
 .border-bottom{ border-bottom:1px solid #222; }
-
+.border-left{ border-left:1px solid #222; }
+.border-right{ border-right:1px solid #222; }
+.border{
+    border-top:1px solid #222;
+    border-bottom:1px solid #222;
+    border-left:1px solid #222;
+    border-right:1px solid #222;
+}
 /* 
 -------------------------------------------------------------------------------------
 DL 

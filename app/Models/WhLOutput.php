@@ -23,16 +23,20 @@ class WhLOutput extends Model
         return $this->hasOne(WhBpartner::class,'id','bpartner_id');
     }
 
-    public function warehouse(){
-        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
-    }
-
     public function sequence(){
         return $this->hasOne(WhSequence::class,'id','sequence_id');
     }
 
+    public function warehouse(){
+        return $this->hasOne(WhWarehouse::class,'id','warehouse_id');
+    }
+
     public function order(){
         return $this->hasOne(WhCOrder::class,'id','order_id');
+    }
+
+    public function reason(){
+        return $this->hasOne(WhReason::class,'id','reason_id');
     }
 
     public function lines(){

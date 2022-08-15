@@ -7,6 +7,7 @@ use App\Models\TempLogisticTransfer;
 use App\Models\TempLogisticTransferLine;
 use App\Models\WhLTransfer;
 use App\Models\WhLTransferLine;
+use App\Models\WhReason;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +23,18 @@ class LogisticTransferController extends Controller
     private $module = 'logistic.transfer';
     public function index()
     {
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
         $result = WhLTransfer::orderBy('id','desc')
             ->paginate(env('PAGINATE_LOGISTIC',5));
+        $reason  = WhReason::where('typereason','LTR')->get();
         return view('logistic.transfer',[
             'result' => $result,
+            'reason' => $reason,
         ]);
     }
 

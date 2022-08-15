@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
+<section class="content-header pb-2">
+    <div class="container-fluid">
+        <div class="row mb-0">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-random fa-fw"></i> Transferencia</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Logistica</li>
+                    <li class="breadcrumb-item">Transferencia</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-0">
@@ -35,18 +53,64 @@
 @endsection
 
 @section('container')
-    {{ $row->warehouse->warehousename }}
-    <table class="table table-sm">
-        <tbody>
-            @foreach ($row->lines as $item)
+<div class="invoice p-3 mb-3">
+    <div class="row invoice-info">
+        <div class="col-md-4 invoice-col">
+            <label class="mb-0 mt-1">Almacen Origen</label>
+            <p class="text-muted">
+                {{ $row->warehouse->warehousename }}
+            </p>
+        </div>
+        <div class="col-md-4 invoice-col">
+            <label class="mb-0 mt-1">Almacen Destino</label>
+            <p class="text-muted">
+                {{ $row->warehouse->address->address }}
+            </p>
+        </div>
+        <div class="col-md-2 invoice-col">
+            <label class="mb-0 mt-1">#CONTROL</label>
+            <p class="text-muted">
+                {{ $row->serial.'-'.$row->documentno }}
+            </p>
+        </div>
+        <div class="col-md-2 invoice-col">
+            <label class="mb-0 mt-1">FECHA</label>
+            <p class="text-muted">
+                {{ $row->datetrx }}
+            </p>
+        </div>
+    </div>
+    <div class="row">        
+        <table class="table table-sm">
+            <thead>
                 <tr>
-                    <td>{{ $item->product->productcode }}</td>
-                    <td>{{ $item->product->productname }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->product->um->shortname }}</td>
-                    <td>{{ $item->package }}</td>
+                    <th width="80">CODIGO</th>
+                    <th>PRODUCTO</th>
+                    <th class="text-right" width="100">CANTIDAD</th>
+                    <th width="40"></th>
+                    <th class="text-right" width="100">PACK</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($row->lines as $item)
+                    <tr>
+                        <td>{{ $item->product->productcode }}</td>
+                        <td>{{ $item->product->productname }}</td>
+                        <td class="text-right">{{ $item->quantity }}</td>
+                        <td>{{ $item->product->um->shortname }}</td>
+                        <td class="text-right">{{ $item->package }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr class="border-top">
+                    <th colspan="2">{{ count($row->lines) }} - items</th>
+                    <th class="text-right">{{ $row->lines->sum('quantity') }}</th>
+                    <th></th>
+                    <th class="text-right">{{ $row->lines->sum('package') }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 @endsection

@@ -7,6 +7,7 @@ use App\Models\TempLogisticInventory;
 use App\Models\TempLogisticInventoryLine;
 use App\Models\WhLInventory;
 use App\Models\WhLInventoryLine;
+use App\Models\WhReason;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +25,10 @@ class LogisticInventoryController extends Controller
     {
         $result = WhLInventory::orderBy('id','desc')
             ->paginate(env('PAGINATE_LOGISTIC',5));
+        $reason  = WhReason::where('typereason','LIN')->get();
         return view('logistic.inventory',[
             'result' => $result,
+            'reason' => $reason, 
         ]);
     }
 

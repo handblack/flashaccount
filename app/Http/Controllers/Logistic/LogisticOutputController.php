@@ -7,6 +7,7 @@ use App\Models\TempLogisticOutput;
 use App\Models\TempLogisticOutputLine;
 use App\Models\WhLOutput;
 use App\Models\WhLOutputLine;
+use App\Models\WhReason;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +23,18 @@ class LogisticOutputController extends Controller
     private $module = 'logistic.output';
     public function index()
     {
+        if(auth()->user()->grant($this->module)->isgrant == 'N'){
+            return view('error',[
+                'module' => $this->module,
+                'action' => 'isgrand',
+            ]);
+        }
         $result = WhLOutput::orderBy('id','desc')
             ->paginate(env('PAGINATE_LOGISTIC',5));
+        $reason  = WhReason::where('typereason','LOU')->get();
         return view('logistic.output',[
             'result' => $result,
+            'reason' => $reason,
         ]);
     }
 

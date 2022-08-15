@@ -87,9 +87,9 @@ class CreateWhSequencesTable extends Migration
         $this->CreateSequence('LIN','I002');
         $this->CreateSequence('LIN','I003');
         // Salidas
-        $this->CreateSequence('LOU','I001');
-        $this->CreateSequence('LOU','I002');
-        $this->CreateSequence('LOU','I003');
+        $this->CreateSequence('LOU','S001');
+        $this->CreateSequence('LOU','S002');
+        $this->CreateSequence('LOU','S003');
         // Transferencias
         $this->CreateSequence('LTR','TR01');
         $this->CreateSequence('LTR','TR02');

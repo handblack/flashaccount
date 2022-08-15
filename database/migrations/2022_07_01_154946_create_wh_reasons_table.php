@@ -19,16 +19,16 @@ class CreateWhReasonsTable extends Migration
             $table->id();
             $table->string('reasonname');
             $table->string('shortname')->nullable();
-            $table->enum('typereason',['INP','OUT','TRA','INV']);
+            $table->enum('typereason',['LIN','LOU','LTR','LIV']);
             $table->string('token',60);
             $table->timestamps();
         });
-        $this->CreateReason('INP','INGRESO POR COMPRAS');
-        $this->CreateReason('INP','INGRESO POR DEVOLUCION');
-        $this->CreateReason('OUT','SALIDA POR VENTAS');
-        $this->CreateReason('OUT','SALIDA POR DEVOLUCION');
-        $this->CreateReason('TRA','TRANSFERENCIA');
-        $this->CreateReason('INV','AJUSTE DE INVENTARIO');
+        $this->CreateReason('LIN','INGRESO POR COMPRAS');
+        $this->CreateReason('LIN','INGRESO POR DEVOLUCION');
+        $this->CreateReason('LOU','SALIDA POR VENTAS');
+        $this->CreateReason('LOU','SALIDA POR DEVOLUCION');
+        $this->CreateReason('LTR','TRANSFERENCIA');
+        $this->CreateReason('LIV','AJUSTE DE INVENTARIO');
     }
 
     private function CreateReason($tp,$name){

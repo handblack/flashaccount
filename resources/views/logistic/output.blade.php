@@ -155,7 +155,9 @@
                             <div class="col-md-6">
                                 <label class="mb-0">Motivo</label>
                                 <select name="reason_id" class="form-control" required>
-                                    <option value="0">MOTIVO</option>
+                                    @foreach ($reason as $item)
+                                        <option value="{{ $item->id }}">{{ $item->reasonname }}</option>
+                                    @endforeach
                                 </select>
                             </div>                           
                             <div class="col-md-6">

@@ -148,8 +148,10 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <label class="mb-0">Motivo</label>
-                                <select name="reason_id" id="" class="form-control" required>
-                                    <option value="1">MOTIVO TRASNFERENCIA</option>
+                                <select name="reason_id" class="form-control" required>
+                                    @foreach ($reason as $item)
+                                        <option value="{{ $item->id }}">{{ $item->reasonname }}</option>
+                                    @endforeach
                                 </select>
                             </div>                           
                         </div>

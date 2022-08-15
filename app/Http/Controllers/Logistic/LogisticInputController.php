@@ -31,7 +31,7 @@ class LogisticInputController extends Controller
         }
         $result = WhLInput::orderBy('id','desc')
             ->paginate(env('PAGINATE_LOGISTIC',30));
-        $reason  = WhReason::where('typereason','INP')->get();
+        $reason  = WhReason::where('typereason','LIN')->get();
         return view('logistic.input',[
             'result' => $result,
             'reason' => $reason,
