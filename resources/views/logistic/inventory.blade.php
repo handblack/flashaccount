@@ -58,7 +58,8 @@
                 <thead>
                     <tr>
                         <th width="100">FECHA</th>
-                        <th>DOCUMENTO</th>
+                        <th>NUMERO</th>
+                        <th>TIPO</th>
                         <th>ALMACEN</th>
                         <th>GLOSA</th>
                         <th></th>
@@ -68,7 +69,13 @@
                     @forelse ($result as $item)
                         <tr>
                             <td width="100">{{ $item->datetrx }}</td>
-                            <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td>                            
+                            <td width="110">{{ $item->serial }}-{{ $item->documentno }}</td> 
+                            <td width="70">
+                                <span class="{{ ($item->movetype == 'I') ? 'text-success' : 'text-danger' }}">
+                                    <i class="fas fa-sign-{{ ($item->movetype == 'I') ? 'in' : 'out' }}-alt"></i>
+                                    {{ ($item->movetype == 'I') ? 'ING' : 'SAL' }}
+                                </span>
+                            </td>
                             <td>{{ $item->warehouse->shortname }}</td>
                             <td>{{ $item->glosa }}</td>
                             <td class="text-right">

@@ -12,6 +12,7 @@ class WhLInventory extends Model
         'warehouse_id',
         'sequence_id',
         'reason_id',
+        'movetype',
         'datetrx',
         'glosa',
     ];

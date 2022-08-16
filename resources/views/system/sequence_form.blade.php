@@ -80,12 +80,12 @@
                 <div class="row">
                     <div class="col-md-2 mt-2">
                         <label class="mb-0">Serie</label>
-                        <input type="text" class="form-control" name="serial" value="{{ $row->serial }}" maxlength="4"
+                        <input type="text" class="form-control console" name="serial" value="{{ $row->serial }}" maxlength="4"
                             required>
                     </div>
                     <div class="col-md-2 mt-2">
                         <label class="mb-0">Ultimo</label>
-                        <input type="number" class="form-control text-right" name="lastnumber" value="{{ $row->lastnumber }}"
+                        <input type="number" class="form-control text-right console" name="lastnumber" value="{{ $row->lastnumber }}"
                             maxlength="10" required>
                     </div>
                     <div class="col-md-2 mt-2">

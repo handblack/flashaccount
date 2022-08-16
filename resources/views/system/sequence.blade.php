@@ -91,7 +91,7 @@
                                 <strong>{{ $item->doctype->group->shortname }}</strong> - 
                                 {{ $item->doctype->doctypename }}
                             </td>
-                            <td class="border-left border-right">{{ $item->serial }}</td>
+                            <td class="border-left border-right console">{{ $item->serial }}</td>
                             <td class="text-right pr-3">{{ $item->lastnumber }}</td>
                             <td>{{ $item->warehouse->warehousename }}</td>
                             <td class="text-right">

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-0">
             <div class="col-sm-6">
-                <h1><i class="fas fa-edit fa-fw"></i> Inventarios</h1>
+                <h1><i class="fas fa-clipboard-check fa-fw"></i> Inventarios</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -54,9 +54,9 @@
                 <ul class="nav nav-tabs card-header-tabs ">
                     <li class="nav-item">
                         <span class="nav-link active">
-                            <i class="far fa-edit fa-fw"></i>
+                            <i class="fas fa-clipboard-check fa-fw"></i>
                             <span class="d-none d-sm-inline-block">
-                                Parte INVENTARIO
+                                Inventario [{{ $row->movetype == 'I' ? 'INGRESO' : 'SALIDA' }}]
                             </span>
                         </span>
                     </li>
