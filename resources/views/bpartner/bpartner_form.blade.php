@@ -246,8 +246,10 @@
                         <label class="mb-0">Envio de FEX</label>
                         <select class="form-control select2-email" name="fex_email[]" multiple="multiple">
                             @foreach ($row->contacts as $contact )
-                                @foreach ($contact->email as $email)                                    
-                                    <option value="{{ $email }}" {{ (in_array($email,$row->fex_email) ? 'selected' : '' ) }}>{{ $email }}</option>
+                                @foreach ($contact->email as $email)
+                                    @if($row->contacs)
+                                        <option value="{{ $email }}" {{ (in_array($email,$row->fex_email) ? 'selected' : '' ) }}>{{ $email }}</option>
+                                    @endif
                                 @endforeach
                             @endforeach                           
                         </select>
